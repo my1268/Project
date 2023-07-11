@@ -1,0 +1,25 @@
+.buttons {
+  display: inline-flex;
+}
+
+.buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+.buttons button:is(:hover, :active),
+.isOpen {
+  color: #3da5f5;
+}
+
+.chevron {
+  margin: 0 8px;
+}

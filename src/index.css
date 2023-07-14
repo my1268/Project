@@ -19,7 +19,8 @@ li {
 
 button,
 input,
-textarea {
+textarea,
+select {
   outline: none;
 }
 

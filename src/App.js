@@ -8,6 +8,7 @@ import Date from './UI/Form/Date';
 import LoginType from './UI/Form/LoginType';
 import Memo from './UI/Form/Memo';
 import Pagination from './UI/Pagination/Pagination';
+import Selector from './UI/Form/Selector';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <LoginType />
         <Date />
         <Memo placeholder='메모를 입력하세요' />
+        <Selector placeholder='옵션을 선택하세요' />
       </div>
       <div>
         <Pagination />

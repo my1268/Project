@@ -4,7 +4,9 @@ import button from './Button.module.css';
 function Primary({ text, isShortPrimary }) {
   return (
     <button
-      className={`${button.primary} ${isShortPrimary && button.short}`}
+      className={`${button.base} ${button.primary} ${
+        isShortPrimary && button.short
+      }`}
       type='button'
     >
       {text}

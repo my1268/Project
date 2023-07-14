@@ -1,10 +1,10 @@
 import React from 'react';
 import button from './Button.module.css';
 
-function Ghost({ text, isOpenCategory }) {
+function Ghost({ text }) {
   return (
     <button
-      className={`${button.ghost} ${isOpenCategory && button.isOpen}`}
+      className={`${button.base} ${button.short} ${button.ghost}`}
       type='button'
     >
       {text}

@@ -1,3 +1,10 @@
+.base {
+  border: none;
+  border-radius: 4px;
+  transition: background-color 200ms ease-in-out;
+  transition: color 200ms ease-in-out;
+}
+
 .primary {
   width: 100%;
   height: 45px;
@@ -5,9 +12,6 @@
   font-size: 16px;
   font-weight: 600;
   background-color: #3da5f5;
-  border: none;
-  border-radius: 4px;
-  transition: background-color 200ms ease-in-out;
 }
 
 .primary:is(:hover, :active) {
@@ -23,9 +27,6 @@
   padding: 0px 10px;
   height: 24px;
   font-size: 12px;
-  border-radius: 4px;
-  border: none;
-  transition: background-color 200ms ease-in-out;
 }
 
 .gray {
@@ -46,19 +47,13 @@
 }
 
 .ghost {
-  padding: 10px;
   font-size: 16px;
-  background-color: #fff;
-  border: none;
-}
-
-.ghost:is(:hover, :active),
-.isOpen {
-  color: #3186c4;
-}
-
-.isOpen {
   font-weight: 600;
+  background-color: #fff;
+}
+
+.ghost:is(:hover, :active) {
+  color: #3186c4;
 }
 
 .kakao {
@@ -81,10 +76,5 @@
   .short {
     width: 100px;
     height: 40px;
-  }
-
-  .ghost {
-    width: 176px;
-    text-align: left;
   }
 }

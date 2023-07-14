@@ -18,8 +18,7 @@ function App() {
         <Primary text='버튼' isShortPrimary={true} />
         <Mini text='버튼' color='gray' />
         <Mini text='버튼' color='red' />
-        <Ghost text='버튼' isOpenCategory={false} />
-        <Ghost text='버튼' isOpenCategory={true} />
+        <Ghost text='버튼' />
         <Kakao />
       </div>
       <div>

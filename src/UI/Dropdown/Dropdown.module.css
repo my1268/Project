@@ -1,0 +1,55 @@
+.menu {
+  position: absolute;
+  top: 72px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  border: 1px solid #e0e2e7;
+  border-radius: 4px;
+  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, -10px, 0);
+  transition: transform 200ms ease-in-out, opacity 200ms ease-in-out,
+    visibility 200ms ease-in-out;
+}
+
+.menu a {
+  padding: 8px;
+  width: 160px;
+}
+
+.menu a:is(:hover, :active) {
+  background-color: #f7f8fa;
+}
+
+.menuOpen {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+}
+
+.menu::before,
+.menu::after {
+  position: absolute;
+  top: -32px;
+  left: 12px;
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 16px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 16px solid transparent;
+  border-left: 10px solid transparent;
+  content: '';
+}
+
+.menu::before {
+  border-bottom-color: #e0e2e7;
+}
+
+.menu::after {
+  border-bottom-color: #fff;
+  top: -30px;
+}

@@ -3,6 +3,7 @@ import header from './Header.module.css';
 import { AiOutlineMenu } from 'react-icons/ai';
 import Ghost from '../UI/Button/Ghost';
 import Primary from '../UI/Button/Primary';
+import Menu from '../UI/Dropdown/Menu';
 
 function Header() {
   return (
@@ -28,6 +29,7 @@ function Header() {
           </div>
         </div>
       </header>
+      <Menu isOpenMenu='false' />
     </div>
   );
 }

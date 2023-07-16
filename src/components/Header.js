@@ -4,6 +4,7 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import Ghost from '../UI/Button/Ghost';
 import Primary from '../UI/Button/Primary';
 import Menu from '../UI/Dropdown/Menu';
+import { BsFillPersonFill } from 'react-icons/bs';
 
 function Header() {
   return (
@@ -16,15 +17,21 @@ function Header() {
           <button className={header.menu} type='button'>
             <AiOutlineMenu />
           </button>
+          {/* 비회원인 경우 */}
           <a href='/' className={header.login}>
             <Ghost text='로그인' />
           </a>
+          {/* 회원인 경우 */}
+          {/* <a href='/' className={header.myMenu}>
+            <BsFillPersonFill />
+          </a> */}
         </div>
         <div className={`lg-only ${header.menuList}`}>
           <div className={header.categoy}>
             <Ghost text='플래너 작성' />
             <Ghost text='리뷰 게시판' />
           </div>
+          {/* 비회원인 경우 */}
           <div className={header.member}>
             <a className={header.login} href='/'>
               <Ghost text='로그인' />
@@ -33,6 +40,10 @@ function Header() {
               <Primary isShortPrimary='true' text='회원가입' />
             </a>
           </div>
+          {/* 회원인 경우 */}
+          {/* <a href='/' className={header.myMenu}>
+            <BsFillPersonFill />
+          </a> */}
         </div>
       </header>
       <Menu isOpenMenu='false' />

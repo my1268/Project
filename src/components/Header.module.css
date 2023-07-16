@@ -50,6 +50,24 @@
   color: #3da5f5;
 }
 
+.myMenu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.myMenu:is(:hover, :active) > * {
+  fill: #3da5f5;
+}
+
+.myMenu > * {
+  width: 24px;
+  height: 24px;
+  transition: fill 200ms ease-in-out;
+}
+
 @media screen and (min-width: 900px) {
   .header {
     display: flex;
@@ -69,9 +87,14 @@
 
   .menuList {
     display: flex;
+    align-items: center;
   }
 
   .category {
     margin-right: 16px;
+  }
+
+  .myMenu {
+    margin-left: 16px;
   }
 }

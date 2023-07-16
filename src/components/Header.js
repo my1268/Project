@@ -16,7 +16,9 @@ function Header() {
           <button className={header.menu} type='button'>
             <AiOutlineMenu />
           </button>
-          <Ghost text='로그인' />
+          <a href='/' className={header.login}>
+            <Ghost text='로그인' />
+          </a>
         </div>
         <div className={`lg-only ${header.menuList}`}>
           <div className={header.categoy}>
@@ -24,8 +26,12 @@ function Header() {
             <Ghost text='리뷰 게시판' />
           </div>
           <div className={header.member}>
-            <Ghost text='로그인' />
-            <Primary isShortPrimary='true' text='회원가입' />
+            <a className={header.login} href='/'>
+              <Ghost text='로그인' />
+            </a>
+            <a href='/'>
+              <Primary isShortPrimary='true' text='회원가입' />
+            </a>
           </div>
         </div>
       </header>

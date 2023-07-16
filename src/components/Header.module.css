@@ -46,6 +46,10 @@
   font-weight: 700;
 }
 
+.login > * {
+  color: #3da5f5;
+}
+
 @media screen and (min-width: 900px) {
   .header {
     display: flex;

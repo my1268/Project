@@ -1,9 +1,9 @@
 import React from 'react';
 import button from './Button.module.css';
 
-function Kakao() {
+function Kakao({ style }) {
   return (
-    <button className={button.kakao} type='button'>
+    <button style={style} className={button.kakao} type='button'>
       카카오 로그인
     </button>
   );

@@ -46,10 +46,6 @@
   font-weight: 700;
 }
 
-.login > * {
-  color: #3da5f5;
-}
-
 .myMenu {
   display: flex;
   align-items: center;

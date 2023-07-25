@@ -32,6 +32,7 @@
 @media screen and (min-width: 900px) {
   .background {
     height: 160px;
+    margin-bottom: 24px;
   }
 
   .title {

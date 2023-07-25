@@ -1,0 +1,60 @@
+.container {
+  padding: 0 15px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 48px;
+}
+
+.item {
+  display: flex;
+  height: 36px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.item:last-child {
+  margin-bottom: 0px;
+}
+
+.item dt {
+  width: 48px;
+  margin-right: 4px;
+  font-size: 14px;
+}
+
+.item dd {
+  width: 100%;
+}
+
+@media screen and (min-width: 900px) {
+  .container {
+    padding: 0;
+    margin: 0 auto;
+  }
+
+  .layout {
+    display: flex;
+    margin: 0 auto;
+    padding-top: 24px;
+    width: 100%;
+    max-width: 1280px;
+    height: 80px;
+  }
+
+  .item dt {
+    margin-right: 8px;
+  }
+
+  .item dd {
+    width: 400px;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+  }
+}

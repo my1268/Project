@@ -9,10 +9,10 @@ function MyMenu() {
   return (
     <>
       <PageCover title='마이페이지' />
-      <div className={myMenu.layout}>
+      <div className='layout'>
         <Categories />
 
-        <div className={myMenu.container}>
+        <div className='container'>
           <form className={myMenu.form}>
             <dl className={myMenu.list}>
               <div className={myMenu.item}>

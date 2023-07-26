@@ -3,6 +3,7 @@
   border-radius: 4px;
   transition: background-color 200ms ease-in-out;
   transition: color 200ms ease-in-out;
+  white-space: nowrap;
 }
 
 .primary {

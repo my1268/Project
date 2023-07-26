@@ -1,5 +1,6 @@
 .buttons {
-  display: inline-flex;
+  display: flex;
+  justify-content: center;
 }
 
 .buttons button {
@@ -22,4 +23,8 @@
 
 .chevron {
   margin: 0 8px;
+}
+
+.button {
+  color: #3f4150;
 }

@@ -1,11 +1,11 @@
 import React from 'react';
-import Categories from '../Categories';
-import PageCover from '../PageCover';
+import Categories from '../features/Categories';
+import PageCover from '../features/PageCover';
 import Base from '../../UI/Form/Base';
 import Primary from '../../UI/Button/Primary';
 import Pagination from '../../UI/Pagination/Pagination';
 import myPlanner from './MyPlanner.module.css';
-import Board from '../Board';
+import Board from '../features/Board';
 
 function MyPlanner() {
   const list = [

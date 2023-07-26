@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import header from './Header.module.css';
 import { AiOutlineMenu } from 'react-icons/ai';
-import Ghost from '../UI/Button/Ghost';
-import Primary from '../UI/Button/Primary';
-import Menu from '../UI/Dropdown/Menu';
+import Ghost from '../../UI/Button/Ghost';
+import Primary from '../../UI/Button/Primary';
+import Menu from '../../UI/Dropdown/Menu';
 import { BsFillPersonFill } from 'react-icons/bs';
-import LoginModal from '../UI/Modal/LoginModal';
-import Overlay from '../UI/Modal/Overlay';
+import LoginModal from '../../UI/Modal/LoginModal';
+import Overlay from '../../UI/Modal/Overlay';
 
 function Header() {
   const [isOpenLogin, setIsOpenLogin] = useState(false);

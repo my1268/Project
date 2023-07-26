@@ -1,6 +1,6 @@
 import React from 'react';
 import board from './Board.module.css';
-import Mini from '../UI/Button/Mini';
+import Mini from '../../UI/Button/Mini';
 
 function Board({ list }) {
   return (

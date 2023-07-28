@@ -1,15 +1,15 @@
-import Ghost from './UI/Button/Ghost';
-import Kakao from './UI/Button/Kakao';
-import Mini from './UI/Button/Mini';
-import Primary from './UI/Button/Primary';
-import Base from './UI/Form/Base';
-import ButtonType from './UI/Form/ButtonType';
-import Date from './UI/Form/Date';
-import LoginType from './UI/Form/LoginType';
-import Memo from './UI/Form/Memo';
-import Pagination from './UI/Pagination/Pagination';
-import Selector from './UI/Form/Selector';
-import Header from './components/Header';
+import Ghost from "./UI/Button/Ghost";
+import Kakao from "./UI/Button/Kakao";
+import Mini from "./UI/Button/Mini";
+import Primary from "./UI/Button/Primary";
+import Base from "./UI/Form/Base";
+import ButtonType from "./UI/Form/ButtonType";
+import Date from "./UI/Form/Date";
+import LoginType from "./UI/Form/LoginType";
+import Memo from "./UI/Form/Memo";
+import Pagination from "./UI/Pagination/Pagination";
+import Selector from "./UI/Form/Selector";
+import Header from "./components/features/Header";
 
 function App() {
   return (

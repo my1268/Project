@@ -4,18 +4,6 @@ import { VscTriangleDown } from "react-icons/vsc";
 import ButtonType from "./ButtonType";
 
 function SignUpType({ style }) {
-  const inputMargin = {
-    marginBottom: "7px",
-  };
-
-  const iconStyle = {
-    position: "absolute",
-    right: "10px",
-    top: "50%",
-    transform: "translateY(-50%)",
-    cursor: "pointer",
-  };
-
   const [showOptions, setShowOptions] = useState(false);
   const [selectQuestion, setSelectQuestion] = useState("");
   const [showAddInput, setShowAddInput] = useState(false);
@@ -37,21 +25,18 @@ function SignUpType({ style }) {
         <ButtonType placeholder="이메일" />
       </div>
       <input
-        style={inputMargin}
-        className={form.base}
+        className={`${form.base} ${form.inputMargin}`}
         type="password"
         placeholder="비밀번호"
       />
       <input
-        style={inputMargin}
-        className={form.base}
+        className={`${form.base} ${form.inputMargin}`}
         type="password"
         placeholder="비밀번호 확인"
       />
       <div>
         <input
-          style={inputMargin}
-          className={form.base}
+          className={`${form.base} ${form.inputMargin}`}
           type="text"
           placeholder="이름"
         />
@@ -59,20 +44,13 @@ function SignUpType({ style }) {
       <div style={{ marginBottom: "7px" }}>
         <ButtonType placeholder="닉네임" />
       </div>
-      <div
-        style={{
-          position: "relative",
-          border: "1px solid #ccc",
-          padding: "6px",
-          paddingLeft: "15px",
-        }}
-      >
-        <div style={inputMargin} onClick={OptionsClick}>
+      <div className={form.findPassword}>
+        <div className={form.inputMargin} onClick={OptionsClick}>
           {selectQuestion || "비밀번호 찾기 질문 "}
         </div>
         {!showOptions && (
           <VscTriangleDown
-            style={iconStyle}
+            className={form.iconStyle}
             onClick={() => setShowOptions(!showOptions)}
           />
         )}
@@ -90,12 +68,9 @@ function SignUpType({ style }) {
         <div>
           <input
             style={{
-              width: "400px",
-              height: "40px",
-              fontSize: "15px",
-              paddingLeft: "15px",
               marginTop: "7px",
             }}
+            className={form.findPasswordValue}
             type="text"
             placeholder={`여기에 ${selectQuestion}에 대한 값을 적어주세요`}
           />

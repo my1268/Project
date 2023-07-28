@@ -35,7 +35,6 @@
 
 .loginType input:first-child:is(:hover, :focus, :active) {
   position: relative;
-  z-index: 5;
 }
 
 .loginType input:last-child {
@@ -60,7 +59,7 @@
   color: #8c8d96;
 }
 
-.selector select option[value=''][disabled] {
+.selector select option[value=""][disabled] {
   display: none;
 }
 
@@ -86,7 +85,7 @@
   fill: #3da5f5;
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 2000px) {
   .base {
     width: 400px;
     height: 40px;

@@ -11,13 +11,6 @@ function LoginModal({ onClick }) {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-  const SignUpClick = () => {
-    setShowSignUpModal(true);
-  };
-  const PasswordClick = () => {
-    setShowPasswordModal(true);
-  };
-
   return (
     <aside className={`${modal.base} ${modal.member}`}>
       <h2>로그인</h2>
@@ -25,10 +18,10 @@ function LoginModal({ onClick }) {
       <Primary text="로그인" style={{ marginBottom: "64px" }} />
       <Kakao style={{ marginBottom: "16px" }} />
       <div className={modal.extraButtons}>
-        <button onClick={SignUpClick} type="button">
+        <button onClick={() => setShowSignUpModal(true)} type="button">
           회원가입
         </button>
-        <button onClick={PasswordClick} type="button">
+        <button onClick={() => setShowPasswordModal(true)} type="button">
           비밀번호 찾기
         </button>
       </div>

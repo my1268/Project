@@ -101,3 +101,29 @@
     width: 100%;
   }
 }
+
+.iconStyle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.inputMargin {
+  margin-bottom: 7px;
+}
+
+.findPassword {
+  position: relative;
+  border: 1px solid #ccc;
+  padding: 6px;
+  padding-left: 15px;
+}
+
+.findPasswordValue {
+  width: 400px;
+  height: 40px;
+  font-size: 15px;
+  padding-left: 15px;
+}

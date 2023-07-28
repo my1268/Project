@@ -5,12 +5,17 @@ import Primary from "../Button/Primary";
 import Kakao from "../Button/Kakao";
 import { GrClose } from "react-icons/gr";
 import SignUpModal from "./SignUpModal";
+import PasswordModal from "./PasswordModal";
 
 function LoginModal({ onClick }) {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const SignUpClick = () => {
     setShowSignUpModal(true);
+  };
+  const PasswordClick = () => {
+    setShowPasswordModal(true);
   };
 
   return (
@@ -23,7 +28,9 @@ function LoginModal({ onClick }) {
         <button onClick={SignUpClick} type="button">
           회원가입
         </button>
-        <button type="button">비밀번호 찾기</button>
+        <button onClick={PasswordClick} type="button">
+          비밀번호 찾기
+        </button>
       </div>
       <button
         type="button"
@@ -35,6 +42,9 @@ function LoginModal({ onClick }) {
 
       {showSignUpModal && (
         <SignUpModal onClick={() => setShowSignUpModal(false)} />
+      )}
+      {showPasswordModal && (
+        <PasswordModal onClick={() => setShowPasswordModal(false)} />
       )}
     </aside>
   );

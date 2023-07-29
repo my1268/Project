@@ -10,6 +10,8 @@ import Overlay from '../../UI/Modal/Overlay';
 
 function Header() {
   const [isOpenLogin, setIsOpenLogin] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+
   return (
     <div className={header.wrapper}>
       <header className={header.header}>
@@ -17,7 +19,11 @@ function Header() {
           <a href='/'>Trip Planner</a>
         </h1>
         <div className={`sm-only ${header.buttonList}`}>
-          <button className={header.menu} type='button'>
+          <button
+            className={header.menu}
+            type='button'
+            onClick={() => setIsOpenMenu(!isOpenMenu)}
+          >
             <AiOutlineMenu />
           </button>
           {/* 비회원인 경우 */}
@@ -53,7 +59,7 @@ function Header() {
           </a> */}
         </div>
       </header>
-      <Menu isOpenMenu='false' />
+      <Menu isOpenMenu={isOpenMenu} />
       {isOpenLogin && (
         <>
           <LoginModal onClick={() => setIsOpenLogin(false)} />

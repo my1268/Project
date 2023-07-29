@@ -7,6 +7,8 @@ import PageCover from '../features/PageCover';
 import making from './MakingPlanner.module.css';
 import Outlined from '../../UI/Button/Outlined';
 
+// 플래너 만들기
+// -> 리뷰 작성 페이지 만들어 주세요.
 function MakingPlanner() {
   return (
     <>

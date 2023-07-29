@@ -5,6 +5,8 @@ import myMenu from './MyMenu.module.css';
 import Base from '../../UI/Form/Base';
 import Primary from '../../UI/Button/Primary';
 
+// 내 정보
+// -> 비밀번호 수정 페이지 만들어 주세요
 function MyMenu() {
   return (
     <>

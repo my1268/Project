@@ -9,6 +9,11 @@ import Board from '../features/Board';
 import PlannerModal from '../../UI/Modal/PlannerModal';
 import Overlay from '../../UI/Modal/Overlay';
 
+// 내 플래너
+// -> 내 게시글, 내 댓글 페이지 만들어 주세요
+
+// 플래너 상세
+// -> 리뷰 게시글 페이지 만들어 주세요
 function MyPlanner() {
   const [openModal, setOpenModal] = useState(false);
 

@@ -36,6 +36,8 @@
   font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
+  background-color: transparent;
+  border: 0;
 }
 
 .tableBody:has(.title:is(:hover, :focus)) {

@@ -8,7 +8,7 @@ import CardList from '../Card/CardList';
 import demoImage from '../../assets/images/놀이공원.png';
 import TimeTable from '../TimeTable/TimeTable';
 
-function PlannerModal() {
+function PlannerModal({ onClick }) {
   const placeList = [
     {
       name: '놀이공원1',
@@ -43,7 +43,11 @@ function PlannerModal() {
             <AiTwotoneDelete />
           </button>
         </div>
-        <button type='button' className={`sm-only ${modal.close}`}>
+        <button
+          type='button'
+          className={`sm-only ${modal.close}`}
+          onClick={onClick}
+        >
           <GrClose />
         </button>
       </header>

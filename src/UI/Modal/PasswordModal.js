@@ -15,7 +15,7 @@ function PasswordModal({ onClick }) {
       <Primary
         onClick={() => setShowNewPassword(true)}
         text="확인" // 하나라도 아니면 경고창 발생
-        //아이디, 이름, 비번찾기 질문이 다 맞을때 서버로 전송 비밀번호 수정 모달창으로 이동
+        //아이디, 이름, 비번찾기 질문이 다 맞을때 비밀번호 수정 모달창으로 이동
         style={{ marginBottom: "64px" }}
       />
       <div className={modal.extraButtons}></div>

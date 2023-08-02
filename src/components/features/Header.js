@@ -41,11 +41,6 @@ function Header() {
           >
             <AiOutlineMenu />
           </button>
-          {isLoggedIn && (
-            <Link to="/mymenu" className={header.myMenu}>
-              <BsFillPersonFill />
-            </Link>
-          )}
         </div>
         <div className={`lg-only ${header.menuList}`}>
           <div className={header.categoy}>

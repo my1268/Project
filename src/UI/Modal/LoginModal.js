@@ -7,15 +7,23 @@ import { GrClose } from "react-icons/gr";
 import SignUpModal from "./SignUpModal";
 import PasswordModal from "./PasswordModal";
 
-function LoginModal({ onClick }) {
+function LoginModal({ onClick, onLoginSuccess }) {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+
+  const handleLogin = () => {
+    onLoginSuccess();
+  };
 
   return (
     <aside className={`${modal.base} ${modal.member}`}>
       <h2>로그인</h2>
       <LoginType style={{ marginBottom: "16px" }} />
-      <Primary text="로그인" style={{ marginBottom: "64px" }} />
+      <Primary
+        text="로그인"
+        style={{ marginBottom: "64px" }}
+        onClick={handleLogin} // 서버로 post해야함
+      />
       <Kakao style={{ marginBottom: "16px" }} />
       <div className={modal.extraButtons}>
         <button onClick={() => setShowSignUpModal(true)} type="button">

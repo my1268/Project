@@ -8,71 +8,100 @@ import { BsFillPersonFill } from "react-icons/bs";
 import LoginModal from "../../UI/Modal/LoginModal";
 import Overlay from "../../UI/Modal/Overlay";
 import SignUpModal from "../../UI/Modal/SignUpModal";
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
   const [isOpenLogin, setIsOpenLogin] = useState(false);
   const [isOpenSignUp, setIsOpenSignUp] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+    setIsOpenLogin(false);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    navigate("/");
+  };
   return (
     <div className={header.wrapper}>
       <header className={header.header}>
         <h1 className={header.logo}>
-          <a href="/">Trip Planner</a>
+          <Link to="/">Trip Planner</Link>
         </h1>
         <div className={`sm-only ${header.buttonList}`}>
-          <button className={header.menu} type="button">
+          <button
+            className={header.menu}
+            type="button"
+            onClick={() => setIsOpenMenu(!isOpenMenu)}
+          >
             <AiOutlineMenu />
           </button>
-          {/* 비회원인 경우 */}
-          <Ghost
-            text="로그인"
-            style={{ color: "#3da5f5" }}
-            onClick={() => setIsOpenLogin(true)}
-          />
-          {/* 회원인 경우 */}
-          {/* <a href='/' className={header.myMenu}>
-            <BsFillPersonFill />
-          </a> */}
+          {isLoggedIn && (
+            <Link to="/mymenu" className={header.myMenu}>
+              <BsFillPersonFill />
+            </Link>
+          )}
         </div>
         <div className={`lg-only ${header.menuList}`}>
           <div className={header.categoy}>
             <Ghost text="플래너 작성" />
             <Ghost text="리뷰 게시판" />
           </div>
-          {/* 비회원인 경우 */}
           <div className={header.member}>
-            <Ghost
-              text="로그인"
-              style={{ color: "#3da5f5" }}
-              onClick={() => setIsOpenLogin(true)}
-            />
-            <a
-              href="/"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsOpenSignUp(true);
-              }}
-            >
-              <Primary
-                isShortPrimary="true"
-                text="회원가입"
-                onClick={() => setIsOpenSignUp(true)}
-              />
-            </a>
+            {isLoggedIn ? (
+              <>
+                <Link to="/mymenu" className={header.myMenu}>
+                  <BsFillPersonFill />
+                </Link>
+                <button
+                  className={header.logout}
+                  type="button"
+                  onClick={handleLogout}
+                >
+                  로그아웃
+                </button>
+              </>
+            ) : (
+              <>
+                <Ghost
+                  text="로그인"
+                  style={{ color: "#3da5f5" }}
+                  onClick={() => setIsOpenLogin(true)}
+                />
+                <a
+                  href="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsOpenSignUp(true);
+                  }}
+                >
+                  <Primary
+                    isShortPrimary="true"
+                    text="회원가입"
+                    onClick={() => setIsOpenSignUp(true)}
+                  />
+                </a>
+              </>
+            )}
           </div>
-          {/* 회원인 경우 */}
-          {/* <a href='/' className={header.myMenu}>
-            <BsFillPersonFill />
-          </a> */}
         </div>
       </header>
-      <Menu isOpenMenu="false" />
+      <Menu isOpenMenu={isOpenMenu} />
       {isOpenLogin && (
         <>
-          <LoginModal onClick={() => setIsOpenLogin(false)} />
+          <LoginModal
+            onClick={() => setIsOpenLogin(false)}
+            onLoginSuccess={handleLoginSuccess}
+          />
           <Overlay onClick={() => setIsOpenLogin(false)} />
         </>
       )}
-      {isOpenSignUp && ( // 회원가입 모달 렌더링
+      {isOpenSignUp && (
         <>
           <SignUpModal onClick={() => setIsOpenSignUp(false)} />
           <Overlay onClick={() => setIsOpenSignUp(false)} />

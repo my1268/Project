@@ -16,7 +16,14 @@ function Categories() {
         </Link>
       </li>
       <li>
-        <Link to="/">비밀번호 수정</Link>
+        <Link
+          to="/mypasswordupdate"
+          className={
+            location.pathname === "/mypasswordupdate" ? categories.isOpen : null
+          }
+        >
+          비밀번호 수정
+        </Link>
       </li>
       <li>
         <Link

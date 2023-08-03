@@ -27,6 +27,15 @@ function Header() {
     setIsLoggedIn(false);
     navigate("/");
   };
+
+  const handlePlannerButtonClick = () => {
+    if (isLoggedIn) {
+      navigate("/makingplanner");
+    } else {
+      alert("로그인 후 이용해주세요");
+      setIsOpenLogin(true);
+    }
+  };
   return (
     <div className={header.wrapper}>
       <header className={header.header}>
@@ -44,7 +53,7 @@ function Header() {
         </div>
         <div className={`lg-only ${header.menuList}`}>
           <div className={header.categoy}>
-            <Ghost text="플래너 작성" />
+            <Ghost text="플래너 작성" onClick={handlePlannerButtonClick} />
             <Ghost text="리뷰 게시판" />
           </div>
           <div className={header.member}>
@@ -86,7 +95,7 @@ function Header() {
           </div>
         </div>
       </header>
-      <Menu isOpenMenu={isOpenMenu} />
+      <Menu isOpenMenu={isOpenMenu} onClick={handlePlannerButtonClick} />
       {isOpenLogin && (
         <>
           <LoginModal

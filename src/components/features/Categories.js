@@ -36,10 +36,22 @@ function Categories() {
         </Link>
       </li>
       <li>
-        <Link to="/">내 게시글</Link>
+        <Link
+          to="/mypost"
+          className={location.pathname === "/mypost" ? categories.isOpen : null}
+        >
+          내 게시글
+        </Link>
       </li>
       <li>
-        <Link to="/">내 댓글</Link>
+        <Link
+          to="/mycomment"
+          className={
+            location.pathname === "/mycomment" ? categories.isOpen : null
+          }
+        >
+          내 댓글
+        </Link>
       </li>
     </ul>
   );

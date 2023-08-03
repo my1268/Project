@@ -5,6 +5,9 @@ import MyMenu from "./components/pages/MyMenu";
 import MyPlanner from "./components/pages/MyPlanner";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MyPasswordUpdate from "./components/pages/MyPasswordUpdate";
+import MakingPlanner from "./components/pages/MakingPlanner";
+import MyPost from "./components/pages/MyPost";
+import MyComment from "./components/pages/MyComment";
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
           <Route path="/mymenu" element={<MyMenu />} />
           <Route path="/mypasswordupdate" element={<MyPasswordUpdate />} />
           <Route path="/myplanner" element={<MyPlanner />} />
+          <Route path="/mypost" element={<MyPost />} />
+          <Route path="/mycomment" element={<MyComment />} />
+          <Route path="/makingplanner" element={<MakingPlanner />} />
         </Routes>
       </>
     </Router>

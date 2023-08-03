@@ -6,6 +6,7 @@ import Kakao from "../Button/Kakao";
 import { GrClose } from "react-icons/gr";
 import SignUpModal from "./SignUpModal";
 import PasswordModal from "./PasswordModal";
+import { useNavigate } from "react-router-dom";
 
 function LoginModal({ onClick, onLoginSuccess }) {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
@@ -13,6 +14,12 @@ function LoginModal({ onClick, onLoginSuccess }) {
 
   const handleLogin = () => {
     onLoginSuccess();
+  };
+
+  const navigate = useNavigate("");
+  const handleCloseModal = () => {
+    onClick();
+    navigate("/");
   };
 
   return (
@@ -36,7 +43,7 @@ function LoginModal({ onClick, onLoginSuccess }) {
       <button
         type="button"
         className={`sm-only ${modal.close}`}
-        onClick={onClick}
+        onClick={handleCloseModal}
       >
         <GrClose />
       </button>

@@ -20,8 +20,10 @@
   object-fit: cover;
 }
 
+.inquiry,
 .date,
-.address {
+.address,
+.nickName {
   font-size: 14px;
   font-style: normal;
   color: #8c8d96;

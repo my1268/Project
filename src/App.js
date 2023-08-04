@@ -8,6 +8,7 @@ import MyPasswordUpdate from "./components/pages/MyPasswordUpdate";
 import MakingPlanner from "./components/pages/MakingPlanner";
 import MyPost from "./components/pages/MyPost";
 import MyComment from "./components/pages/MyComment";
+import ReviewPost from "./components/pages/ReviewPost";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/mypost" element={<MyPost />} />
           <Route path="/mycomment" element={<MyComment />} />
           <Route path="/makingplanner" element={<MakingPlanner />} />
+          <Route path="/reviewpost" element={<ReviewPost />} />
         </Routes>
       </>
     </Router>

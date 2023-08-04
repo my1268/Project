@@ -1,0 +1,23 @@
+.form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  margin-right: 100px;
+}
+
+.formContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+}
+
+.form input {
+  margin-right: 8px;
+}

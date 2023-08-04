@@ -36,6 +36,10 @@ function Header() {
       setIsOpenLogin(true);
     }
   };
+
+  const handleReviewPostButtonClick = () => {
+    navigate("/reviewpost");
+  };
   return (
     <div className={header.wrapper}>
       <header className={header.header}>
@@ -54,7 +58,7 @@ function Header() {
         <div className={`lg-only ${header.menuList}`}>
           <div className={header.categoy}>
             <Ghost text="플래너 작성" onClick={handlePlannerButtonClick} />
-            <Ghost text="리뷰 게시판" />
+            <Ghost text="리뷰 게시판" onClick={handleReviewPostButtonClick} />
           </div>
           <div className={header.member}>
             {isLoggedIn ? (

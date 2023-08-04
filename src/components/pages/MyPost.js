@@ -25,7 +25,7 @@ function MyPost() {
 
         <div className="container">
           <form className={myPlanner.form}>
-            <Base placeholder="게시글 제목을 검색하세요" />
+            <Base placeholder="게시글을 검색하세요" />
             <Primary isShortPrimary="true" text="검색" />
           </form>
 

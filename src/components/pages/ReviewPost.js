@@ -8,9 +8,15 @@ import demoImage from "../../assets/images/놀이공원.png";
 import CardList from "../../UI/Card/CardList";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
+import { useNavigate } from "react-router-dom";
 
 function ReviewPost() {
   const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate("");
+  const ReviewWriteButton = () => {
+    navigate("/reviewwrite");
+  };
+
   const placeList = [
     {
       inquiry: "조회 10",
@@ -65,7 +71,11 @@ function ReviewPost() {
               <Base placeholder="플래너를 검색하세요" />
               <Primary isShortPrimary="true" text="검색" />
             </div>
-            <Ghost text="리뷰 작성하기" style={{ color: "#3da5f5" }} />
+            <Ghost
+              text="리뷰 작성하기"
+              onClick={ReviewWriteButton}
+              style={{ color: "#3da5f5" }}
+            />
           </div>
         </form>
         <CardList placeList={placeList} />

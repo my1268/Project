@@ -9,6 +9,7 @@ import MakingPlanner from "./components/pages/MakingPlanner";
 import MyPost from "./components/pages/MyPost";
 import MyComment from "./components/pages/MyComment";
 import ReviewPost from "./components/pages/ReviewPost";
+import ReviewWrite from "./components/pages/ReviewWrite";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/mycomment" element={<MyComment />} />
           <Route path="/makingplanner" element={<MakingPlanner />} />
           <Route path="/reviewpost" element={<ReviewPost />} />
+          <Route path="/reviewwrite" element={<ReviewWrite />} />
         </Routes>
       </>
     </Router>

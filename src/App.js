@@ -10,6 +10,7 @@ import MyPost from "./components/pages/MyPost";
 import MyComment from "./components/pages/MyComment";
 import ReviewPost from "./components/pages/ReviewPost";
 import ReviewWrite from "./components/pages/ReviewWrite";
+import PlaceSearch from "./components/pages/PlaceSearch";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/makingplanner" element={<MakingPlanner />} />
           <Route path="/reviewpost" element={<ReviewPost />} />
           <Route path="/reviewwrite" element={<ReviewWrite />} />
+          <Route path="/placesearch" element={<PlaceSearch />} />
         </Routes>
       </>
     </Router>

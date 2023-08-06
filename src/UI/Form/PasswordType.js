@@ -23,7 +23,7 @@ function PasswordType({ style }) {
       <input
         className={`${form.base} ${form.inputMargin}`}
         type="text"
-        placeholder="아이디"
+        placeholder="이메일"
       />
       <input
         className={`${form.base} ${form.inputMargin}`}

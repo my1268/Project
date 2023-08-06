@@ -79,8 +79,8 @@ function ReviewWrite() {
                         src={previewUrl}
                         alt={`Preview ${index}`}
                         style={{
-                          width: "150px",
-                          height: "100px",
+                          width: "196px",
+                          height: "131px",
                           margin: "3px",
                         }}
                       />

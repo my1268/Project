@@ -15,23 +15,13 @@ function MyMenu() {
           <form className={myMenu.form}>
             <dl className={myMenu.list}>
               <div className={myMenu.item}>
-                <dt>이메일</dt>
-                <dd>1234@gmail.com</dd>
-              </div>
-              <div className={myMenu.item}>
-                <dt>이름</dt>
-                <dd>
-                  <Base placeholder="홍길동" />
-                </dd>
-              </div>
-              <div className={myMenu.item}>
                 <dt>닉네임</dt>
                 <dd>
-                  <Base placeholder="고길동" />
+                  <Base placeholder="닉네임" />
                 </dd>
               </div>
             </dl>
-            <Primary text="회원 정보 수정" />
+            <Primary text="닉네임 수정" />
           </form>
         </div>
       </div>

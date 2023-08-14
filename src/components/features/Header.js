@@ -9,6 +9,7 @@ import LoginModal from "../../UI/Modal/LoginModal";
 import Overlay from "../../UI/Modal/Overlay";
 import SignUpModal from "../../UI/Modal/SignUpModal";
 import { Link, useNavigate } from "react-router-dom";
+// import KakaoLogoutApi from "../../UI/KaKao/KakaoLogoutApi";
 
 function Header() {
   const [isOpenLogin, setIsOpenLogin] = useState(false);
@@ -120,3 +121,5 @@ function Header() {
 }
 
 export default Header;
+
+// <KakaoLogoutApi />;

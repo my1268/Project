@@ -57,7 +57,7 @@
 }
 
 .form {
-  position: fixed;
+  position: absolute;
   left: 507px;
   bottom: 870px;
   display: flex;
@@ -67,4 +67,15 @@
 
 .form input {
   margin-right: 8px;
+}
+
+.tourapi {
+  position: fixed;
+  left: 510px;
+  top: 100px;
+}
+
+.img {
+  width: 300px;
+  height: 150px;
 }

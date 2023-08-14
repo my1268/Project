@@ -228,7 +228,7 @@ function PlaceSearch() {
         <form className={placesearch.form} onSubmit={handleSearch}>
           <Base
             type="text"
-            placeholder="장소를 검색하세요"
+            placeholder="키워드를 입력하세요"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
           />

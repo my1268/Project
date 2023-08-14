@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "addr1": "경기도 여주시 점동면 가래울길 29",
+      "addr2": "",
+      "areacode": "31",
+      "contentId": "2768070",
+      "contentTypeId": "39",
+      "mapx": "127.6756069815",
+      "mapy": "37.2051837464",
+      "title": "가래울 해장국",
+      "image": "http://tong.visitkorea.or.kr/cms/resource/93/2768293_image2_1.jpg"
+    },
+    {
+      "addr1": "서울특별시 중구 한강대로 405",
+      "addr2": "롯데아울렛서울역",
+      "areacode": "1",
+      "contentId": "2929281",
+      "contentTypeId": "38",
+      "mapx": "126.9717664185",
+      "mapy": "37.5545416306",
+      "title": "가버 롯데서울역",
+      "image": ""
+    },
+    {
+      "addr1": "서울특별시 중구 을지로 281",
+      "addr2": "(을지로7가), DDP 배움터 2층 디자인박물관",
+      "areacode": "1",
+      "contentId": "130511",
+      "contentTypeId": "14",
+      "mapx": "127.0103125191",
+      "mapy": "37.5681962916",
+      "title": "간송미술관(서울 보화각)",
+      "image": "http://tong.visitkorea.or.kr/cms/resource/18/2384418_image2_1.jpg"
+    },
+    {
+      "addr1": "서울특별시 종로구 율곡로23길 16",
+      "addr2": "(충신동)",
+      "areacode": "1",
+      "contentId": "294439",
+      "contentTypeId": "12",
+      "mapx": "127.0066015446",
+      "mapy": "37.5753148419",
+      "title": "감로암(서울)",
+      "image": "http://tong.visitkorea.or.kr/cms/resource/85/2031885_image2_1.jpg"
+    },
+    {
+      "addr1": "강원특별자치도 강릉시 옥계면 풍동로 406",
+      "addr2": "(옥계면)",
+      "areacode": "32",
+      "contentId": "128360",
+      "contentTypeId": "12",
+      "mapx": "128.9916900986",
+      "mapy": "37.6176360265",
+      "title": "강릉 한울타리마을",
+      "image": "http://tong.visitkorea.or.kr/cms/resource/89/2480189_image2_1.jpg"
+    },
+    {
+      "addr1": "",
+      "addr2": "",
+      "areacode": "32",
+      "contentId": "1967383",
+      "contentTypeId": "25",
+      "mapx": "128.5571409191",
+      "mapy": "38.0513717866",
+      "title": "강원도 양양군 겨울바다 해돋이코스",
+      "image": ""
+    },
+    {
+      "addr1": "강원특별자치도 고성군 간성읍 고성중앙길 9",
+      "addr2": "",
+      "areacode": "32",
+      "contentId": "2747957",
+      "contentTypeId": "28",
+      "mapx": "128.4678859929",
+      "mapy": "38.3806733748",
+      "title": "강원평화누리길 16코스 고성 울산바위비경길",
+      "image": "http://tong.visitkorea.or.kr/cms/resource/78/2747978_image2_1.jpg"
+    },
+    {
+      "addr1": "강원특별자치도 평창군 봉평면 흥정계곡3길 70",
+      "addr2": "(흥정리)",
+      "areacode": "32",
+      "contentId": "2761333",
+      "contentTypeId": "32",
+      "mapx": "128.3292516392",
+      "mapy": "37.6477364536",
+      "title": "개여울",
+      "image": "http://tong.visitkorea.or.kr/cms/resource/60/2764860_image2_1.jpg"
+    },
+    {
+      "addr1": "서울특별시 성북구 개운사길 73",
+      "addr2": "",
+      "areacode": "1",
+      "contentId": "126501",
+      "contentTypeId": "12",
+      "mapx": "127.0280213987",
+      "mapy": "37.5899857439",
+      "title": "개운사(서울)",
+      "image": "http://tong.visitkorea.or.kr/cms/resource/26/2690626_image2_1.jpg"
+    },
+    {
+      "addr1": "경상북도 경산시 갓바위로81길 7-5",
+      "addr2": "",
+      "areacode": "35",
+      "contentId": "2840696",
+      "contentTypeId": "39",
+      "mapx": "128.7611701103",
+      "mapy": "35.9758471797",
+      "title": "개울가식당",
+      "image": "http://tong.visitkorea.or.kr/cms/resource/84/2840684_image2_1.jpg"
+    }
+  ]
+}

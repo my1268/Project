@@ -1,12 +1,7 @@
-import React from 'react';
-import button from './Button.module.css';
+import React from "react";
+import KakaoLoginApi from "../KaKao/KakaoLoginApi";
 
 function Kakao({ style }) {
-  return (
-    <button style={style} className={button.kakao} type='button'>
-      카카오 로그인
-    </button>
-  );
+  return <KakaoLoginApi style={style} />;
 }
-
 export default Kakao;

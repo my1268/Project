@@ -79,3 +79,17 @@
   width: 300px;
   height: 150px;
 }
+
+.inputSaveButton {
+  background-color: #3da5f5;
+  color: white;
+  border: none;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.inputSaveButton:hover {
+  background-color: #3476c8;
+}

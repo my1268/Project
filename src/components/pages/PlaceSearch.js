@@ -91,6 +91,31 @@ function PlaceSearch() {
     setSearchResults(filteredSearchResults);
   }, [searchKeyword]);
 
+  const handleSaveItem = (item) => {
+    const selectedCalendar = calendars[selectedDayIndex];
+    if (selectedCalendar) {
+      if (!selectedCalendar.start) {
+        handleInputChange(selectedDayIndex, "start", item.title);
+      } else {
+        const waypoints = selectedCalendar.waypoints || [];
+        const emptyWaypointIndex = waypoints.findIndex(
+          (waypoint) => !waypoint.waypoint
+        );
+
+        if (emptyWaypointIndex !== -1) {
+          handleWaypointInputChange(
+            selectedDayIndex,
+            emptyWaypointIndex,
+            "waypoint",
+            item.title
+          );
+        } else if (!selectedCalendar.end) {
+          handleInputChange(selectedDayIndex, "end", item.title);
+        }
+      }
+    }
+  };
+
   return (
     <>
       <div>
@@ -240,7 +265,10 @@ function PlaceSearch() {
           />
         </form>
       </div>
-      <div className={placesearch.tourapi}>
+      <div
+        className={placesearch.tourapi}
+        style={{ maxHeight: "820px", overflowY: "auto" }}
+      >
         {searchResults.map((result, index) => (
           <div key={index}>
             <img
@@ -250,6 +278,12 @@ function PlaceSearch() {
             />
             <h3>{result.title}</h3>
             <p>{result.addr1}</p>
+            <button
+              className={placesearch.inputSaveButton}
+              onClick={() => handleSaveItem(result)}
+            >
+              저장
+            </button>
           </div>
         ))}
       </div>

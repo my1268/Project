@@ -9,7 +9,6 @@ function MyPasswordUpdate() {
   const [password, setPassword] = useState("");
   const [changePassword, setChangePassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 

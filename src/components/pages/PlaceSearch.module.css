@@ -93,3 +93,29 @@
 .inputSaveButton:hover {
   background-color: #3476c8;
 }
+
+.position {
+  position: absolute;
+  left: 957px;
+  bottom: 60px;
+}
+
+.result {
+  position: absolute;
+  left: 955px;
+  bottom: 30px;
+}
+
+.showMap {
+  background-color: #3da5f5;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+.showMap:hover {
+  background-color: #0056b3;
+}

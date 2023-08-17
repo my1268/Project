@@ -7,7 +7,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
 import axios from "axios";
-import tmap from "./tmap.module.css";
 
 function PlaceSearch() {
   const navigate = useNavigate();
@@ -342,11 +341,11 @@ function PlaceSearch() {
         ))}
       </div>
       <div className="App">
-        <button className={tmap.showMap} onClick={handleClick}>
+        <button className={placesearch.showMap} onClick={handleClick}>
           Show Map
         </button>
-        {showMap && <div id="map_div" className={tmap.position}></div>}
-        <div id="result" className={tmap.result}></div>
+        {showMap && <div id="map_div" className={placesearch.position}></div>}
+        <div id="result" className={placesearch.result}></div>
       </div>
     </>
   );

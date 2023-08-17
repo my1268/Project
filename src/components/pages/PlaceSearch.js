@@ -22,6 +22,7 @@ function PlaceSearch() {
   const [waypointClickCounts, setWaypointClickCounts] = useState(
     Array(dayPlus).fill(0)
   );
+
   const saveButtonClick = () => {
     navigate("/myplanner");
   };
@@ -58,7 +59,6 @@ function PlaceSearch() {
     const newWaypointClickCounts = [...waypointClickCounts];
     newWaypointClickCounts.splice(index, 1);
     setWaypointClickCounts(newWaypointClickCounts);
-
     setDayPlus((prev) => prev - 1);
     setSelectedDayIndex(null);
   };
@@ -69,9 +69,8 @@ function PlaceSearch() {
 
   const handleAddWaypoint = (index) => {
     if (waypointClickCounts[index] >= 8) {
-      return; // Disable further clicks after 8 clicks
+      return;
     }
-
     const updatedCalendars = [...calendars];
     updatedCalendars[index].waypoints = updatedCalendars[index].waypoints || [];
     updatedCalendars[index].waypoints.push({
@@ -82,7 +81,6 @@ function PlaceSearch() {
     const newWaypointClickCounts = [...waypointClickCounts];
     newWaypointClickCounts[index] += 1;
     setWaypointClickCounts(newWaypointClickCounts);
-
     setCalendars(updatedCalendars);
   };
 
@@ -149,7 +147,6 @@ function PlaceSearch() {
         const emptyWaypointIndex = waypoints.findIndex(
           (waypoint) => !waypoint.waypoint
         );
-
         if (emptyWaypointIndex !== -1) {
           handleWaypointInputChange(
             selectedDayIndex,
@@ -161,19 +158,14 @@ function PlaceSearch() {
           handleInputChange(selectedDayIndex, "end", item.title);
         }
       }
-
       if (item.mapx && item.mapy && map) {
         console.log(`위도: ${item.mapy}, 경도: ${item.mapx}`);
-
         const currentMarkerNumber = markerNumber;
         setMarkerNumber(currentMarkerNumber + 1);
-
         if (!map.markers) {
           map.markers = [];
         }
-
         const iconUrl = `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${currentMarkerNumber}.png`;
-
         const marker = new window.Tmapv2.Marker({
           position: new window.Tmapv2.LatLng(item.mapy, item.mapx),
           icon: iconUrl,
@@ -181,7 +173,6 @@ function PlaceSearch() {
           map: map,
         });
         map.markers.push(marker);
-
         const bounds = new window.Tmapv2.LatLngBounds();
         map.markers.forEach((m) => bounds.extend(m.getPosition()));
         map.fitBounds(bounds);
@@ -294,7 +285,6 @@ function PlaceSearch() {
             style={{ color: "#3da5f5" }}
             onClick={() => handleAddWaypoint(selectedDayIndex)}
           />
-
           <Ghost
             text="삭제"
             style={{ color: "red" }}
@@ -350,5 +340,4 @@ function PlaceSearch() {
     </>
   );
 }
-
 export default PlaceSearch;

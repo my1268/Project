@@ -358,10 +358,14 @@ function PlaceSearch() {
         <button className={placesearch.showMap} onClick={handleClick}>
           Show Map
         </button>
-        {showMap && <div id="map_div" className={placesearch.position}></div>}
-        <p className={placesearch.totalDistance}>
-          마커 거리의 합: {totalDistance.toFixed(2)}km
-        </p>
+        {showMap && (
+          <div>
+            <div id="map_div" className={placesearch.position}></div>
+            <p className={placesearch.totalDistance}>
+              마커 거리의 합: {totalDistance.toFixed(2)}km
+            </p>
+          </div>
+        )}
       </div>
     </>
   );

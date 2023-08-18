@@ -22,7 +22,8 @@ function PlaceSearch() {
   const [waypointClickCounts, setWaypointClickCounts] = useState(
     Array(dayPlus).fill(0)
   );
-
+  const [polyline, setPolyline] = useState(null);
+  const [totalDistance, setTotalDistance] = useState(0);
   const saveButtonClick = () => {
     navigate("/myplanner");
   };
@@ -173,10 +174,31 @@ function PlaceSearch() {
           map: map,
         });
         map.markers.push(marker);
+        const polylineCoordinates = map.markers.map((m) => m.getPosition());
+        if (polyline) {
+          polyline.setMap(null);
+        }
+        setPolyline(
+          new window.Tmapv2.Polyline({
+            path: polylineCoordinates,
+            strokeColor: "black",
+            strokeWeight: 4,
+            map: map,
+          })
+        );
         const bounds = new window.Tmapv2.LatLngBounds();
         map.markers.forEach((m) => bounds.extend(m.getPosition()));
         map.fitBounds(bounds);
       }
+      let markerTotalDistance = 0;
+      for (let i = 1; i < map.markers.length; i++) {
+        const prevMarker = map.markers[i - 1];
+        const currentMarker = map.markers[i];
+        markerTotalDistance += prevMarker
+          .getPosition()
+          .distanceTo(currentMarker.getPosition());
+      }
+      setTotalDistance(markerTotalDistance / 1000);
     }
   };
   const handleClick = () => {
@@ -280,11 +302,13 @@ function PlaceSearch() {
       </div>
       {dayPlus > 0 && selectedDayIndex !== null && (
         <>
-          <Ghost
-            text="경유지 추가"
-            style={{ color: "#3da5f5" }}
-            onClick={() => handleAddWaypoint(selectedDayIndex)}
-          />
+          {waypointClickCounts[selectedDayIndex] < 8 && (
+            <Ghost
+              text="경유지 추가"
+              style={{ color: "#3da5f5" }}
+              onClick={() => handleAddWaypoint(selectedDayIndex)}
+            />
+          )}
           <Ghost
             text="삭제"
             style={{ color: "red" }}
@@ -335,7 +359,9 @@ function PlaceSearch() {
           Show Map
         </button>
         {showMap && <div id="map_div" className={placesearch.position}></div>}
-        <div id="result" className={placesearch.result}></div>
+        <p className={placesearch.totalDistance}>
+          마커 거리의 합: {totalDistance.toFixed(2)}km
+        </p>
       </div>
     </>
   );

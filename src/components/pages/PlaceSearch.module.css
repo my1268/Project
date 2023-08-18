@@ -100,12 +100,6 @@
   bottom: 60px;
 }
 
-.result {
-  position: absolute;
-  left: 955px;
-  bottom: 30px;
-}
-
 .showMap {
   background-color: #3da5f5;
   border: none;
@@ -118,4 +112,10 @@
 }
 .showMap:hover {
   background-color: #0056b3;
+}
+
+.totalDistance {
+  position: absolute;
+  left: 955px;
+  bottom: 35px;
 }

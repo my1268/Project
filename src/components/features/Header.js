@@ -112,7 +112,10 @@ function Header() {
       )}
       {isOpenSignUp && (
         <>
-          <SignUpModal onClick={() => setIsOpenSignUp(false)} />
+          <SignUpModal
+            onClick={() => setIsOpenSignUp(false)}
+            onCloseModal={() => setIsOpenSignUp(false)}
+          />
           <Overlay onClick={() => setIsOpenSignUp(false)} />
         </>
       )}

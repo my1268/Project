@@ -123,7 +123,7 @@ function SignUpType({ style, onCloseModal }) {
     } else {
       axios
         .post(
-          "/login/normal",
+          "/member/join",
           {
             email,
             password,

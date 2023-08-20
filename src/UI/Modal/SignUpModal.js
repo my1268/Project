@@ -3,11 +3,14 @@ import modal from "./Modal.module.css";
 import SignUpType from "../Form/SignUpType";
 import { GrClose } from "react-icons/gr";
 
-function SignUpModal({ onClick }) {
+function SignUpModal({ onClick, onCloseModal }) {
   return (
     <aside className={`${modal.base} ${modal.member}`}>
       <h2>회원가입</h2>
-      <SignUpType style={{ marginBottom: "16px" }} />
+      <SignUpType
+        onCloseModal={onCloseModal}
+        style={{ marginBottom: "16px" }}
+      />
       <div className={modal.extraButtons}></div>
       <button
         type="button"

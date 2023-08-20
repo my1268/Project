@@ -3,8 +3,9 @@ import form from "./Form.module.css";
 import { VscTriangleDown } from "react-icons/vsc";
 import ButtonType from "./ButtonType";
 import Primary from "../Button/Primary";
+import axios from "axios";
 
-function SignUpType({ style }) {
+function SignUpType({ style, onCloseModal }) {
   const [showOptions, setShowOptions] = useState(false);
   const [selectQuestion, setSelectQuestion] = useState("");
   const [showAddInput, setShowAddInput] = useState(false);
@@ -120,7 +121,34 @@ function SignUpType({ style }) {
     ) {
       return;
     } else {
-      alert("회원가입 완료"); //회원가입 post
+      axios
+        .post(
+          "/login/normal",
+          {
+            email,
+            password,
+            confirmPassword,
+            name,
+            nickName,
+            question: selectQuestion,
+            addInput,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          if (response.data.success) {
+            onCloseModal();
+          } else {
+            alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
   };
 

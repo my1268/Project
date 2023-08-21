@@ -24,6 +24,8 @@ function PlaceSearch() {
   );
   const [polyline, setPolyline] = useState(null);
   const [totalDistance, setTotalDistance] = useState(0);
+  const [showResetMarker, setShowResetMarker] = useState(false);
+
   const saveButtonClick = () => {
     navigate("/myplanner");
   };
@@ -108,6 +110,16 @@ function PlaceSearch() {
     }
   };
 
+  const MapType = (type) => {
+    if ("SATELLITE" === type) {
+      map.setMapType(window.Tmapv2.Map.MapType.SATELLITE);
+    } else if ("HYBRID" === type) {
+      map.setMapType(window.Tmapv2.Map.MapType.HYBRID);
+    } else if ("ROAD" === type) {
+      map.setMapType(window.Tmapv2.Map.MapType.ROAD);
+    }
+  };
+
   useEffect(() => {
     const filteredSearchResults = searchResults.filter((result) =>
       result.title
@@ -138,6 +150,7 @@ function PlaceSearch() {
       initTmap();
     }
   }, [showMap]);
+
   const handleSaveItem = (item) => {
     const selectedCalendar = calendars[selectedDayIndex];
     if (selectedCalendar) {
@@ -155,8 +168,6 @@ function PlaceSearch() {
             "waypoint",
             item.title
           );
-        } else if (!selectedCalendar.end) {
-          handleInputChange(selectedDayIndex, "end", item.title);
         }
       }
       if (item.mapx && item.mapy && map) {
@@ -199,6 +210,21 @@ function PlaceSearch() {
           .distanceTo(currentMarker.getPosition());
       }
       setTotalDistance(markerTotalDistance / 1000);
+      setShowResetMarker(true);
+    }
+  };
+
+  const handleResetMarkers = () => {
+    if (map && map.markers.length > 0) {
+      map.markers.forEach((marker) => marker.setMap(null));
+      map.markers = [];
+      if (polyline) {
+        polyline.setMap(null);
+        setPolyline(null);
+      }
+      setTotalDistance(0);
+      setMarkerNumber(1);
+      setShowResetMarker(false);
     }
   };
   const handleClick = () => {
@@ -247,6 +273,7 @@ function PlaceSearch() {
                     onChange={(e) =>
                       handleInputChange(index, "start", e.target.value)
                     }
+                    readOnly
                   />
                   <DatePicker
                     selected={calendar.startTime}
@@ -276,6 +303,7 @@ function PlaceSearch() {
                             e.target.value
                           )
                         }
+                        readOnly
                       />
                       <DatePicker
                         selected={waypoint.waypointTime}
@@ -360,10 +388,26 @@ function PlaceSearch() {
         </button>
         {showMap && (
           <div>
-            <div id="map_div" className={placesearch.position}></div>
-            <p className={placesearch.totalDistance}>
-              마커 거리의 합: {totalDistance.toFixed(2)}km
-            </p>
+            <div id="map_div" className={placesearch.position}>
+              <div className={placesearch.changeMapButton}>
+                <button onClick={() => MapType("ROAD")}>ROAD</button>
+                <button onClick={() => MapType("SATELLITE")}>SATELLITE</button>
+                <button onClick={() => MapType("HYBRID")}>HYBRID</button>
+              </div>
+            </div>
+            {showResetMarker && (
+              <>
+                <button
+                  className={placesearch.resetMarkers}
+                  onClick={handleResetMarkers}
+                >
+                  마커 리셋
+                </button>
+                <p className={placesearch.totalDistance}>
+                  마커 거리의 합: {totalDistance.toFixed(2)}km
+                </p>
+              </>
+            )}
           </div>
         )}
       </div>

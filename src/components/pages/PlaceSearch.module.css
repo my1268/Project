@@ -96,8 +96,8 @@
 
 .position {
   position: absolute;
-  left: 957px;
-  bottom: 60px;
+  right: 1px;
+  top: 24px;
 }
 
 .showMap {
@@ -107,15 +107,38 @@
   padding: 5px 10px;
   font-size: 16px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 8px;
   transition: background-color 0.3s ease;
 }
+
 .showMap:hover {
   background-color: #0056b3;
 }
 
 .totalDistance {
   position: absolute;
-  left: 955px;
+  left: 957px;
   bottom: 35px;
+}
+
+.resetMarkers {
+  position: absolute;
+  right: 697px;
+  bottom: 35px;
+  background-color: #3da5f5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 2px 5px;
+  transition: background-color 0.3s ease;
+}
+
+.resetMarkers:hover {
+  background-color: #0056b3;
+}
+
+.changeMapButton {
+  position: relative;
+  top: 22px;
+  z-index: 1;
 }

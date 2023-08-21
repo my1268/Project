@@ -110,7 +110,59 @@ function SignUpType({ style, onCloseModal }) {
 
   const match = password === confirmPassword;
 
-  const handleSubmit = () => {
+  const handleEmailCheck = async () => {
+    if (!email) {
+      alert("이메일을 먼저 입력해주세요.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        "/api/check-email", //예시 URL
+        { email },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.exists) {
+        //예시 response
+        setEmailError("이미 사용 중인 이메일입니다.");
+      } else {
+        setEmailError("사용 가능한 이메일입니다.");
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+    }
+  };
+
+  const handleNicknameCheck = async () => {
+    if (!nickName) {
+      alert("닉네임을 먼저 입력해주세요.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        "/api/check-nickname", // 예시 URL
+        { nickname: nickName },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.exists) {
+        //예시 response
+        setNickNameError("이미 사용 중인 닉네임입니다.");
+      } else {
+        setNickNameError("사용 가능한 닉네임입니다.");
+      }
+    } catch (error) {
+      console.error("Error checking nickname:", error);
+    }
+  };
+
+  const handleSubmit = async () => {
     if (
       !validateEmail() ||
       !validatePassword() ||
@@ -121,8 +173,8 @@ function SignUpType({ style, onCloseModal }) {
     ) {
       return;
     } else {
-      axios
-        .post(
+      try {
+        const response = await axios.post(
           "/member/join",
           {
             email,
@@ -138,17 +190,17 @@ function SignUpType({ style, onCloseModal }) {
               "Content-Type": "application/json",
             },
           }
-        )
-        .then((response) => {
-          if (response.data.success) {
-            onCloseModal();
-          } else {
-            alert("회원가입에 실패했습니다. 다시 시도해주세요.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+        );
+        if (response.data.success) {
+          // 예시 response
+          onCloseModal();
+          alert("회원가입 완료");
+        } else {
+          alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   };
 
@@ -159,6 +211,7 @@ function SignUpType({ style, onCloseModal }) {
           placeholder="이메일"
           onChange={handleEmailChange}
           value={email}
+          onClick={handleEmailCheck}
         />
         <p style={{ color: "red" }}>{emailError}</p>
       </div>
@@ -195,6 +248,7 @@ function SignUpType({ style, onCloseModal }) {
           placeholder="닉네임"
           onChange={handleNickNameChange}
           value={nickName}
+          onClick={handleNicknameCheck}
         />
         <p style={{ color: "red" }}>{nickNameError}</p>
       </div>

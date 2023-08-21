@@ -127,9 +127,9 @@ function SignUpType({ style, onCloseModal }) {
       );
       if (response.data.exists) {
         //예시 response
-        setEmailError("이미 사용 중인 이메일입니다.");
+        alert("이미 사용 중인 이메일입니다.");
       } else {
-        setEmailError("사용 가능한 이메일입니다.");
+        alert("사용 가능한 이메일입니다.");
       }
     } catch (error) {
       console.error("Error checking email:", error);
@@ -153,9 +153,9 @@ function SignUpType({ style, onCloseModal }) {
       );
       if (response.data.exists) {
         //예시 response
-        setNickNameError("이미 사용 중인 닉네임입니다.");
+        alert("이미 사용 중인 닉네임입니다.");
       } else {
-        setNickNameError("사용 가능한 닉네임입니다.");
+        alert("사용 가능한 닉네임입니다.");
       }
     } catch (error) {
       console.error("Error checking nickname:", error);

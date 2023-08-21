@@ -2,7 +2,7 @@ import React from "react";
 import form from "./Form.module.css";
 import Mini from "../Button/Mini";
 
-function ButtonType({ placeholder, buttonText, onChange, value }) {
+function ButtonType({ placeholder, onClick, onChange, value }) {
   return (
     <div className={form.buttonType}>
       <input
@@ -12,7 +12,7 @@ function ButtonType({ placeholder, buttonText, onChange, value }) {
         value={value}
         onChange={onChange}
       />
-      <Mini text="중복확인" color="gray" />
+      <Mini text="중복확인" color="gray" onClick={onClick} />
     </div>
   );
 }

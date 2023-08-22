@@ -144,7 +144,7 @@ function SignUpType({ style, onCloseModal }) {
     try {
       const response = await axios.post(
         "/api/check-nickname", // 예시 URL
-        { nickname: nickName },
+        { nickName },
         {
           headers: {
             "Content-Type": "application/json",

@@ -156,6 +156,9 @@ function PlaceSearch() {
     if (selectedCalendar) {
       if (!selectedCalendar.start) {
         handleInputChange(selectedDayIndex, "start", item.title);
+        handleInputChange(selectedDayIndex, "startImage", item.image);
+        console.log(`Start Item: ${item.title}`);
+        console.log(`Start Item Image: ${item.image}`);
       } else {
         const waypoints = selectedCalendar.waypoints || [];
         const emptyWaypointIndex = waypoints.findIndex(
@@ -168,6 +171,14 @@ function PlaceSearch() {
             "waypoint",
             item.title
           );
+          handleWaypointInputChange(
+            selectedDayIndex,
+            emptyWaypointIndex,
+            "waypointImage",
+            item.image // 추가
+          );
+          console.log(`Waypoint Item: ${item.title}`);
+          console.log(`Waypoint Item Image: ${item.image}`);
         }
       }
       if (item.mapx && item.mapy && map) {
@@ -390,9 +401,24 @@ function PlaceSearch() {
           <div>
             <div id="map_div" className={placesearch.position}>
               <div className={placesearch.changeMapButton}>
-                <button onClick={() => MapType("ROAD")}>ROAD</button>
-                <button onClick={() => MapType("SATELLITE")}>SATELLITE</button>
-                <button onClick={() => MapType("HYBRID")}>HYBRID</button>
+                <button
+                  className={placesearch.mapTypeButton}
+                  onClick={() => MapType("ROAD")}
+                >
+                  ROAD
+                </button>
+                <button
+                  className={placesearch.mapTypeButton}
+                  onClick={() => MapType("SATELLITE")}
+                >
+                  SATELLITE
+                </button>
+                <button
+                  className={placesearch.mapTypeButton}
+                  onClick={() => MapType("HYBRID")}
+                >
+                  HYBRID
+                </button>
               </div>
             </div>
             {showResetMarker && (

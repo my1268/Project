@@ -97,7 +97,7 @@
 .position {
   position: absolute;
   right: 1px;
-  top: 24px;
+  top: 17px;
 }
 
 .showMap {
@@ -139,6 +139,20 @@
 
 .changeMapButton {
   position: relative;
-  top: 22px;
+  top: 30px;
   z-index: 1;
+}
+
+.mapTypeButton {
+  background-color: #3da5f5;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 6px;
+  margin-right: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.mapTypeButton:hover {
+  background-color: #0056b3;
 }

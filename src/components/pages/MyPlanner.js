@@ -41,9 +41,10 @@ function MyPlanner() {
       {openModal && (
         <>
           <PlannerModal
-            title="플래너 목록"
+            title="플래너 제목"
             subTitle="타임 테이블"
             showTimeTable={true}
+            showMemo={true}
             showPlace={true}
             onClick={() => setOpenModal(false)}
           />

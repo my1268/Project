@@ -17,6 +17,7 @@ function PlannerModal({
   showSection,
   showPlace,
   showTimeTable,
+  showMemo,
   showComment,
 }) {
   const placeList = [
@@ -40,7 +41,7 @@ function PlannerModal({
     },
   ];
   return (
-    <aside className={`${modal.base} ${modal.posting}`}>
+    <aside className={`${modal.base} ${modal.posting} ${modal.overFlow}`}>
       <header className={modal.header}>
         <h2>{title}</h2>
         <div className={modal.buttonWrapper}>
@@ -65,6 +66,12 @@ function PlannerModal({
         <h3>{subTitle}</h3>
         {showTimeTable && <TimeTable />}
       </div>
+      {showMemo && (
+        <div className={modal.section}>
+          <h3>메모</h3>
+          <textarea className={modal.memoTextArea} />
+        </div>
+      )}
       {showSection && (
         <div className={modal.section}>
           <h3>리뷰</h3>

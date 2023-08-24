@@ -19,6 +19,8 @@ function PlannerModal({
   showTimeTable,
   showMemo,
   showComment,
+  showReviewReadOnly,
+  showUpdateDeleteButton,
 }) {
   const placeList = [
     {
@@ -44,16 +46,26 @@ function PlannerModal({
     <aside className={`${modal.base} ${modal.posting} ${modal.overFlow}`}>
       <header className={modal.header}>
         <h2>{title}</h2>
-        <div className={modal.buttonWrapper}>
-          <Ghost text="수정" style={{ color: "#3DA5F5" }} className="lg-only" />
-          <Ghost text="삭제" style={{ color: "#F86D7D" }} className="lg-only" />
-          <button type="button" className={`sm-only ${modal.edit}`}>
-            <MdEdit />
-          </button>
-          <button type="button" className={`sm-only ${modal.delete}`}>
-            <AiTwotoneDelete />
-          </button>
-        </div>
+        {showUpdateDeleteButton && (
+          <div className={modal.buttonWrapper}>
+            <Ghost
+              text="수정"
+              style={{ color: "#3DA5F5" }}
+              className="lg-only"
+            />
+            <Ghost
+              text="삭제"
+              style={{ color: "#F86D7D" }}
+              className="lg-only"
+            />
+            <button type="button" className={`sm-only ${modal.edit}`}>
+              <MdEdit />
+            </button>
+            <button type="button" className={`sm-only ${modal.delete}`}>
+              <AiTwotoneDelete />
+            </button>
+          </div>
+        )}
         <button
           type="button"
           className={`sm-only ${modal.close}`}
@@ -75,7 +87,11 @@ function PlannerModal({
       {showSection && (
         <div className={modal.section}>
           <h3>리뷰</h3>
-          <textarea className={modal.reviewTextArea} placeholder="리뷰" />
+          <textarea
+            className={modal.reviewTextArea}
+            placeholder="리뷰"
+            readOnly={showReviewReadOnly}
+          />
           <div className={modal.section}>
             <h3>사진</h3>
             <CardList placeList={placeList.map(({ image }) => ({ image }))} />

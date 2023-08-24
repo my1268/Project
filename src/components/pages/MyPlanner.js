@@ -62,6 +62,7 @@ function MyPlanner() {
             showMemo={true}
             showPlace={true}
             onClick={() => setOpenModal(false)}
+            showUpdateDeleteButton={true}
           />
           <Overlay onClick={() => setOpenModal(false)} />
         </>

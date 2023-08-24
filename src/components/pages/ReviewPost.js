@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 
 function ReviewPost() {
   const [openModal, setOpenModal] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
+
   const navigate = useNavigate("");
   const ReviewWriteButton = () => {
     navigate("/reviewwrite");
@@ -20,56 +23,76 @@ function ReviewPost() {
   const placeList = [
     {
       inquiry: "조회 10",
-      name: "리뷰 제목",
+      name: "리뷰 제목1",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
       inquiry: "조회 10",
-      name: "리뷰 제목",
+      name: "리뷰 제목2",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
       inquiry: "조회 10",
-      name: "리뷰 제목",
+      name: "리뷰 제목3",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
       inquiry: "조회 10",
-      name: "리뷰 제목",
+      name: "리뷰 제목4",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
       inquiry: "조회 10",
-      name: "리뷰 제목",
+      name: "리뷰 제목5",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
       inquiry: "조회 10",
-      name: "리뷰 제목",
+      name: "리뷰 제목6",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
   ];
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    updateFilteredItems();
+  };
+
+  const updateFilteredItems = () => {
+    const filteredList = placeList.filter((item) =>
+      item.name.includes(searchKeyword)
+    );
+    setFilteredItems(filteredList);
+  };
   return (
     <>
       <PageCover title="리뷰 게시판" />
       <div className="container">
-        <form className={reviewPost.form}>
+        <form className={reviewPost.form} onSubmit={handleSearch}>
           <div className={reviewPost.formContainer}>
             <div className={reviewPost.searchContainer}>
-              <Base placeholder="플래너를 검색하세요" />
-              <Primary isShortPrimary="true" text="검색" />
+              <Base
+                placeholder="제목을 검색하세요"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+              />
+              <Primary
+                isShortPrimary="true"
+                text="검색"
+                onClick={handleSearch}
+              />
             </div>
             <Ghost
               text="리뷰 작성하기"
@@ -78,7 +101,10 @@ function ReviewPost() {
             />
           </div>
         </form>
-        <CardList placeList={placeList} />
+        <CardList
+          placeList={filteredItems.length > 0 ? filteredItems : placeList}
+          onClick={() => setOpenModal(true)}
+        />
       </div>
       {openModal && (
         <>
@@ -88,6 +114,7 @@ function ReviewPost() {
             showTimeTable={true}
             showSection={true}
             onClick={() => setOpenModal(false)}
+            showReviewReadOnly={true}
           />
           <Overlay onClick={() => setOpenModal(false)} />
         </>

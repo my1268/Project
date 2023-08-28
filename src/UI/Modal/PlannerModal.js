@@ -81,6 +81,7 @@ function PlannerModal({
         const updatedComments = comments.filter((_, i) => i !== index);
         setComments(updatedComments);
       }
+      closeEmotionModal();
     };
   };
 

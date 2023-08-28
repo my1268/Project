@@ -1,14 +1,30 @@
-import React from "react";
-import demoImage from "../../assets/images/화담숲.png";
+import React, { useState, useEffect } from "react";
+import demoImage1 from "../../assets/images/풍경1.png";
+import demoImage2 from "../../assets/images/풍경2.png";
+import demoImage3 from "../../assets/images/풍경3.png";
+import demoImage4 from "../../assets/images/풍경4.png";
 import Primary from "../../UI/Button/Primary";
 import main from "./Main.module.css";
 
+const images = [demoImage1, demoImage2, demoImage3, demoImage4];
+
 function Main() {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    }, 2000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <main className={main.main}>
       <div className={main.wrapper}>
         <div className={main.image}>
-          <img src={demoImage} alt="화담숲" />
+          <img src={images[currentImage]} alt="풍경" />
         </div>
         <p className={main.message}>
           <strong>도시의 환상</strong>과

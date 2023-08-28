@@ -32,13 +32,25 @@
 
 .message {
   margin-bottom: 40px;
-  font-size: 20px;
+  font-size: 25px;
   color: #191a20;
   line-height: 28px;
+  animation: slide 2s forwards;
 }
 
 .message strong {
   color: #3da5f5;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @media screen and (min-width: 900px) {

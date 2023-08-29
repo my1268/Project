@@ -14,10 +14,19 @@ function MyComment() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
 
-  const list = [
+  const [list, setList] = useState([
     { title: "플래너 제목- 댓글 1", date: "23.03.01 - 23.03.04", page: "/" },
     { title: "플래너 제목- 댓글 2", date: "23.02.01 - 23.02.04", page: "/" },
-  ];
+  ]);
+
+  const handleDelete = (itemDelete) => {
+    const updatedList = list.filter((item) => item !== itemDelete);
+    const updatedFilteredList = filteredItems.filter(
+      (item) => item !== itemDelete
+    );
+    setList(updatedList);
+    setFilteredItems(updatedFilteredList);
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -45,11 +54,19 @@ function MyComment() {
             />
             <Primary isShortPrimary="true" text="검색" onClick={handleSearch} />
           </form>
-          <Board
-            list={filteredItems.length > 0 ? filteredItems : list}
-            title="댓글 목록"
-            onClick={() => setOpenModal(true)}
-          />
+          {filteredItems.length > 0 || list.length > 0 ? (
+            <Board
+              list={filteredItems.length > 0 ? filteredItems : list}
+              title="댓글 목록"
+              onClick={() => setOpenModal(true)}
+              onDelete={handleDelete}
+            />
+          ) : (
+            <p>
+              현재 댓글이 없습니다. 상단에 리뷰 게시판 버튼을 눌러 댓글을
+              작성해보세요!
+            </p>
+          )}
           <Pagination />
         </div>
       </div>

@@ -126,7 +126,6 @@ function SignUpType({ style, onCloseModal }) {
         }
       );
       if (response.data.exists) {
-        //예시 response
         alert("이미 사용 중인 이메일입니다.");
       } else {
         alert("사용 가능한 이메일입니다.");
@@ -152,7 +151,6 @@ function SignUpType({ style, onCloseModal }) {
         }
       );
       if (response.data.exists) {
-        //예시 response
         alert("이미 사용 중인 닉네임입니다.");
       } else {
         alert("사용 가능한 닉네임입니다.");
@@ -192,7 +190,6 @@ function SignUpType({ style, onCloseModal }) {
           }
         );
         if (response.data.success) {
-          // 예시 response
           onCloseModal();
           alert("회원가입 완료");
         } else {

@@ -45,7 +45,6 @@ function NewPasswordModal({ onClick, onCloseModal }) {
           }
         );
         if (response.data.success) {
-          // 예시 response
           alert("비밀번호 수정이 완료되었습니다.");
           onCloseModal();
         } else {

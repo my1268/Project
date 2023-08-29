@@ -40,7 +40,6 @@ function PasswordType({ style, setShowNewPassword }) {
         },
       });
       if (response.ok) {
-        //예시 response
         setShowNewPassword(true);
       } else {
         alert("다시 확인해주세요");

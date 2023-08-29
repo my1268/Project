@@ -2,7 +2,7 @@ import React from "react";
 import board from "./Board.module.css";
 import Mini from "../../UI/Button/Mini";
 
-function Board({ list, onClick, title }) {
+function Board({ list, onClick, title, onDelete }) {
   return (
     <ul className={board.table}>
       <li className={board.tableHeader}>
@@ -11,13 +11,18 @@ function Board({ list, onClick, title }) {
         <div className="lg-only"></div>
       </li>
       {list.map((item) => {
+        const handleDelete = () => {
+          if (window.confirm(`${item.title}을 삭제하시겠습니까?`)) {
+            onDelete(item);
+          }
+        };
         return (
           <li className={board.tableBody} key={item.title}>
             <button type="button" className={board.title} onClick={onClick}>
               {item.title}
             </button>
             <span className={`lg-only ${board.date}`}>{item.date}</span>
-            <Mini color="red" text="삭제" />
+            <Mini color="red" text="삭제" onClick={handleDelete} />
           </li>
         );
       })}

@@ -26,10 +26,6 @@ function PlaceSearch() {
   const [totalDistance, setTotalDistance] = useState(0);
   const [showResetMarker, setShowResetMarker] = useState(false);
 
-  const saveButtonClick = () => {
-    navigate("/myplanner");
-  };
-
   const handleBack = () => {
     navigate(-1);
   };
@@ -238,6 +234,55 @@ function PlaceSearch() {
       setShowResetMarker(false);
     }
   };
+
+  const saveButtonClick = async () => {
+    let emptyData = false;
+    for (const calendar of calendars) {
+      if (!calendar.start || !calendar.startTime) {
+        emptyData = true;
+        break;
+      }
+      if (calendar.waypoints) {
+        for (const waypoint of calendar.waypoints) {
+          if (!waypoint.waypoint || !waypoint.waypointTime) {
+            emptyData = true;
+            break;
+          }
+        }
+      }
+      if (emptyData) {
+        break;
+      }
+    }
+    if (emptyData) {
+      alert("현재 비어있는 장소나 날짜가 있습니다. 모두 입력해주세요!");
+      return;
+    }
+    try {
+      const requestData = calendars.map((calendar) => {
+        const waypointsData = calendar.waypoints
+          ? calendar.waypoints.map((waypoint) => ({
+              waypoint: waypoint.waypoint,
+              waypointTime: waypoint.waypointTime,
+            }))
+          : [];
+        return {
+          start: calendar.start,
+          startTime: calendar.startTime,
+          waypoints: waypointsData,
+        };
+      });
+      const response = await axios.post(
+        "http://localhost:3000/save-calendars", //예시 URL
+        requestData
+      );
+      console.log("Calendars saved:", response.data);
+      navigate("/myplanner");
+    } catch (error) {
+      console.error("Error saving calendars:", error);
+    }
+  };
+
   const handleClick = () => {
     setShowMap(true);
   };

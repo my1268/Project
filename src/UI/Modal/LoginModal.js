@@ -7,13 +7,31 @@ import { GrClose } from "react-icons/gr";
 import SignUpModal from "./SignUpModal";
 import PasswordModal from "./PasswordModal";
 import { useNavigate } from "react-router-dom";
+//import axios from "axios";
 
 function LoginModal({ onClick, onLoginSuccess }) {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    //  try {
+    //   const response = await axios.post("/login/normal", {
+    //    email: email,
+    //    password: password,
+    //      });
+    //     if (response.data.token) {
+    //   localStorage.setItem("token", response.data.token);
     onLoginSuccess();
+    //    } else {
+    //    alert("이메일 또는 비밀번호를 다시 확인해주세요.");
+    //    setEmail("");
+    //    setPassword("");
+    //       }
+    //    } catch (error) {
+    //      console.error("로그인 실패:", error);
+    //   }
   };
 
   const navigate = useNavigate("");
@@ -25,11 +43,17 @@ function LoginModal({ onClick, onLoginSuccess }) {
   return (
     <aside className={`${modal.base} ${modal.member}`}>
       <h2>로그인</h2>
-      <LoginType style={{ marginBottom: "16px" }} />
+      <LoginType
+        style={{ marginBottom: "16px" }}
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+      />
       <Primary
         text="로그인"
         style={{ marginBottom: "64px" }}
-        onClick={handleLogin} // 서버로 post해야함
+        onClick={handleLogin}
       />
       <Kakao style={{ marginBottom: "16px" }} />
       <div className={modal.extraButtons}>

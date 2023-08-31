@@ -5,11 +5,23 @@ import demoImage3 from "../../assets/images/풍경3.png";
 import demoImage4 from "../../assets/images/풍경4.png";
 import Primary from "../../UI/Button/Primary";
 import main from "./Main.module.css";
+import { useNavigate } from "react-router-dom";
+import { getToken } from "../Tokens/getToken";
 
 const images = [demoImage1, demoImage2, demoImage3, demoImage4];
 
 function Main() {
   const [currentImage, setCurrentImage] = useState(0);
+
+  const navigate = useNavigate();
+  const writeButtonClick = () => {
+    const token = getToken();
+    if (token) {
+      navigate("/makingplanner");
+    } else {
+      alert("로그인 후 이용해주세요");
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,9 +46,7 @@ function Main() {
           여행을 즐겨보세요!
         </p>
       </div>
-      <a href="/">
-        <Primary text="플래너 작성하기 가기" />
-      </a>
+      <Primary text="플래너 작성하기 가기" onClick={writeButtonClick} />
       <div className={main.background}></div>
     </main>
   );

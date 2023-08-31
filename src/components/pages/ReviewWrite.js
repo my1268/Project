@@ -5,10 +5,13 @@ import Memo from "../../UI/Form/Memo";
 import PageCover from "../features/PageCover";
 import making from "./MakingPlanner.module.css";
 import form from "../../UI/Form/Form.module.css";
+// import { getToken } from "../Tokens/getToken";
 
 function ReviewWrite() {
   const [selectPlanner, setSelectPlanner] = useState("");
   const [imagePreviews, setImagePreviews] = useState([]);
+
+  // const token = getToken(); // post 필요
 
   const PlannerChange = (e) => {
     setSelectPlanner(e.target.value);
@@ -22,9 +25,9 @@ function ReviewWrite() {
   };
 
   const plannerOptions = [
-    { value: "planner1", label: "플래너1" },
-    { value: "planner2", label: "플래너2" },
-    { value: "planner3", label: "플래너3" },
+    { value: "플래너1" },
+    { value: "플래너2" },
+    { value: "플래너3" },
   ];
   return (
     <>
@@ -51,7 +54,7 @@ function ReviewWrite() {
                     <option value="">플래너를 선택하세요</option>
                     {plannerOptions.map((option) => (
                       <option key={option.value} value={option.value}>
-                        {option.label}
+                        {option.value}
                       </option>
                     ))}
                   </select>

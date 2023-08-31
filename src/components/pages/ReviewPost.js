@@ -9,6 +9,7 @@ import CardList from "../../UI/Card/CardList";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import { useNavigate } from "react-router-dom";
+//import { getToken } from "../Tokens/getToken";
 
 function ReviewPost() {
   const [openModal, setOpenModal] = useState(false);
@@ -17,7 +18,12 @@ function ReviewPost() {
 
   const navigate = useNavigate("");
   const ReviewWriteButton = () => {
+    // const token = getToken();
+    // if (token) {
     navigate("/reviewwrite");
+    // } else {
+    //   alert("리뷰를 작성하려면 로그인이 필요합니다.");
+    // }
   };
 
   const placeList = [

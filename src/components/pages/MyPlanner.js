@@ -8,6 +8,7 @@ import myPlanner from "./MyPlanner.module.css";
 import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
+import { getToken } from "../Tokens/getToken";
 
 function MyPlanner() {
   const [openModal, setOpenModal] = useState(false);
@@ -81,6 +82,7 @@ function MyPlanner() {
             onClick={() => setOpenModal(false)}
             showUpdateDeleteButton={true}
             onDelete={handleDelete}
+            token={getToken()}
           />
           <Overlay onClick={() => setOpenModal(false)} />
         </>

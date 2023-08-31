@@ -5,7 +5,8 @@ import Memo from "../../UI/Form/Memo";
 import PageCover from "../features/PageCover";
 import making from "./MakingPlanner.module.css";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios";
+//import axios from "axios";
+//import { getToken } from "../Tokens/getToken";
 
 function MakingPlanner() {
   const [title, setTitle] = useState("");
@@ -14,22 +15,28 @@ function MakingPlanner() {
   const navigate = useNavigate("");
 
   const placeSearchButton = async () => {
+    // const token = getToken();
     if (title.trim().length === 0) {
       alert("제목을 한 글자 이상 입력해주세요!");
-    } else {
-      // try {
-      // const requestData = {
-      //  title: title,
-      //  memo: memo,
-      // };
-      //  const response = await axios.post(
-      //    "http://localhost:3000/create-planner", // 예시 URL
-      //      requestData
-      //    );
-      //   console.log("Planner created:", response.data);
+      //  } else {
+      //    try {
+      //      const requestData = {
+      //        title: title,
+      //        memo: memo,
+      //      };
+      //      const response = await axios.post(
+      //        "http://localhost:3000/create-planner", // 예시 URL
+      //        requestData,
+      //       {
+      //         headers: {
+      //          Authorization: `Bearer ${token}`,
+      //       },
+      //    }
+      //   );
+      //  console.log("Planner created:", response.data);
       navigate("/placesearch");
-      //   } catch (error) {
-      //     console.error("Error creating planner:", error);
+      //  } catch (error) {
+      //    console.error("Error creating planner:", error);
       //  }
     }
   };

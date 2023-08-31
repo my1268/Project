@@ -11,6 +11,8 @@ import Base from "../Form/Base";
 import Primary from "../Button/Primary";
 import { BiEraser } from "react-icons/bi";
 import { BiDotsHorizontal, BiHappyHeartEyes, BiAngry } from "react-icons/bi";
+//import axios from "axios";
+//import { getToken } from "../../components/Tokens/getToken";
 
 function PlannerModal({
   onClick,
@@ -23,6 +25,7 @@ function PlannerModal({
   showComment,
   showReviewReadOnly,
   showUpdateDeleteButton,
+  //token,
 }) {
   const placeList = [
     {
@@ -62,14 +65,58 @@ function PlannerModal({
     setIsOpenEmotionModal(false);
   };
 
-  const handleSaveComment = (comment) => {
+  // if (!token) {
+  //   alert("로그인 후에 모달창을 클릭할 수 있습니다.");
+  //   return;
+  // }
+
+  const handleSaveComment = async (comment, emotionType) => {
     if (comment.trim() === "") {
       return;
     }
+    //  const token = getToken();
+    //  if (!token) {
+    //    alert("로그인 후에 댓글을 저장할 수 있습니다.");
+    //    setCurrentComment("");
+    //    return;
+    //  }
+    //  try {
+    //    const getNickName = await axios.get("/api/user/nickname", {
+    //      //예시 URL
+    //      headers: {
+    //        Authorization: `Bearer ${token}`,
+    //      },
+    //    });
+    //   if (getNickName.data.success) {
+    //     const savedNickname = getNickName.data.nickname;
+    //     const commentSave = await axios.post(
+    //       "api/comment", // 예시 URL
+    //       {
+    //        comment: currentComment,
+    //       nickname: savedNickname,
+    //      emotionType: emotionType,
+    //    },
+    //   {
+    //    headers: {
+    //     Authorization: `Bearer ${token}`,
+    //  },
+    //  }
+    //  );
+    //  if (commentSave.data.success) {
+    const newEmotionClickData = { happy: 0, bad: 0 };
     setComments([...comments, { text: comment, time: new Date() }]);
-    setEmotionClick([{ happy: 0, bad: 0 }, ...emotionClick]);
+    setEmotionClick([...emotionClick, newEmotionClickData]);
     setCurrentComment("");
     closeEmotionModal();
+    //    } else {
+    //     console.error("댓글 저장 실패:", commentSave.data.errorMessage);
+    //  }
+    // } else {
+    //   console.error("닉네임 가져오기 실패:", getNickName.data.errorMessage);
+    //  }
+    //  } catch (error) {
+    //   console.error("댓글 저장 실패:", error);
+    //  }
   };
 
   const handleDeleteComment = (index, commentText) => {
@@ -193,7 +240,8 @@ function PlannerModal({
                 .map((comment, index) => (
                   <div key={index} className={modal.commentContainer}>
                     <p className={modal.commentText}>
-                      내 닉네임: {comment.text} ---
+                      {/* {savedNickname}: {comment.text} ---*/}내 닉네임:
+                      {comment.text} ---
                       {comment.time.toLocaleString()}
                     </p>
                     <BiEraser
@@ -258,6 +306,7 @@ function PlannerModal({
       )}
       {showComment && (
         <div>
+          {/* {savedNickname}: {comment.text} */}
           <h4>내 닉네임: 댓글 내용</h4>
           <h4>내 닉네임: 댓글 내용</h4>
           <h4>내 닉네임: 댓글 내용</h4>

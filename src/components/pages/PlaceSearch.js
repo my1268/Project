@@ -7,6 +7,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
 import axios from "axios";
+import { getToken } from "../Tokens/getToken";
+/* eslint-disable */
 
 function PlaceSearch() {
   const navigate = useNavigate();
@@ -235,6 +237,8 @@ function PlaceSearch() {
     }
   };
 
+  const token = getToken();
+
   const saveButtonClick = async () => {
     let emptyData = false;
     for (const calendar of calendars) {
@@ -274,7 +278,12 @@ function PlaceSearch() {
       });
       const response = await axios.post(
         "http://localhost:3000/save-calendars", //예시 URL
-        requestData
+        requestData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Calendars saved:", response.data);
       navigate("/myplanner");

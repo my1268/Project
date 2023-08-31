@@ -9,6 +9,8 @@ import LoginModal from "../../UI/Modal/LoginModal";
 import Overlay from "../../UI/Modal/Overlay";
 import SignUpModal from "../../UI/Modal/SignUpModal";
 import { Link, useNavigate } from "react-router-dom";
+// import { getToken } from "../Tokens/getToken";
+import { removeToken } from "../Tokens/removeToken";
 // import KakaoLogoutApi from "../../UI/KaKao/KakaoLogoutApi";
 
 function Header() {
@@ -25,11 +27,14 @@ function Header() {
   };
 
   const handleLogout = () => {
+    removeToken();
     setIsLoggedIn(false);
     navigate("/");
   };
 
   const handlePlannerButtonClick = () => {
+    //  const token = getToken();
+    // if (token) {
     if (isLoggedIn) {
       navigate("/makingplanner");
     } else {
@@ -62,6 +67,7 @@ function Header() {
             <Ghost text="리뷰 게시판" onClick={handleReviewPostButtonClick} />
           </div>
           <div className={header.member}>
+            {/*{token ?} */}
             {isLoggedIn ? (
               <>
                 <Link to="/mymenu" className={header.myMenu}>

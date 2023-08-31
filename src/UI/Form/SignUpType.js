@@ -23,6 +23,9 @@ function SignUpType({ style, onCloseModal }) {
   const [nickNameError, setNickNameError] = useState("");
   const [addInputError, setAddInputError] = useState("");
 
+  const [emailChecked, setEmailChecked] = useState(false);
+  const [nickNameChecked, setNickNameChecked] = useState(false);
+
   const OptionsClick = () => {
     setShowOptions(!showOptions);
   };
@@ -129,6 +132,7 @@ function SignUpType({ style, onCloseModal }) {
         alert("이미 사용 중인 이메일입니다.");
       } else {
         alert("사용 가능한 이메일입니다.");
+        setEmailChecked(true);
       }
     } catch (error) {
       console.error("Error checking email:", error);
@@ -154,6 +158,7 @@ function SignUpType({ style, onCloseModal }) {
         alert("이미 사용 중인 닉네임입니다.");
       } else {
         alert("사용 가능한 닉네임입니다.");
+        setNickNameChecked(true);
       }
     } catch (error) {
       console.error("Error checking nickname:", error);
@@ -171,6 +176,14 @@ function SignUpType({ style, onCloseModal }) {
     ) {
       return;
     } else {
+      if (!emailChecked) {
+        alert("이메일 중복 확인을 먼저 해주세요.");
+        return;
+      }
+      if (!nickNameChecked) {
+        alert("닉네임 중복 확인을 먼저 해주세요.");
+        return;
+      }
       try {
         const response = await axios.post(
           "/member/join",

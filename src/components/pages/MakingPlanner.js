@@ -18,7 +18,7 @@ function MakingPlanner() {
     // const token = getToken();
     if (title.trim().length === 0) {
       alert("제목을 한 글자 이상 입력해주세요!");
-      //  } else {
+    } else {
       //    try {
       //      const requestData = {
       //        title: title,

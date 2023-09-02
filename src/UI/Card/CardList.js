@@ -5,8 +5,8 @@ import Card from "./Card";
 function CardList({ placeList, onClick }) {
   return (
     <ul className={card.list}>
-      {placeList.map((place) => {
-        return <Card place={place} onClick={onClick} />;
+      {placeList.map((place, index) => {
+        return <Card place={place} key={index} onClick={onClick} />;
       })}
     </ul>
   );

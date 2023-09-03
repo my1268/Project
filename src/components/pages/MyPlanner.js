@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Categories from "../features/Categories";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
@@ -9,24 +9,31 @@ import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import { getToken } from "../Tokens/getToken";
+import axios from "axios";
 
 function MyPlanner() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-
+  //const [currentTitle, setCurrentTitle] = useState();
+  //const [list, setList] = useState([]);
   const [list, setList] = useState([
-    { title: "플래너 제목 1", date: "23.03.01 - 23.03.04", page: "/" },
-    { title: "플래너 제목 2", date: "23.02.01 - 23.02.04", page: "/" },
+    { id: 1, title: "플래너 제목 1", date: "23.03.01 - 23.03.04", page: "/" },
+    { id: 2, title: "플래너 제목 2", date: "23.02.01 - 23.02.04", page: "/" },
   ]);
 
-  const handleDelete = (itemDelete) => {
-    const updatedList = list.filter((item) => item !== itemDelete);
+  const handleDelete = async (itemToDelete) => {
+    //  try {
+    //   await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
+    const updatedList = list.filter((item) => item.id !== itemToDelete.id);
     const updatedFilteredList = filteredItems.filter(
-      (item) => item !== itemDelete
+      (item) => item.id !== itemToDelete.id
     );
     setList(updatedList);
     setFilteredItems(updatedFilteredList);
+    //  } catch (error) {
+    //    console.error("Failed to delete item:", error);
+    //  }
   };
 
   const handleSearch = (e) => {
@@ -40,6 +47,28 @@ function MyPlanner() {
     );
     setFilteredItems(filteredList);
   };
+
+  useEffect(() => {
+    async function getTitle() {
+      try {
+        const response = await axios.get("/api/title/memo"); // 예시 URL
+        if (response.data.success) {
+          const makingPlannerData = response.data.data;
+          //setCurrentTitle(makingPlannerData.title);
+          if (makingPlannerData.title) {
+            const id = Date.now();
+            const newListItem = { id: id, title: makingPlannerData.title };
+            setList([newListItem]);
+          }
+        } else {
+          console.error("Failed get title:", response.data.errorMessage);
+        }
+      } catch (error) {
+        console.error("Failed get title:", error);
+      }
+    }
+    getTitle();
+  }, []);
 
   return (
     <>
@@ -75,6 +104,7 @@ function MyPlanner() {
         <>
           <PlannerModal
             title="플래너 제목"
+            //title={currentTitle}
             subTitle="타임 테이블"
             showTimeTable={true}
             showMemo={true}

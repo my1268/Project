@@ -8,6 +8,7 @@ import myPlanner from "./MyPlanner.module.css";
 import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
+//import axios from "axios";
 
 function MyComment() {
   const [openModal, setOpenModal] = useState(false);
@@ -15,17 +16,32 @@ function MyComment() {
   const [filteredItems, setFilteredItems] = useState([]);
 
   const [list, setList] = useState([
-    { title: "플래너 제목- 댓글 1", date: "23.03.01 - 23.03.04", page: "/" },
-    { title: "플래너 제목- 댓글 2", date: "23.02.01 - 23.02.04", page: "/" },
+    {
+      id: 1,
+      title: "플래너 제목- 댓글 1",
+      date: "23.03.01 - 23.03.04",
+      page: "/",
+    },
+    {
+      id: 2,
+      title: "플래너 제목- 댓글 2",
+      date: "23.02.01 - 23.02.04",
+      page: "/",
+    },
   ]);
 
-  const handleDelete = (itemDelete) => {
-    const updatedList = list.filter((item) => item !== itemDelete);
+  const handleDelete = async (itemToDelete) => {
+    //  try {
+    //   await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
+    const updatedList = list.filter((item) => item.id !== itemToDelete.id);
     const updatedFilteredList = filteredItems.filter(
-      (item) => item !== itemDelete
+      (item) => item.id !== itemToDelete.id
     );
     setList(updatedList);
     setFilteredItems(updatedFilteredList);
+    //  } catch (error) {
+    //    console.error("Failed to delete item:", error);
+    //  }
   };
 
   const handleSearch = (e) => {

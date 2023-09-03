@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Ghost from "../Button/Ghost";
 import modal from "./Modal.module.css";
 import { GrClose } from "react-icons/gr";
-import { AiTwotoneDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import CardList from "../Card/CardList";
 import demoImage from "../../assets/images/놀이공원.png";
@@ -11,6 +10,7 @@ import Base from "../Form/Base";
 import Primary from "../Button/Primary";
 import { BiEraser } from "react-icons/bi";
 import { BiDotsHorizontal, BiHappyHeartEyes, BiAngry } from "react-icons/bi";
+import axios from "axios";
 //import axios from "axios";
 //import { getToken } from "../../components/Tokens/getToken";
 
@@ -55,6 +55,11 @@ function PlannerModal({
   const [emotionModalIndex, setEmotionModalIndex] = useState(null);
   const [selectedComment, setSelectedComment] = useState("");
 
+  const [isMemoUpdate, setIsMemoUpdate] = useState(false);
+  const [currentMemo, setCurrentMemo] = useState("");
+  const [isReviewUpdate, setIsReviewUpdate] = useState(false);
+  const [currentReview, setCurrentReview] = useState("");
+
   const openEmotionModal = (index) => {
     setEmotionModalIndex(index);
     setIsOpenEmotionModal(index);
@@ -63,6 +68,70 @@ function PlannerModal({
   const closeEmotionModal = () => {
     setEmotionModalIndex(null);
     setIsOpenEmotionModal(false);
+  };
+
+  useEffect(() => {
+    async function getMemo() {
+      try {
+        const response = await axios.get("/api/title/memo"); // 예시 URL
+        if (response.data.success) {
+          const makingPlannerData = response.data.data;
+          setCurrentMemo(makingPlannerData.memo);
+        } else {
+          console.error("메모 가져오기 실패:", response.data.errorMessage);
+        }
+      } catch (error) {
+        console.error("메모 가져오기 실패:", error);
+      }
+    }
+    getMemo();
+  }, []);
+
+  const handleUpdateMemo = async (currentMemo) => {
+    try {
+      //   const response = await axios.put("/api/memo", { currentMemo }); // 예시 URL
+      //    if (response.data.success) {
+      //      console.log("메모 수정 성공");
+      alert("메모 수정 성공!");
+      //    } else {
+      //      console.error("메모 수정 실패:", response.data.errorMessage);
+      //      alert("메모 수정 실패!");
+      //    }
+    } catch (error) {
+      console.error("메모 수정 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    async function getReviews() {
+      try {
+        const response = await axios.get("/api/reviews"); // 예시 URL
+        if (response.data.success) {
+          const reviewsData = response.data.data;
+          setCurrentReview(reviewsData.review);
+        } else {
+          console.error("리뷰 가져오기 실패:", response.data.errorMessage);
+        }
+      } catch (error) {
+        console.error("리뷰 가져오기 실패:", error);
+      }
+    }
+    getReviews();
+  }, []);
+
+  const handleUpdateReview = async (currentReview) => {
+    try {
+      //   const response = await axios.put("/api/review", { currentReview }); // 예시 URL
+      //   if (response.data.success) {
+      //     console.log("리뷰 수정 성공");
+      alert("리뷰 수정 성공!");
+      //   } else {
+      //    console.error("리뷰 수정 실패:", response.data.errorMessage);
+      //     alert("리뷰 수정 실패!");
+      //    }
+    } catch (error) {
+      console.error("리뷰 수정 실패:", error);
+    }
   };
 
   // if (!token) {
@@ -172,16 +241,8 @@ function PlannerModal({
               style={{ color: "#3DA5F5" }}
               className="lg-only"
             />
-            <Ghost
-              text="삭제"
-              style={{ color: "#F86D7D" }}
-              className="lg-only"
-            />
             <button type="button" className={`sm-only ${modal.edit}`}>
               <MdEdit />
-            </button>
-            <button type="button" className={`sm-only ${modal.delete}`}>
-              <AiTwotoneDelete />
             </button>
           </div>
         )}
@@ -200,18 +261,61 @@ function PlannerModal({
       {showMemo && (
         <div className={modal.section}>
           <h3>메모</h3>
-          <textarea className={modal.memoTextArea} />
+          <textarea
+            className={modal.memoTextArea}
+            value={currentMemo}
+            readOnly={!isMemoUpdate}
+            onChange={(e) => setCurrentMemo(e.target.value)}
+          />
+          <div className={modal.saveButton}>
+            {!isMemoUpdate && (
+              <Ghost
+                style={{ color: "#3DA5F5" }}
+                text="메모 수정"
+                onClick={() => setIsMemoUpdate(true)}
+              />
+            )}
+            {isMemoUpdate && (
+              <Primary
+                isShortPrimary="true"
+                text="저장"
+                onClick={() => {
+                  handleUpdateMemo(currentMemo);
+                  setIsMemoUpdate(false);
+                }}
+              />
+            )}
+          </div>
         </div>
       )}
       {showSection && (
         <div className={modal.section}>
           <h3>리뷰</h3>
           <textarea
-            style={{ resize: "none" }}
             className={modal.reviewTextArea}
             placeholder="리뷰"
-            readOnly={showReviewReadOnly}
+            readOnly={showReviewReadOnly || !isReviewUpdate}
+            value={currentReview}
+            onChange={(e) => setCurrentReview(e.target.value)}
           />
+          <div className={modal.saveButton}>
+            {!showReviewReadOnly && !isReviewUpdate ? (
+              <Ghost
+                style={{ color: "#3DA5F5" }}
+                text="리뷰 수정"
+                onClick={() => setIsReviewUpdate(true)}
+              />
+            ) : isReviewUpdate ? (
+              <Primary
+                isShortPrimary="true"
+                text="저장"
+                onClick={() => {
+                  handleUpdateReview(currentReview);
+                  setIsReviewUpdate(false);
+                }}
+              />
+            ) : null}
+          </div>
           <div className={modal.section}>
             <h3>사진</h3>
             <CardList placeList={placeList.map(({ image }) => ({ image }))} />

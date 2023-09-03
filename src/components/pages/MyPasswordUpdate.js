@@ -4,6 +4,7 @@ import PageCover from "../features/PageCover";
 import myMenu from "./MyMenu.module.css";
 import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
+import axios from "axios";
 
 function MyPasswordUpdate() {
   const [password, setPassword] = useState("");
@@ -46,13 +47,28 @@ function MyPasswordUpdate() {
   };
   const match = changePassword === confirmPassword;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validatePassword() || !validateConfirmPassword() || !match) {
       return;
     } else {
-      alert("비밀번호 수정완료"); //비밀번호 수정 post
+      try {
+        const response = await axios.put("/api/password.update", {
+          //예시 URL
+          password: password,
+          changePassword: changePassword,
+          confirmPassword: confirmPassword,
+        });
+        if (response.status === 200) {
+          alert("비밀번호가 성공적으로 변경되었습니다.");
+        } else {
+          console.error("비밀번호 변경 실패:", response.data.errorMessage);
+        }
+      } catch (error) {
+        console.error("비밀번호 변경 실패:", error);
+      }
     }
   };
+
   return (
     <>
       <PageCover title="마이페이지" />
@@ -88,7 +104,7 @@ function MyPasswordUpdate() {
                 <dd>
                   <Base
                     type="password"
-                    placeholder="비밀번호 확인"
+                    placeholder="변경 비밀번호 확인"
                     onChange={handleConfirmPasswordChange}
                     value={confirmPassword}
                   />

@@ -1,7 +1,14 @@
 import React from "react";
 import form from "./Form.module.css";
 
-function Base({ type = "text", placeholder, onChange, maxLength, value }) {
+function Base({
+  type = "text",
+  placeholder,
+  onChange,
+  maxLength,
+  value,
+  readOnly,
+}) {
   return (
     <input
       className={form.base}
@@ -10,6 +17,7 @@ function Base({ type = "text", placeholder, onChange, maxLength, value }) {
       onChange={onChange}
       value={value}
       maxLength={maxLength}
+      readOnly={readOnly}
     />
   );
 }

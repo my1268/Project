@@ -40,8 +40,19 @@ function PasswordType({ style, setShowNewPassword }) {
         },
       });
       if (response.ok) {
-        setShowNewPassword(true);
-        //put
+        const newPassword = "1111";
+        const putResponse = await axios.put("/member/password_reset", {
+          email,
+          newPassword,
+        });
+        if (putResponse.ok) {
+          alert(
+            "비밀번호를 1111로 초기화 했으니 다음 창에서 새 비밀번호를 입력해주세요"
+          );
+          setShowNewPassword(true);
+        } else {
+          alert("비밀번호 초기화 실패");
+        }
       } else {
         alert("다시 확인해주세요");
       }

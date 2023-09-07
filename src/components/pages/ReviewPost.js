@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
@@ -9,6 +9,7 @@ import CardList from "../../UI/Card/CardList";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 //import { getToken } from "../Tokens/getToken";
 
 function ReviewPost() {
@@ -26,50 +27,63 @@ function ReviewPost() {
     // }
   };
 
-  const placeList = [
+  const [placeList, setPlaceList] = useState([
     {
-      inquiry: "조회 10",
+      inquiry: 0,
       name: "리뷰 제목1",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
-      inquiry: "조회 10",
+      inquiry: 0,
       name: "리뷰 제목2",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
-      inquiry: "조회 10",
+      inquiry: 0,
       name: "리뷰 제목3",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
-      inquiry: "조회 10",
+      inquiry: 0,
       name: "리뷰 제목4",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
-      inquiry: "조회 10",
+      inquiry: 0,
       name: "리뷰 제목5",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
-      inquiry: "조회 10",
+      inquiry: 0,
       name: "리뷰 제목6",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get("/api/upload-review");
+        const reviews = response.data;
+        setPlaceList(reviews);
+      } catch (error) {
+        console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
+      }
+    };
+    fetchReviews();
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -82,6 +96,7 @@ function ReviewPost() {
     );
     setFilteredItems(filteredList);
   };
+
   return (
     <>
       <PageCover title="리뷰 게시판" />
@@ -108,6 +123,7 @@ function ReviewPost() {
           </div>
         </form>
         <CardList
+          inquiryCounting={true}
           placeList={filteredItems.length > 0 ? filteredItems : placeList}
           onClick={() => setOpenModal(true)}
         />

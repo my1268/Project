@@ -411,9 +411,8 @@ function PlannerModal({
       {showComment && (
         <div>
           {/* {savedNickname}: {comment.text} */}
-          <h4>내 닉네임: 댓글 내용</h4>
-          <h4>내 닉네임: 댓글 내용</h4>
-          <h4>내 닉네임: 댓글 내용</h4>
+          <h4>문의 내용</h4>
+          <h4>관리자 내용</h4>
         </div>
       )}
     </aside>

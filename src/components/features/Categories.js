@@ -59,14 +59,14 @@ function Categories() {
       </li>
       <li>
         <Link
-          to="/mycomment"
+          to="/myinquiry"
           className={
-            location.pathname === "/mycomment" /*&& token*/
+            location.pathname === "/myinquiry" /*&& token*/
               ? categories.isOpen
               : null
           }
         >
-          내 댓글
+          내 문의
         </Link>
       </li>
     </ul>

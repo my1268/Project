@@ -12,7 +12,7 @@ import {
 import MyPasswordUpdate from "./components/pages/MyPasswordUpdate";
 import MakingPlanner from "./components/pages/MakingPlanner";
 import MyPost from "./components/pages/MyPost";
-import MyComment from "./components/pages/MyComment";
+import MyInquiry from "./components/pages/MyInquiry";
 import ReviewPost from "./components/pages/ReviewPost";
 import ReviewWrite from "./components/pages/ReviewWrite";
 import PlaceSearch from "./components/pages/PlaceSearch";
@@ -27,7 +27,7 @@ function App() {
         <Route path="/mypasswordupdate" element={<MyPasswordUpdate />} />
         <Route path="/myplanner" element={<MyPlanner />} />
         <Route path="/mypost" element={<MyPost />} />
-        <Route path="/mycomment" element={<MyComment />} />
+        <Route path="/myinquiry" element={<MyInquiry />} />
         <Route path="/makingplanner" element={<MakingPlanner />} />
         <Route path="/reviewpost" element={<ReviewPost />} />
         <Route path="/reviewwrite" element={<ReviewWrite />} />

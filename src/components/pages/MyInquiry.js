@@ -8,9 +8,10 @@ import myPlanner from "./MyPlanner.module.css";
 import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
+import Ghost from "../../UI/Button/Ghost";
 //import axios from "axios";
 
-function MyComment() {
+function MyInquiry() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
@@ -18,13 +19,13 @@ function MyComment() {
   const [list, setList] = useState([
     {
       id: 1,
-      title: "플래너 제목- 댓글 1",
+      title: "문의 1",
       date: "23.03.01 - 23.03.04",
       page: "/",
     },
     {
       id: 2,
-      title: "플래너 제목- 댓글 2",
+      title: "문의 2",
       date: "23.02.01 - 23.02.04",
       page: "/",
     },
@@ -63,25 +64,31 @@ function MyComment() {
         <Categories />
         <div className="container">
           <form className={myPlanner.form} onSubmit={handleSearch}>
-            <Base
-              placeholder="플래너를 검색하세요"
-              value={searchKeyword}
-              onChange={(e) => setSearchKeyword(e.target.value)}
-            />
-            <Primary isShortPrimary="true" text="검색" onClick={handleSearch} />
+            <div className={myPlanner.formContainer}>
+              <div className={myPlanner.searchContainer}>
+                <Base
+                  placeholder="문의를 검색하세요"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                />
+                <Primary
+                  isShortPrimary="true"
+                  text="검색"
+                  onClick={handleSearch}
+                />
+              </div>
+              <Ghost text="문의 작성하기" style={{ color: "#3da5f5" }} />
+            </div>
           </form>
           {filteredItems.length > 0 || list.length > 0 ? (
             <Board
               list={filteredItems.length > 0 ? filteredItems : list}
-              title="댓글 목록"
+              title="문의 목록"
               onClick={() => setOpenModal(true)}
               onDelete={handleDelete}
             />
           ) : (
-            <p>
-              현재 댓글이 없습니다. 상단에 리뷰 게시판 버튼을 눌러 댓글을
-              작성해보세요!
-            </p>
+            <p>현재 문의가 없습니다. 궁금한 것이 있다면 문의를 작성해보세요!</p>
           )}
           <Pagination />
         </div>
@@ -89,7 +96,7 @@ function MyComment() {
       {openModal && (
         <>
           <PlannerModal
-            title="플래너 제목"
+            title="문의"
             onClick={() => setOpenModal(false)}
             showComment={true}
           />
@@ -100,4 +107,4 @@ function MyComment() {
   );
 }
 
-export default MyComment;
+export default MyInquiry;

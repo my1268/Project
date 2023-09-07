@@ -8,6 +8,17 @@
   margin-right: 8px;
 }
 
+.formContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+}
+
 @media screen and (min-width: 900px) {
   .form {
     width: 100%;

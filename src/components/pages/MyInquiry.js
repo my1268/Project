@@ -9,6 +9,7 @@ import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import Ghost from "../../UI/Button/Ghost";
+import { useNavigate } from "react-router-dom";
 //import axios from "axios";
 
 function MyInquiry() {
@@ -16,6 +17,10 @@ function MyInquiry() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
 
+  const navigate = useNavigate("");
+  const InquiryWriteButton = () => {
+    navigate("/myinquirywrite");
+  };
   const [list, setList] = useState([
     {
       id: 1,
@@ -77,7 +82,13 @@ function MyInquiry() {
                   onClick={handleSearch}
                 />
               </div>
-              <Ghost text="문의 작성하기" style={{ color: "#3da5f5" }} />
+              <Ghost
+                text="문의 작성하기"
+                onClick={() => {
+                  InquiryWriteButton();
+                }}
+                style={{ color: "#3da5f5" }}
+              />
             </div>
           </form>
           {filteredItems.length > 0 || list.length > 0 ? (

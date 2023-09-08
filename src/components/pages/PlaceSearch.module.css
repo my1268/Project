@@ -156,3 +156,28 @@
 .mapTypeButton:hover {
   background-color: #0056b3;
 }
+@media screen and (max-width: 1400px) {
+  .position {
+    position: relative;
+    top: 300px;
+  }
+  .form {
+    position: absolute;
+    top: 110px;
+  }
+  .tourapi {
+    position: absolute;
+    top: 140px;
+    bottom: 300px;
+  }
+  .totalDistance {
+    position: relative;
+    left: 80px;
+    bottom: 580px;
+  }
+  .resetMarkers {
+    position: relative;
+    left: 5px;
+    bottom: 560px;
+  }
+}

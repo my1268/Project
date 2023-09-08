@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Categories from "../features/Categories";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
@@ -10,44 +10,39 @@ import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import Ghost from "../../UI/Button/Ghost";
 import { useNavigate } from "react-router-dom";
-//import axios from "axios";
+import axios from "axios";
+/* eslint-disable */
 
 function MyInquiry() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
 
+  const [currentInquiryText, setCurrentInquiryText] = useState("");
+  //const [list, setList] = useState([]);
+
+  const [list, setList] = useState([
+    { id: 1, title: "문의 1", date: "23.03.01 - 23.03.04", page: "/" },
+    { id: 2, title: "문의 2", date: "23.02.01 - 23.02.04", page: "/" },
+  ]);
+
   const navigate = useNavigate("");
   const InquiryWriteButton = () => {
     navigate("/myinquirywrite");
   };
-  const [list, setList] = useState([
-    {
-      id: 1,
-      title: "문의 1",
-      date: "23.03.01 - 23.03.04",
-      page: "/",
-    },
-    {
-      id: 2,
-      title: "문의 2",
-      date: "23.02.01 - 23.02.04",
-      page: "/",
-    },
-  ]);
 
   const handleDelete = async (itemToDelete) => {
-    //  try {
-    //   await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
-    const updatedList = list.filter((item) => item.id !== itemToDelete.id);
-    const updatedFilteredList = filteredItems.filter(
-      (item) => item.id !== itemToDelete.id
-    );
-    setList(updatedList);
-    setFilteredItems(updatedFilteredList);
-    //  } catch (error) {
-    //    console.error("Failed to delete item:", error);
-    //  }
+    try {
+      await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
+      const updatedList = list.filter((item) => item.id !== itemToDelete.id);
+      const updatedFilteredList = filteredItems.filter(
+        (item) => item.id !== itemToDelete.id
+      );
+      setList(updatedList);
+      setFilteredItems(updatedFilteredList);
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+    }
   };
 
   const handleSearch = (e) => {
@@ -61,6 +56,30 @@ function MyInquiry() {
     );
     setFilteredItems(filteredList);
   };
+
+  useEffect(() => {
+    async function getInquiry() {
+      try {
+        const response = await axios.get("/inquiry/url"); // 예시 URL
+        if (response.data.success) {
+          const inquiryData = response.data;
+          const id = Date.now();
+          const newListItem = {
+            id: id,
+            title: inquiryData.title,
+            inquiryText: inquiryData.inquiryText,
+            date: inquiryData.date,
+          };
+          setList([...list, newListItem]);
+        } else {
+          console.error("Failed get inquiry:", response.data.errorMessage);
+        }
+      } catch (error) {
+        console.error("Failed get inquiry:", error);
+      }
+    }
+    getInquiry();
+  }, []);
 
   return (
     <>
@@ -93,9 +112,19 @@ function MyInquiry() {
           </form>
           {filteredItems.length > 0 || list.length > 0 ? (
             <Board
-              list={filteredItems.length > 0 ? filteredItems : list}
+              list={
+                filteredItems.length > 0
+                  ? filteredItems.map((item) => ({
+                      title: item.title,
+                      date: item.date,
+                    }))
+                  : list.map((item) => ({ title: item.title, date: item.date }))
+              }
               title="문의 목록"
-              onClick={() => setOpenModal(true)}
+              onClick={(item) => {
+                setCurrentInquiryText(item.inquiryText);
+                setOpenModal(true);
+              }}
               onDelete={handleDelete}
             />
           ) : (
@@ -107,9 +136,9 @@ function MyInquiry() {
       {openModal && (
         <>
           <PlannerModal
-            title="문의"
+            inquiryText={currentInquiryText}
             onClick={() => setOpenModal(false)}
-            showComment={true}
+            showInquiry={true}
           />
           <Overlay onClick={() => setOpenModal(false)} />
         </>

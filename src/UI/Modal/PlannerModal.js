@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Ghost from "../Button/Ghost";
 import modal from "./Modal.module.css";
 import { GrClose } from "react-icons/gr";
@@ -11,7 +11,6 @@ import Primary from "../Button/Primary";
 import { BiEraser } from "react-icons/bi";
 import { BiDotsHorizontal, BiHappyHeartEyes, BiAngry } from "react-icons/bi";
 import axios from "axios";
-//import axios from "axios";
 //import { getToken } from "../../components/Tokens/getToken";
 
 function PlannerModal({
@@ -22,9 +21,12 @@ function PlannerModal({
   showPlace,
   showTimeTable,
   showMemo,
-  showComment,
+  showInquiry,
   showReviewReadOnly,
-  showUpdateDeleteButton,
+  showUpdateButton,
+  currentMemoText,
+  currentReviewText,
+  //inquiryText,
   //token,
 }) {
   const placeList = [
@@ -54,11 +56,10 @@ function PlannerModal({
   const [emotionClick, setEmotionClick] = useState([]);
   const [emotionModalIndex, setEmotionModalIndex] = useState(null);
   const [selectedComment, setSelectedComment] = useState("");
-
+  const [updatedMemoText, setUpdatedMemoText] = useState(currentMemoText);
+  const [updatedReviewText, setUpdatedReviewText] = useState(currentReviewText);
   const [isMemoUpdate, setIsMemoUpdate] = useState(false);
-  const [currentMemo, setCurrentMemo] = useState("");
   const [isReviewUpdate, setIsReviewUpdate] = useState(false);
-  const [currentReview, setCurrentReview] = useState("");
 
   const openEmotionModal = (index) => {
     setEmotionModalIndex(index);
@@ -70,58 +71,24 @@ function PlannerModal({
     setIsOpenEmotionModal(false);
   };
 
-  useEffect(() => {
-    async function getMemo() {
-      try {
-        const response = await axios.get("/api/title/memo"); // 예시 URL
-        if (response.data.success) {
-          const makingPlannerData = response.data.data;
-          setCurrentMemo(makingPlannerData.memo);
-        } else {
-          console.error("메모 가져오기 실패:", response.data.errorMessage);
-        }
-      } catch (error) {
-        console.error("메모 가져오기 실패:", error);
-      }
-    }
-    getMemo();
-  }, []);
-
-  const handleUpdateMemo = async (currentMemo) => {
+  const handleUpdatedMemo = async (updatedMemoText) => {
     try {
-      //   const response = await axios.put("/api/memo", { currentMemo }); // 예시 URL
-      //    if (response.data.success) {
-      //      console.log("메모 수정 성공");
-      alert("메모 수정 성공!");
-      //    } else {
-      //      console.error("메모 수정 실패:", response.data.errorMessage);
-      //      alert("메모 수정 실패!");
-      //    }
+      const response = await axios.put("/api/memo", { updatedMemoText }); // 예시 URL
+      if (response.data.success) {
+        console.log("메모 수정 성공");
+        alert("메모 수정 성공!");
+      } else {
+        console.error("메모 수정 실패:", response.data.errorMessage);
+        alert("메모 수정 실패!");
+      }
     } catch (error) {
       console.error("메모 수정 실패:", error);
     }
   };
 
-  useEffect(() => {
-    async function getReviews() {
-      try {
-        const response = await axios.get("/api/reviews"); // 예시 URL
-        if (response.data.success) {
-          const reviewsData = response.data.data;
-          setCurrentReview(reviewsData.review);
-        } else {
-          console.error("리뷰 가져오기 실패:", response.data.errorMessage);
-        }
-      } catch (error) {
-        console.error("리뷰 가져오기 실패:", error);
-      }
-    }
-    getReviews();
-  }, []);
-
-  const handleUpdateReview = async (currentReview) => {
+  const handleUpdatedReview = async (updatedReviewText) => {
     try {
-      //   const response = await axios.put("/api/review", { currentReview }); // 예시 URL
+      //   const response = await axios.put("/api/review", { updatedReviewText }); // 예시 URL
       //   if (response.data.success) {
       //     console.log("리뷰 수정 성공");
       alert("리뷰 수정 성공!");
@@ -133,11 +100,6 @@ function PlannerModal({
       console.error("리뷰 수정 실패:", error);
     }
   };
-
-  // if (!token) {
-  //   alert("로그인 후에 모달창을 클릭할 수 있습니다.");
-  //   return;
-  // }
 
   const handleSaveComment = async (comment, emotionType) => {
     if (comment.trim() === "") {
@@ -234,7 +196,7 @@ function PlannerModal({
     <aside className={`${modal.base} ${modal.posting} ${modal.overFlow}`}>
       <header className={modal.header}>
         <h2>{title}</h2>
-        {showUpdateDeleteButton && (
+        {showUpdateButton && (
           <div className={modal.buttonWrapper}>
             <Ghost
               text="수정"
@@ -263,9 +225,9 @@ function PlannerModal({
           <h3>메모</h3>
           <textarea
             className={modal.memoTextArea}
-            value={currentMemo}
+            value={updatedMemoText}
             readOnly={!isMemoUpdate}
-            onChange={(e) => setCurrentMemo(e.target.value)}
+            onChange={(e) => setUpdatedMemoText(e.target.value)}
           />
           <div className={modal.saveButton}>
             {!isMemoUpdate && (
@@ -280,7 +242,7 @@ function PlannerModal({
                 isShortPrimary="true"
                 text="저장"
                 onClick={() => {
-                  handleUpdateMemo(currentMemo);
+                  handleUpdatedMemo();
                   setIsMemoUpdate(false);
                 }}
               />
@@ -295,8 +257,8 @@ function PlannerModal({
             className={modal.reviewTextArea}
             placeholder="리뷰"
             readOnly={showReviewReadOnly || !isReviewUpdate}
-            value={currentReview}
-            onChange={(e) => setCurrentReview(e.target.value)}
+            value={updatedReviewText}
+            onChange={(e) => setUpdatedReviewText(e.target.value)}
           />
           <div className={modal.saveButton}>
             {!showReviewReadOnly && !isReviewUpdate ? (
@@ -310,7 +272,7 @@ function PlannerModal({
                 isShortPrimary="true"
                 text="저장"
                 onClick={() => {
-                  handleUpdateReview(currentReview);
+                  handleUpdatedReview();
                   setIsReviewUpdate(false);
                 }}
               />
@@ -408,11 +370,11 @@ function PlannerModal({
           <CardList placeList={placeList} />
         </div>
       )}
-      {showComment && (
-        <div>
-          {/* {savedNickname}: {comment.text} */}
-          <h4>문의 내용</h4>
-          <h4>관리자 내용</h4>
+      {showInquiry && (
+        <div className={modal.inquiryContainer}>
+          {/*<h4 className={modal.inquiryContent}>문의 내용: {inquiryText}</h4> */}
+          <h4 className={modal.inquiryContent}>문의 내용:</h4>
+          <h4 className={modal.inquiryContent}>관리자 답변:</h4>
         </div>
       )}
     </aside>

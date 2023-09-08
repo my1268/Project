@@ -84,7 +84,7 @@ function MyPost() {
             showTimeTable={true}
             showSection={true}
             onClick={() => setOpenModal(false)}
-            showUpdateDeleteButton={true}
+            showUpdateButton={false}
           />
           <Overlay onClick={() => setOpenModal(false)} />
         </>

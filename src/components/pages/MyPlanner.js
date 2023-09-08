@@ -15,25 +15,21 @@ function MyPlanner() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-  //const [currentTitle, setCurrentTitle] = useState();
-  //const [list, setList] = useState([]);
-  const [list, setList] = useState([
-    { id: 1, title: "플래너 제목 1", date: "23.03.01 - 23.03.04", page: "/" },
-    { id: 2, title: "플래너 제목 2", date: "23.02.01 - 23.02.04", page: "/" },
-  ]);
+  const [list, setList] = useState([]);
+  const [currentMemoText, setCurrentMemoText] = useState("");
 
   const handleDelete = async (itemToDelete) => {
-    //  try {
-    //   await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
-    const updatedList = list.filter((item) => item.id !== itemToDelete.id);
-    const updatedFilteredList = filteredItems.filter(
-      (item) => item.id !== itemToDelete.id
-    );
-    setList(updatedList);
-    setFilteredItems(updatedFilteredList);
-    //  } catch (error) {
-    //    console.error("Failed to delete item:", error);
-    //  }
+    try {
+      await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
+      const updatedList = list.filter((item) => item.id !== itemToDelete.id);
+      const updatedFilteredList = filteredItems.filter(
+        (item) => item.id !== itemToDelete.id
+      );
+      setList(updatedList);
+      setFilteredItems(updatedFilteredList);
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+    }
   };
 
   const handleSearch = (e) => {
@@ -49,17 +45,18 @@ function MyPlanner() {
   };
 
   useEffect(() => {
-    async function getTitle() {
+    async function getPlanner() {
       try {
         const response = await axios.get("/api/title/memo"); // 예시 URL
         if (response.data.success) {
-          const makingPlannerData = response.data.data;
-          //setCurrentTitle(makingPlannerData.title);
-          if (makingPlannerData.title) {
-            const id = Date.now();
-            const newListItem = { id: id, title: makingPlannerData.title };
-            setList([newListItem]);
-          }
+          const plannerData = response.data;
+          const id = Date.now();
+          const newListItem = {
+            id: id,
+            title: plannerData.title,
+            memo: plannerData.memo,
+          };
+          setList([...list, newListItem]);
         } else {
           console.error("Failed get title:", response.data.errorMessage);
         }
@@ -67,7 +64,7 @@ function MyPlanner() {
         console.error("Failed get title:", error);
       }
     }
-    getTitle();
+    getPlanner();
   }, []);
 
   return (
@@ -86,9 +83,18 @@ function MyPlanner() {
           </form>
           {filteredItems.length > 0 || list.length > 0 ? (
             <Board
-              list={filteredItems.length > 0 ? filteredItems : list}
+              list={
+                filteredItems.length > 0
+                  ? filteredItems.map((item) => ({
+                      title: item.title,
+                    }))
+                  : list.map((item) => ({ title: item.title }))
+              }
               title="플래너 목록"
-              onClick={() => setOpenModal(true)}
+              onClick={(item) => {
+                setCurrentMemoText(item.memo);
+                setOpenModal(true);
+              }}
               onDelete={handleDelete}
             />
           ) : (
@@ -104,13 +110,13 @@ function MyPlanner() {
         <>
           <PlannerModal
             title="플래너 제목"
-            //title={currentTitle}
             subTitle="타임 테이블"
+            currentMemoText={currentMemoText}
             showTimeTable={true}
             showMemo={true}
             showPlace={true}
             onClick={() => setOpenModal(false)}
-            showUpdateDeleteButton={true}
+            showUpdateButton={true}
             onDelete={handleDelete}
             token={getToken()}
           />

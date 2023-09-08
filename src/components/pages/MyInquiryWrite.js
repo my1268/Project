@@ -38,24 +38,24 @@ function MyInquiryWrite() {
         alert("제목은 필수 입력 항목입니다.");
         return;
       }
-      //      const currentDate = new Date();
-      //      const year = currentDate.getFullYear();
-      //      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-      //      const day = String(currentDate.getDate()).padStart(2, "0");
-      //      const response = await axios.post("/inquiry/url", {
-      //예시 URL
-      //        nickName,
-      //        title,
-      //        inquiryText,
-      //        date: `${year}-${month}-${day}`,
-      //      });
-      //      if (response.status === 200) {
-      //        console.log("서버 응답 데이터:", response.data);
-      alert("문의가 성공적으로 업로드되었습니다.");
-      navigate("/myinquiry");
-      //      } else {
-      //        console.error("서버 응답 상태 코드가 200이 아닙니다.");
-      //      }
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+      const day = String(currentDate.getDate()).padStart(2, "0");
+      const response = await axios.post("/inquiry/url", {
+        //예시 URL
+        nickName,
+        title,
+        inquiryText,
+        date: `${year}-${month}-${day}`,
+      });
+      if (response.status === 200) {
+        console.log("서버 응답 데이터:", response.data);
+        alert("문의가 성공적으로 업로드되었습니다.");
+        navigate("/myinquiry");
+      } else {
+        console.error("서버 응답 상태 코드가 200이 아닙니다.");
+      }
     } catch (error) {
       console.error("문의 업로드 중 오류 발생:", error);
     }

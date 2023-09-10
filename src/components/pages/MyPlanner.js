@@ -10,12 +10,15 @@ import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import { getToken } from "../Tokens/getToken";
 import axios from "axios";
+/* eslint-disable */
 
 function MyPlanner() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
   const [list, setList] = useState([]);
+  const [title, setTitle] = useState("");
+  const [placeSearchData, setPlaceSearchData] = useState([]);
   const [currentMemoText, setCurrentMemoText] = useState("");
 
   const handleDelete = async (itemToDelete) => {
@@ -47,9 +50,12 @@ function MyPlanner() {
   useEffect(() => {
     async function getPlanner() {
       try {
-        const response = await axios.get("/api/title/memo"); // 예시 URL
-        if (response.data.success) {
-          const plannerData = response.data;
+        const response1 = await axios.get("/api/title/memo"); // 예시 URL
+        const response2 = await axios.get(
+          "http://localhost:3000/save-calendars" // 예시 URL
+        );
+        if (response1.data.success) {
+          const plannerData = response1.data;
           const id = Date.now();
           const newListItem = {
             id: id,
@@ -57,11 +63,24 @@ function MyPlanner() {
             memo: plannerData.memo,
           };
           setList([...list, newListItem]);
+          setTitle(plannerData.title);
         } else {
-          console.error("Failed get title:", response.data.errorMessage);
+          console.error("Failed get title:", response1.data.errorMessage);
+        }
+        if (response2.data.success) {
+          const makingPlannerData = response2.data;
+          const newPlaceSearchItem = {
+            requestData: makingPlannerData.requestData,
+          };
+          setPlaceSearchData(newPlaceSearchItem);
+        } else {
+          console.error(
+            "Failed get data from placesearch:",
+            response2.data.errorMessage
+          );
         }
       } catch (error) {
-        console.error("Failed get title:", error);
+        console.error("Failed get data:", error);
       }
     }
     getPlanner();
@@ -109,7 +128,7 @@ function MyPlanner() {
       {openModal && (
         <>
           <PlannerModal
-            title="플래너 제목"
+            title={title}
             subTitle="타임 테이블"
             currentMemoText={currentMemoText}
             showTimeTable={true}
@@ -119,6 +138,7 @@ function MyPlanner() {
             showUpdateButton={true}
             onDelete={handleDelete}
             token={getToken()}
+            placeSearchData={placeSearchData}
           />
           <Overlay onClick={() => setOpenModal(false)} />
         </>

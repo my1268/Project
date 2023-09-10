@@ -4,7 +4,6 @@ import modal from "./Modal.module.css";
 import { GrClose } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
 import CardList from "../Card/CardList";
-import demoImage from "../../assets/images/놀이공원.png";
 import TimeTable from "../TimeTable/TimeTable";
 import Base from "../Form/Base";
 import Primary from "../Button/Primary";
@@ -24,31 +23,20 @@ function PlannerModal({
   showInquiry,
   showReviewReadOnly,
   showUpdateButton,
+  placeSearchData,
   currentMemoText,
   currentReviewText,
-  //inquiryText,
-  //token,
+  reviewTitle,
+  inquiryText,
+  selectPlanner,
+  image,
+  token,
 }) {
-  const placeList = [
+  const placeList = useState([
     {
-      name: "놀이공원1",
-      date: "3월 10일 12:00 - 13:00",
-      address: "서울특별시 강남구",
-      image: demoImage,
+      image: image,
     },
-    {
-      name: "놀이공원2",
-      date: "3월 10일 12:00 - 13:00",
-      address: "서울특별시 강남구",
-      image: demoImage,
-    },
-    {
-      name: "놀이공원3",
-      date: "3월 10일 12:00 - 13:00",
-      address: "서울특별시 강남구",
-      image: demoImage,
-    },
-  ];
+  ]);
 
   const [comments, setComments] = useState([]);
   const [currentComment, setCurrentComment] = useState("");
@@ -195,7 +183,8 @@ function PlannerModal({
   return (
     <aside className={`${modal.base} ${modal.posting} ${modal.overFlow}`}>
       <header className={modal.header}>
-        <h2>{title}</h2>
+        {title && <h2>{title}</h2>}
+        {reviewTitle && <h2>{reviewTitle}</h2>}
         {showUpdateButton && (
           <div className={modal.buttonWrapper}>
             <Ghost
@@ -218,7 +207,7 @@ function PlannerModal({
       </header>
       <div className={modal.section}>
         <h3>{subTitle}</h3>
-        {showTimeTable && <TimeTable />}
+        {showTimeTable && <TimeTable placeSearchData={placeSearchData} />}
       </div>
       {showMemo && (
         <div className={modal.section}>
@@ -372,8 +361,7 @@ function PlannerModal({
       )}
       {showInquiry && (
         <div className={modal.inquiryContainer}>
-          {/*<h4 className={modal.inquiryContent}>문의 내용: {inquiryText}</h4> */}
-          <h4 className={modal.inquiryContent}>문의 내용:</h4>
+          <h4 className={modal.inquiryContent}>문의 내용: {inquiryText}</h4>
           <h4 className={modal.inquiryContent}>관리자 답변:</h4>
         </div>
       )}

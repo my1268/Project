@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Categories from "../features/Categories";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
@@ -8,30 +8,31 @@ import myPlanner from "./MyPlanner.module.css";
 import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
-//import axios from "axios";
+import axios from "axios";
+/* eslint-disable */
 
 function MyPost() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-
-  const [list, setList] = useState([
-    { id: 1, title: "플래너 제목 1", date: "23.03.01 - 23.03.04", page: "/" },
-    { id: 2, title: "플래너 제목 2", date: "23.02.01 - 23.02.04", page: "/" },
-  ]);
+  const [list, setList] = useState([]);
+  const [reviewTitle, setReviewTitle] = useState("");
+  const [currentReviewText, setCurrentReviewText] = useState("");
+  const [selectPlanner, setSelectPlanner] = useState("");
+  const [image, setImage] = useState("");
 
   const handleDelete = async (itemToDelete) => {
-    //  try {
-    //   await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
-    const updatedList = list.filter((item) => item.id !== itemToDelete.id);
-    const updatedFilteredList = filteredItems.filter(
-      (item) => item.id !== itemToDelete.id
-    );
-    setList(updatedList);
-    setFilteredItems(updatedFilteredList);
-    //  } catch (error) {
-    //    console.error("Failed to delete item:", error);
-    //  }
+    try {
+      await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
+      const updatedList = list.filter((item) => item.id !== itemToDelete.id);
+      const updatedFilteredList = filteredItems.filter(
+        (item) => item.id !== itemToDelete.id
+      );
+      setList(updatedList);
+      setFilteredItems(updatedFilteredList);
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+    }
   };
 
   const handleSearch = (e) => {
@@ -45,6 +46,34 @@ function MyPost() {
     );
     setFilteredItems(filteredList);
   };
+
+  useEffect(() => {
+    async function getReview() {
+      try {
+        const response = await axios.get("/api/upload-review"); // 예시 URL
+        if (response.data.success) {
+          const reviewData = response.data;
+          const id = Date.now();
+          const newListItem = {
+            id: id,
+            nickName: reviewData.nickName,
+            title: reviewData.title,
+            reviewText: reviewData.reviewText,
+            selectPlanner: reviewData.selectPlanner,
+            image: reviewData.image,
+            date: reviewData.date,
+          };
+          setList([...list, newListItem]);
+          setReviewTitle(reviewData.title);
+        } else {
+          console.error("Failed get title:", response.data.errorMessage);
+        }
+      } catch (error) {
+        console.error("Failed get data:", error);
+      }
+    }
+    getReview();
+  }, []);
 
   return (
     <>
@@ -62,9 +91,21 @@ function MyPost() {
           </form>
           {filteredItems.length > 0 || list.length > 0 ? (
             <Board
-              list={filteredItems.length > 0 ? filteredItems : list}
+              list={
+                filteredItems.length > 0
+                  ? filteredItems.map((item) => ({
+                      title: item.title,
+                      date: item.date,
+                    }))
+                  : list.map((item) => ({ title: item.title, date: item.date }))
+              }
               title="게시글 목록"
-              onClick={() => setOpenModal(true)}
+              onClick={(item) => {
+                setCurrentReviewText(item.reviewText);
+                setSelectPlanner(item.selectPlanner);
+                setImage(item.image);
+                setOpenModal(true);
+              }}
               onDelete={handleDelete}
             />
           ) : (
@@ -79,8 +120,11 @@ function MyPost() {
       {openModal && (
         <>
           <PlannerModal
-            title="리뷰 제목"
+            reviewtitle={reviewTitle}
             subTitle="플래너 요약"
+            currentReviewText={currentReviewText}
+            selectPlanner={selectPlanner}
+            image={image}
             showTimeTable={true}
             showSection={true}
             onClick={() => setOpenModal(false)}

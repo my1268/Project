@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import Ghost from "../Button/Ghost";
 import modal from "./Modal.module.css";
 import { GrClose } from "react-icons/gr";
-import { MdEdit } from "react-icons/md";
 import CardList from "../Card/CardList";
 import TimeTable from "../TimeTable/TimeTable";
 import Base from "../Form/Base";
 import Primary from "../Button/Primary";
 import { BiEraser } from "react-icons/bi";
-import { BiDotsHorizontal, BiHappyHeartEyes, BiAngry } from "react-icons/bi";
 import axios from "axios";
-//import { getToken } from "../../components/Tokens/getToken";
+import { getToken } from "../../components/Tokens/getToken";
 
 function PlannerModal({
   onClick,
@@ -22,7 +20,6 @@ function PlannerModal({
   showMemo,
   showInquiry,
   showReviewReadOnly,
-  showUpdateButton,
   placeSearchData,
   currentMemoText,
   currentReviewText,
@@ -40,24 +37,10 @@ function PlannerModal({
 
   const [comments, setComments] = useState([]);
   const [currentComment, setCurrentComment] = useState("");
-  const [isOpenEmotionModal, setIsOpenEmotionModal] = useState(false);
-  const [emotionClick, setEmotionClick] = useState([]);
-  const [emotionModalIndex, setEmotionModalIndex] = useState(null);
-  const [selectedComment, setSelectedComment] = useState("");
   const [updatedMemoText, setUpdatedMemoText] = useState(currentMemoText);
   const [updatedReviewText, setUpdatedReviewText] = useState(currentReviewText);
   const [isMemoUpdate, setIsMemoUpdate] = useState(false);
   const [isReviewUpdate, setIsReviewUpdate] = useState(false);
-
-  const openEmotionModal = (index) => {
-    setEmotionModalIndex(index);
-    setIsOpenEmotionModal(index);
-  };
-
-  const closeEmotionModal = () => {
-    setEmotionModalIndex(null);
-    setIsOpenEmotionModal(false);
-  };
 
   const handleUpdatedMemo = async (updatedMemoText) => {
     try {
@@ -76,66 +59,62 @@ function PlannerModal({
 
   const handleUpdatedReview = async (updatedReviewText) => {
     try {
-      //   const response = await axios.put("/api/review", { updatedReviewText }); // 예시 URL
-      //   if (response.data.success) {
-      //     console.log("리뷰 수정 성공");
-      alert("리뷰 수정 성공!");
-      //   } else {
-      //    console.error("리뷰 수정 실패:", response.data.errorMessage);
-      //     alert("리뷰 수정 실패!");
-      //    }
+      const response = await axios.put("/api/review", { updatedReviewText }); // 예시 URL
+      if (response.data.success) {
+        console.log("리뷰 수정 성공");
+        alert("리뷰 수정 성공!");
+      } else {
+        console.error("리뷰 수정 실패:", response.data.errorMessage);
+        alert("리뷰 수정 실패!");
+      }
     } catch (error) {
       console.error("리뷰 수정 실패:", error);
     }
   };
 
-  const handleSaveComment = async (comment, emotionType) => {
+  const handleSaveComment = async (comment) => {
     if (comment.trim() === "") {
       return;
     }
-    //  const token = getToken();
-    //  if (!token) {
-    //    alert("로그인 후에 댓글을 저장할 수 있습니다.");
-    //    setCurrentComment("");
-    //    return;
-    //  }
-    //  try {
-    //    const getNickName = await axios.get("/api/user/nickname", {
-    //      //예시 URL
-    //      headers: {
-    //        Authorization: `Bearer ${token}`,
-    //      },
-    //    });
-    //   if (getNickName.data.success) {
-    //     const savedNickname = getNickName.data.nickname;
-    //     const commentSave = await axios.post(
-    //       "api/comment", // 예시 URL
-    //       {
-    //        comment: currentComment,
-    //       nickname: savedNickname,
-    //      emotionType: emotionType,
-    //    },
-    //   {
-    //    headers: {
-    //     Authorization: `Bearer ${token}`,
-    //  },
-    //  }
-    //  );
-    //  if (commentSave.data.success) {
-    const newEmotionClickData = { happy: 0, bad: 0 };
-    setComments([...comments, { text: comment, time: new Date() }]);
-    setEmotionClick([...emotionClick, newEmotionClickData]);
-    setCurrentComment("");
-    closeEmotionModal();
-    //    } else {
-    //     console.error("댓글 저장 실패:", commentSave.data.errorMessage);
-    //  }
-    // } else {
-    //   console.error("닉네임 가져오기 실패:", getNickName.data.errorMessage);
-    //  }
-    //  } catch (error) {
-    //   console.error("댓글 저장 실패:", error);
-    //  }
+    const token = getToken();
+    if (!token) {
+      alert("로그인 후에 댓글을 저장할 수 있습니다.");
+      setCurrentComment("");
+      return;
+    }
+    try {
+      const getNickName = await axios.get("/api/user/nickname", {
+        //예시 URL
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (getNickName.data.success) {
+        const savedNickname = getNickName.data.nickname;
+        const commentSave = await axios.post(
+          "api/comment", // 예시 URL
+          {
+            comment: currentComment,
+            nickname: savedNickname,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (commentSave.data.success) {
+          setComments([...comments, { text: comment, time: new Date() }]);
+          setCurrentComment("");
+        } else {
+          console.error("댓글 저장 실패:", commentSave.data.errorMessage);
+        }
+      } else {
+        console.error("닉네임 가져오기 실패:", getNickName.data.errorMessage);
+      }
+    } catch (error) {
+      console.error("댓글 저장 실패:", error);
+    }
   };
 
   const handleDeleteComment = (index, commentText) => {
@@ -147,37 +126,7 @@ function PlannerModal({
         const updatedComments = comments.filter((_, i) => i !== index);
         setComments(updatedComments);
       }
-      closeEmotionModal();
     };
-  };
-
-  const handleEmotionClick = (commentIndex, emotionType) => {
-    setEmotionClick((prevEmotion) => {
-      const updatedEmotion = [...prevEmotion];
-      if (!updatedEmotion[commentIndex]) {
-        updatedEmotion[commentIndex] = { happy: 0, bad: 0 };
-      }
-      if (
-        emotionType === "happy" &&
-        updatedEmotion[commentIndex]["bad"] === 1
-      ) {
-        return updatedEmotion;
-      }
-      if (
-        emotionType === "bad" &&
-        updatedEmotion[commentIndex]["happy"] === 1
-      ) {
-        return updatedEmotion;
-      }
-      if (updatedEmotion[commentIndex][emotionType] === 0) {
-        updatedEmotion[commentIndex][emotionType] = 1;
-      } else {
-        updatedEmotion[commentIndex][emotionType] = 0;
-      }
-      const otherEmotionType = emotionType === "happy" ? "bad" : "happy";
-      updatedEmotion[commentIndex][otherEmotionType] = 0;
-      return updatedEmotion;
-    });
   };
 
   return (
@@ -185,18 +134,6 @@ function PlannerModal({
       <header className={modal.header}>
         {title && <h2>{title}</h2>}
         {reviewTitle && <h2>{reviewTitle}</h2>}
-        {showUpdateButton && (
-          <div className={modal.buttonWrapper}>
-            <Ghost
-              text="수정"
-              style={{ color: "#3DA5F5" }}
-              className="lg-only"
-            />
-            <button type="button" className={`sm-only ${modal.edit}`}>
-              <MdEdit />
-            </button>
-          </div>
-        )}
         <button
           type="button"
           className={`sm-only ${modal.close}`}
@@ -306,47 +243,6 @@ function PlannerModal({
                         comment.text
                       )}
                     />
-                    {isOpenEmotionModal !== index && (
-                      <BiDotsHorizontal
-                        className={modal.optionButton}
-                        onClick={() => {
-                          openEmotionModal(index);
-                          setSelectedComment(comment.text);
-                        }}
-                      />
-                    )}
-                    {emotionModalIndex === index && (
-                      <div
-                        className={modal.optionModal}
-                        style={{
-                          top: `calc(${87 + index}%)`,
-                        }}
-                      >
-                        {emotionModalIndex === index && (
-                          <div className={modal.commentContent}>
-                            <p>{selectedComment}</p>
-                          </div>
-                        )}
-                        <div className={modal.optionEmotions}>
-                          <BiHappyHeartEyes
-                            className={modal.optionButton}
-                            onClick={() => handleEmotionClick(index, "happy")}
-                          />
-                          <p>{emotionClick[index]?.happy || 0}</p>
-                          <BiAngry
-                            className={modal.optionButton}
-                            onClick={() => handleEmotionClick(index, "bad")}
-                          />
-                          <p>{emotionClick[index]?.bad || 0}</p>
-                        </div>
-                        <button
-                          className={modal.closeOptionButton}
-                          onClick={closeEmotionModal}
-                        >
-                          닫기
-                        </button>
-                      </div>
-                    )}
                   </div>
                 ))}
             </div>

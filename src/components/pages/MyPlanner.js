@@ -135,7 +135,6 @@ function MyPlanner() {
             showMemo={true}
             showPlace={true}
             onClick={() => setOpenModal(false)}
-            showUpdateButton={true}
             onDelete={handleDelete}
             token={getToken()}
             placeSearchData={placeSearchData}

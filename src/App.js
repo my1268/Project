@@ -17,6 +17,7 @@ import ReviewPost from "./components/pages/ReviewPost";
 import ReviewWrite from "./components/pages/ReviewWrite";
 import PlaceSearch from "./components/pages/PlaceSearch";
 import MyInquiryWrite from "./components/pages/MyInquiryWrite";
+import PlannerPost from "./components/pages/PlannerPost";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/myinquiry" element={<MyInquiry />} />
         <Route path="/myinquirywrite" element={<MyInquiryWrite />} />
         <Route path="/makingplanner" element={<MakingPlanner />} />
+        <Route path="/plannerpost" element={<PlannerPost />} />
         <Route path="/reviewpost" element={<ReviewPost />} />
         <Route path="/reviewwrite" element={<ReviewWrite />} />
         <Route path="/placesearch" element={<PlaceSearch />} />

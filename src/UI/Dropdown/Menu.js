@@ -13,6 +13,7 @@ function Menu({ isOpenMenu, onClick }) {
       <Link to="/makingplanner" onClick={handleMenuClick}>
         플래너 작성
       </Link>
+      <Link to="/plannerpost">플래너 완성</Link>
       <Link to="/reviewpost">리뷰 게시판</Link>
     </aside>
   );

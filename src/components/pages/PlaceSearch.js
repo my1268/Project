@@ -24,7 +24,7 @@ function PlaceSearch() {
   const [waypointClickCounts, setWaypointClickCounts] = useState(
     Array(dayPlus).fill(0)
   );
-  const [polyline, setPolyline] = useState(null);
+  //const [polyline, setPolyline] = useState(null);
   const [totalDistance, setTotalDistance] = useState(0);
   const [showResetMarker, setShowResetMarker] = useState(false);
 
@@ -194,18 +194,18 @@ function PlaceSearch() {
           map: map,
         });
         map.markers.push(marker);
-        const polylineCoordinates = map.markers.map((m) => m.getPosition());
-        if (polyline) {
-          polyline.setMap(null);
-        }
-        setPolyline(
-          new window.Tmapv2.Polyline({
-            path: polylineCoordinates,
-            strokeColor: "black",
-            strokeWeight: 4,
-            map: map,
-          })
-        );
+        //  const polylineCoordinates = map.markers.map((m) => m.getPosition());
+        //  if (polyline) {
+        //    polyline.setMap(null);
+        //  }
+        //  setPolyline(
+        //    new window.Tmapv2.Polyline({
+        //      path: polylineCoordinates,
+        //      strokeColor: "black",
+        //      strokeWeight: 4,
+        //      map: map,
+        //    })
+        //  );
         const bounds = new window.Tmapv2.LatLngBounds();
         map.markers.forEach((m) => bounds.extend(m.getPosition()));
         map.fitBounds(bounds);
@@ -227,10 +227,10 @@ function PlaceSearch() {
     if (map && map.markers.length > 0) {
       map.markers.forEach((marker) => marker.setMap(null));
       map.markers = [];
-      if (polyline) {
-        polyline.setMap(null);
-        setPolyline(null);
-      }
+      //    if (polyline) {
+      //     polyline.setMap(null);
+      //     setPolyline(null);
+      //   }
       setTotalDistance(0);
       setMarkerNumber(1);
       setShowResetMarker(false);

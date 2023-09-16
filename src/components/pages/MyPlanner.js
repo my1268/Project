@@ -14,9 +14,14 @@ function MyPlanner() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-  const [list, setList] = useState([]);
+  //const [list, setList] = useState([]);
   const [title, setTitle] = useState("");
   const [currentMemoText, setCurrentMemoText] = useState("");
+
+  const [list, setList] = useState([
+    { id: 1, title: "플래너 1", date: "23.03.01 - 23.03.04", page: "/" },
+    { id: 2, title: "플래너 2", date: "23.02.01 - 23.02.04", page: "/" },
+  ]);
 
   const handleDelete = async (itemToDelete) => {
     try {
@@ -117,6 +122,7 @@ function MyPlanner() {
             showMemo={true}
             showPlace={true}
             onClick={() => setOpenModal(false)}
+            reviewWrite={true}
           />
           <Overlay onClick={() => setOpenModal(false)} />
         </>

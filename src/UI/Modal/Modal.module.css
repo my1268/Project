@@ -152,6 +152,13 @@
   cursor: pointer;
 }
 
+.reviewWriteTitle {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 @media screen and (min-width: 900px) {
   .base {
     height: auto;

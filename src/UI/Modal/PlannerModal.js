@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Ghost from "../Button/Ghost";
 import modal from "./Modal.module.css";
 import { GrClose } from "react-icons/gr";
@@ -9,6 +9,7 @@ import Primary from "../Button/Primary";
 import { BiEraser } from "react-icons/bi";
 import axios from "axios";
 import { getToken } from "../../components/Tokens/getToken";
+import ReviewWriteModal from "./ReviewWriteModal";
 
 function PlannerModal({
   onClick,
@@ -19,28 +20,70 @@ function PlannerModal({
   showTimeTable,
   showMemo,
   showInquiry,
+  showMemoReadOnly,
   showReviewReadOnly,
-  placeSearchData,
   currentMemoText,
   currentReviewText,
   reviewTitle,
   inquiryText,
-  selectPlanner,
-  image,
-  token,
+  reviewWrite,
 }) {
-  const placeList = useState([
-    {
-      image: image,
-    },
-  ]);
-
+  const [placeList, setPlaceList] = useState([]);
   const [comments, setComments] = useState([]);
   const [currentComment, setCurrentComment] = useState("");
   const [updatedMemoText, setUpdatedMemoText] = useState(currentMemoText);
   const [updatedReviewText, setUpdatedReviewText] = useState(currentReviewText);
   const [isMemoUpdate, setIsMemoUpdate] = useState(false);
   const [isReviewUpdate, setIsReviewUpdate] = useState(false);
+  const [placeSearchData, setPlaceSearchData] = useState([]);
+  const [showPlannerModal, setShowPlannerModal] = useState(false);
+  const [showReviewWriteModal, setShowReviewWriteModal] = useState(false);
+
+  const handleshowReviewWriteModal = () => {
+    const confirmMessage = window.confirm("리뷰를 작성하시겠습니까?");
+    if (confirmMessage) {
+      setShowPlannerModal(false);
+      setShowReviewWriteModal(true);
+    }
+  };
+  useEffect(() => {
+    async function getPlanner() {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/save-calendars" // 예시 URL
+        );
+        if (response.data.success) {
+          const placeSearchData = response.data;
+          const placeSearchItem = {
+            start: placeSearchData.start,
+            startTime: placeSearchData.startTime,
+            waypoints: placeSearchData.waypoints.map((waypointItem) => ({
+              waypoint: waypointItem.waypoint,
+              waypointTime: waypointItem.waypointTime,
+            })),
+          };
+          const placeSearchImage = placeSearchData.map((plannerItem) => {
+            return {
+              startImage: plannerItem.startImage,
+              waypoints: plannerItem.waypoints.map((waypointItem) => ({
+                waypointImage: waypointItem.waypointImage,
+              })),
+            };
+          });
+          setPlaceSearchData(placeSearchItem);
+          setPlaceList(placeSearchImage);
+        } else {
+          console.error(
+            "Failed get data from placesearch:",
+            response.data.errorMessage
+          );
+        }
+      } catch (error) {
+        console.error("Failed get data:", error);
+      }
+    }
+    getPlanner();
+  }, []);
 
   const handleUpdatedMemo = async (updatedMemoText) => {
     try {
@@ -129,7 +172,7 @@ function PlannerModal({
     };
   };
 
-  return (
+  return !showReviewWriteModal ? (
     <aside className={`${modal.base} ${modal.posting} ${modal.overFlow}`}>
       <header className={modal.header}>
         {title && <h2>{title}</h2>}
@@ -141,6 +184,13 @@ function PlannerModal({
         >
           <GrClose />
         </button>
+        {reviewWrite && (
+          <Ghost
+            text="리뷰 작성하기"
+            onClick={handleshowReviewWriteModal}
+            style={{ color: "#3da5f5" }}
+          />
+        )}
       </header>
       <div className={modal.section}>
         <h3>{subTitle}</h3>
@@ -152,18 +202,17 @@ function PlannerModal({
           <textarea
             className={modal.memoTextArea}
             value={updatedMemoText}
-            readOnly={!isMemoUpdate}
+            readOnly={showMemoReadOnly || !isMemoUpdate}
             onChange={(e) => setUpdatedMemoText(e.target.value)}
           />
           <div className={modal.saveButton}>
-            {!isMemoUpdate && (
+            {!showMemoReadOnly && !isMemoUpdate ? (
               <Ghost
                 style={{ color: "#3DA5F5" }}
                 text="메모 수정"
                 onClick={() => setIsMemoUpdate(true)}
               />
-            )}
-            {isMemoUpdate && (
+            ) : isMemoUpdate ? (
               <Primary
                 isShortPrimary="true"
                 text="저장"
@@ -172,7 +221,7 @@ function PlannerModal({
                   setIsMemoUpdate(false);
                 }}
               />
-            )}
+            ) : null}
           </div>
         </div>
       )}
@@ -262,6 +311,11 @@ function PlannerModal({
         </div>
       )}
     </aside>
+  ) : (
+    <ReviewWriteModal
+      onClick={() => setShowReviewWriteModal(false)}
+      placeSearchData={placeSearchData}
+    />
   );
 }
 

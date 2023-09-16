@@ -9,7 +9,6 @@ import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
-/* eslint-disable */
 
 function MyPost() {
   const [openModal, setOpenModal] = useState(false);
@@ -18,8 +17,7 @@ function MyPost() {
   const [list, setList] = useState([]);
   const [reviewTitle, setReviewTitle] = useState("");
   const [currentReviewText, setCurrentReviewText] = useState("");
-  const [selectPlanner, setSelectPlanner] = useState("");
-  const [image, setImage] = useState("");
+  const [reviewimage, setReviewImage] = useState("");
 
   const handleDelete = async (itemToDelete) => {
     try {
@@ -102,17 +100,13 @@ function MyPost() {
               title="게시글 목록"
               onClick={(item) => {
                 setCurrentReviewText(item.reviewText);
-                setSelectPlanner(item.selectPlanner);
-                setImage(item.image);
+                setReviewImage(item.image);
                 setOpenModal(true);
               }}
               onDelete={handleDelete}
             />
           ) : (
-            <p>
-              현재 게시글이 없습니다. 상단에 리뷰 게시판 버튼을 눌러 리뷰를
-              작성해보세요!
-            </p>
+            <p>현재 게시글이 없습니다. 리뷰를 작성해보세요!</p>
           )}
           <Pagination />
         </div>
@@ -123,8 +117,7 @@ function MyPost() {
             reviewtitle={reviewTitle}
             subTitle="플래너 요약"
             currentReviewText={currentReviewText}
-            selectPlanner={selectPlanner}
-            image={image}
+            reviewimage={reviewimage}
             showTimeTable={true}
             showSection={true}
             onClick={() => setOpenModal(false)}

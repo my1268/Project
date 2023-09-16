@@ -13,7 +13,7 @@ function ReviewPost() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-
+  const [reviewTitle, setReviewTitle] = useState("");
   const [placeList, setPlaceList] = useState([
     {
       inquiry: 0,
@@ -53,6 +53,7 @@ function ReviewPost() {
           image: demoImage,
         };
         setPlaceList([...placeList, newListItem]);
+        setReviewTitle(reviewData.title);
       } catch (error) {
         console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
       }
@@ -101,7 +102,7 @@ function ReviewPost() {
       {openModal && (
         <>
           <PlannerModal
-            title="리뷰 제목"
+            reviewTitle={reviewTitle}
             subTitle="플래너 요약"
             showTimeTable={true}
             showSection={true}

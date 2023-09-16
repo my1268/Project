@@ -20,7 +20,7 @@ function Card({ place, onClick, inquiryCounting }) {
       {inquiryCounting && (
         <h4 className={card.inquiry}>조회: {inquiryCount}</h4>
       )}
-      <h4 className={card.name}>{place.name}</h4>
+      <h4 className={card.title}>{place.title}</h4>
       <span className={card.nickName}>{place.nickName}</span>
       <span className={card.date}>{place.date}</span>
       <address className={card.address}>{place.address}</address>

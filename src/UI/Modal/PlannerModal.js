@@ -172,7 +172,7 @@ function PlannerModal({
     };
   };
 
-  return !showReviewWriteModal ? (
+  return !showPlannerModal && !showReviewWriteModal ? (
     <aside className={`${modal.base} ${modal.posting} ${modal.overFlow}`}>
       <header className={modal.header}>
         {title && <h2>{title}</h2>}

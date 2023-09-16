@@ -19,21 +19,21 @@ function PlannerPost() {
   const [placeList, setPlaceList] = useState([
     {
       inquiry: 0,
-      title: "리뷰 제목1",
+      title: "플래너 제목1",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
       inquiry: 0,
-      title: "리뷰 제목2",
+      title: "플래너 제목2",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,
     },
     {
       inquiry: 0,
-      title: "리뷰 제목3",
+      title: "플래너 제목3",
       nickName: "작성자",
       date: "날짜",
       image: demoImage,

@@ -9,6 +9,7 @@ import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
+/* eslint-disable */
 
 function MyPlanner() {
   const [openModal, setOpenModal] = useState(false);
@@ -102,6 +103,7 @@ function MyPlanner() {
                 setOpenModal(true);
               }}
               onDelete={handleDelete}
+              deleteButton={true}
             />
           ) : (
             <p>

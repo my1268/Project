@@ -126,6 +126,7 @@ function MyInquiry() {
                 setOpenModal(true);
               }}
               onDelete={handleDelete}
+              deleteButton={true}
             />
           ) : (
             <p>현재 문의가 없습니다. 궁금한 것이 있다면 문의를 작성해보세요!</p>

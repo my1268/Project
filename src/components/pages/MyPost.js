@@ -9,7 +9,7 @@ import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
-
+/* eslint-disable */
 function MyPost() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -104,6 +104,7 @@ function MyPost() {
                 setOpenModal(true);
               }}
               onDelete={handleDelete}
+              deleteButton={true}
             />
           ) : (
             <p>현재 게시글이 없습니다. 리뷰를 작성해보세요!</p>

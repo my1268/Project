@@ -2,7 +2,7 @@ import React from "react";
 import board from "./Board.module.css";
 import Mini from "../../UI/Button/Mini";
 
-function Board({ list, onClick, title, onDelete }) {
+function Board({ list, onClick, title, onDelete, deleteButton }) {
   return (
     <ul className={board.table}>
       <li className={board.tableHeader}>
@@ -22,7 +22,9 @@ function Board({ list, onClick, title, onDelete }) {
               {item.title}
             </button>
             <span className={`lg-only ${board.date}`}>{item.date}</span>
-            <Mini color="red" text="삭제" onClick={handleDelete} />
+            {deleteButton && (
+              <Mini color="red" text="삭제" onClick={handleDelete} />
+            )}
           </li>
         );
       })}

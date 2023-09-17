@@ -111,9 +111,9 @@ function ReviewWriteModal({ onClick, onCloseModal, style, placeSearchData }) {
                   src={previewUrl}
                   alt={`Preview ${index}`}
                   style={{
-                    width: "196px",
-                    height: "131px",
-                    margin: "3px",
+                    width: "155px",
+                    height: "121px",
+                    margin: "2px",
                   }}
                 />
               ))}
@@ -121,7 +121,9 @@ function ReviewWriteModal({ onClick, onCloseModal, style, placeSearchData }) {
           </div>
         )}
       </div>
-      <Primary text="리뷰 올리기" onClick={handleReviewSubmit} />
+      <div className={modal.reveiwButton}>
+        <Primary text="리뷰 올리기" onClick={handleReviewSubmit} />
+      </div>
       <button
         type="button"
         className={`sm-only ${modal.close}`}

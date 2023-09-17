@@ -15,6 +15,7 @@ function Menu({ isOpenMenu, onClick }) {
       </Link>
       <Link to="/plannerpost">플래너 완성</Link>
       <Link to="/reviewpost">리뷰 게시판</Link>
+      <Link to="/inquirypost">궁금한 점</Link>
     </aside>
   );
 }

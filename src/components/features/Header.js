@@ -50,6 +50,10 @@ function Header() {
   const handleReviewPostButtonClick = () => {
     navigate("/reviewpost");
   };
+
+  const handleInquiryPostButtonClick = () => {
+    navigate("/inquirypost");
+  };
   return (
     <div className={header.wrapper}>
       <header className={header.header}>
@@ -70,7 +74,7 @@ function Header() {
             <Ghost text="플래너 작성" onClick={handlePlannerButtonClick} />
             <Ghost text="플래너 완성" onClick={handlePlannerPostButtonClick} />
             <Ghost text="리뷰 게시판" onClick={handleReviewPostButtonClick} />
-            <Ghost text="궁금한 점" />
+            <Ghost text="궁금한 점" onClick={handleInquiryPostButtonClick} />
           </div>
           <div className={header.member}>
             {/*{token ?} */}

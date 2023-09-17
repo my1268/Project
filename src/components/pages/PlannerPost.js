@@ -8,7 +8,7 @@ import CardList from "../../UI/Card/CardList";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
-
+/* eslint-disable */
 function PlannerPost() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");

@@ -8,7 +8,7 @@ import CardList from "../../UI/Card/CardList";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
-
+/* eslint-disable */
 function ReviewPost() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -93,11 +93,18 @@ function ReviewPost() {
             </div>
           </div>
         </form>
-        <CardList
-          inquiryCounting={true}
-          placeList={filteredItems.length > 0 ? filteredItems : placeList}
-          onClick={() => setOpenModal(true)}
-        />
+        {filteredItems.length > 0 || placeList.length > 0 ? (
+          <CardList
+            inquiryCounting={true}
+            placeList={filteredItems.length > 0 ? filteredItems : placeList}
+            onClick={() => setOpenModal(true)}
+          />
+        ) : (
+          <p>
+            유저 리뷰 플래너가 없습니다. 내 플래너 버튼을 눌러 처음으로 플래너를
+            작성해보세요!
+          </p>
+        )}
       </div>
       {openModal && (
         <>

@@ -118,6 +118,7 @@ function MyPost() {
             reviewtitle={reviewTitle}
             subTitle="플래너 요약"
             currentReviewText={currentReviewText}
+            showUpdateDeleteButton={true}
             reviewimage={reviewimage}
             showTimeTable={true}
             showSection={true}

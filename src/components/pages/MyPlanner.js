@@ -120,6 +120,7 @@ function MyPlanner() {
             title={title}
             subTitle="타임 테이블"
             currentMemoText={currentMemoText}
+            showUpdateDeleteButton={true}
             showTimeTable={true}
             showMemo={true}
             showPlace={true}

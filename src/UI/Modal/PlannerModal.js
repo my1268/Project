@@ -7,9 +7,11 @@ import TimeTable from "../TimeTable/TimeTable";
 import Base from "../Form/Base";
 import Primary from "../Button/Primary";
 import { BiEraser } from "react-icons/bi";
+import { MdEdit } from "react-icons/md";
 import axios from "axios";
 import { getToken } from "../../components/Tokens/getToken";
 import ReviewWriteModal from "./ReviewWriteModal";
+import { useNavigate } from "react-router-dom";
 
 function PlannerModal({
   onClick,
@@ -22,6 +24,7 @@ function PlannerModal({
   showInquiry,
   showMemoReadOnly,
   showReviewReadOnly,
+  showUpdateDeleteButton,
   currentMemoText,
   currentReviewText,
   reviewTitle,
@@ -29,6 +32,7 @@ function PlannerModal({
   reviewWrite,
 }) {
   const [placeList, setPlaceList] = useState([]);
+  const [photoList, setPhotoList] = useState([]);
   const [comments, setComments] = useState([]);
   const [currentComment, setCurrentComment] = useState("");
   const [updatedMemoText, setUpdatedMemoText] = useState(currentMemoText);
@@ -38,6 +42,15 @@ function PlannerModal({
   const [placeSearchData, setPlaceSearchData] = useState([]);
   const [showPlannerModal, setShowPlannerModal] = useState(false);
   const [showReviewWriteModal, setShowReviewWriteModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleEditClick = () => {
+    const confirmMessage = window.confirm("수정 페이지로 이동하시겠습니까?");
+    if (confirmMessage) {
+      const editUrl = `/placesearch/${placeSearchData.id}`;
+      navigate(editUrl);
+    }
+  };
 
   const handleshowReviewWriteModal = () => {
     const confirmMessage = window.confirm("리뷰를 작성하시겠습니까?");
@@ -46,6 +59,7 @@ function PlannerModal({
       setShowReviewWriteModal(true);
     }
   };
+
   useEffect(() => {
     async function getPlanner() {
       try {
@@ -55,6 +69,7 @@ function PlannerModal({
         if (response.data.success) {
           const placeSearchData = response.data;
           const placeSearchItem = {
+            id: placeSearchData.id,
             start: placeSearchData.start,
             startTime: placeSearchData.startTime,
             waypoints: placeSearchData.waypoints.map((waypointItem) => ({
@@ -83,6 +98,23 @@ function PlannerModal({
       }
     }
     getPlanner();
+  }, []);
+
+  useEffect(() => {
+    const getReview = async () => {
+      try {
+        const response = await axios.get("/api/upload-review");
+        const reviewData = response.data;
+        const newReviewListItems = reviewData.map((item, index) => ({
+          id: index,
+          image: item.Image,
+        }));
+        setPhotoList(newReviewListItems);
+      } catch (error) {
+        console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
+      }
+    };
+    getReview();
   }, []);
 
   const handleUpdatedMemo = async (updatedMemoText) => {
@@ -177,6 +209,19 @@ function PlannerModal({
       <header className={modal.header}>
         {title && <h2>{title}</h2>}
         {reviewTitle && <h2>{reviewTitle}</h2>}
+        {showUpdateDeleteButton && (
+          <div className={modal.buttonWrapper}>
+            <Ghost
+              text="수정"
+              style={{ color: "#3DA5F5" }}
+              className="lg-only"
+              onClick={handleEditClick}
+            />
+            <button type="button" className={`sm-only ${modal.edit}`}>
+              <MdEdit />
+            </button>
+          </div>
+        )}
         <button
           type="button"
           className={`sm-only ${modal.close}`}
@@ -255,7 +300,7 @@ function PlannerModal({
           </div>
           <div className={modal.section}>
             <h3>사진</h3>
-            <CardList placeList={placeList.map(({ image }) => ({ image }))} />
+            <CardList photoList={photoList} />
           </div>
           <div className={modal.section}>
             <h3>댓글</h3>

@@ -271,6 +271,7 @@ function PlaceSearch() {
             }))
           : [];
         return {
+          id: calendar.id,
           start: calendar.start,
           startTime: calendar.startTime,
           waypoints: waypointsData,

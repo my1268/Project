@@ -120,7 +120,7 @@ function SignUpType({ style, onCloseModal }) {
     }
     try {
       const response = await axios.post(
-        "/api/check-email", //예시 URL
+        "http://localhost:8080/member/duplication",
         { email },
         {
           headers: {
@@ -128,7 +128,7 @@ function SignUpType({ style, onCloseModal }) {
           },
         }
       );
-      if (response.data.exists) {
+      if (!response.data) {
         alert("이미 사용 중인 이메일입니다.");
       } else {
         alert("사용 가능한 이메일입니다.");
@@ -146,7 +146,7 @@ function SignUpType({ style, onCloseModal }) {
     }
     try {
       const response = await axios.post(
-        "/api/check-nickname", // 예시 URL
+        "http://localhost:8080/member/duplication",
         { nickName },
         {
           headers: {
@@ -154,7 +154,7 @@ function SignUpType({ style, onCloseModal }) {
           },
         }
       );
-      if (response.data.exists) {
+      if (!response.data) {
         alert("이미 사용 중인 닉네임입니다.");
       } else {
         alert("사용 가능한 닉네임입니다.");
@@ -186,7 +186,7 @@ function SignUpType({ style, onCloseModal }) {
       }
       try {
         const response = await axios.post(
-          "/member/join",
+          "http://localhost:8080/member/join",
           {
             email,
             password,
@@ -202,7 +202,7 @@ function SignUpType({ style, onCloseModal }) {
             },
           }
         );
-        if (response.data.success) {
+        if (response.data) {
           onCloseModal();
           alert("회원가입 완료");
         } else {

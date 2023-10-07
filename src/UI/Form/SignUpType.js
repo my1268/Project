@@ -14,23 +14,23 @@ function SignUpType({ style, onCloseModal }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
-  const [nickName, setNickName] = useState("");
-  const [addInput, setAddInput] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [answer, setAnswer] = useState("");
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [nameError, setNameError] = useState("");
-  const [nickNameError, setNickNameError] = useState("");
-  const [addInputError, setAddInputError] = useState("");
+  const [nicknameError, setNicknameError] = useState("");
+  const [answerError, setAnswerError] = useState("");
 
   const [emailChecked, setEmailChecked] = useState(false);
-  const [nickNameChecked, setNickNameChecked] = useState(false);
+  const [nicknameChecked, setNicknameChecked] = useState(false);
 
   const OptionsClick = () => {
     setShowOptions(!showOptions);
   };
 
-  const questions = ["질문 1", "질문 2", "질문 3"];
+  const questions = [1, 2, 3];
 
   const OptionSelect = (question) => {
     setSelectQuestion(question);
@@ -58,12 +58,12 @@ function SignUpType({ style, onCloseModal }) {
     setNameError("");
   };
   const handleNickNameChange = (event) => {
-    setNickName(event.target.value);
-    setNickNameError("");
+    setNickname(event.target.value);
+    setNicknameError("");
   };
   const handleAddInputChange = (event) => {
-    setAddInput(event.target.value);
-    setAddInputError("");
+    setAnswer(event.target.value);
+    setAnswerError("");
   };
   const validateEmail = () => {
     const emailRegex =
@@ -95,8 +95,8 @@ function SignUpType({ style, onCloseModal }) {
 
   const validateNickName = () => {
     const NickNameRegex = /^.{2,12}$/;
-    if (!nickName.match(NickNameRegex)) {
-      setNickNameError("올바른 닉네임을 입력해주세요.");
+    if (!nickname.match(NickNameRegex)) {
+      setNicknameError("올바른 닉네임을 입력해주세요.");
       return false;
     }
     return true;
@@ -104,8 +104,8 @@ function SignUpType({ style, onCloseModal }) {
 
   const validateAddInput = () => {
     const AddInputRegex = /^.{2,12}$/;
-    if (!addInput.match(AddInputRegex)) {
-      setAddInputError("올바른 질문의 답을 입력해주세요.");
+    if (!answer.match(AddInputRegex)) {
+      setAnswerError("올바른 질문의 답을 입력해주세요.");
       return false;
     }
     return true;
@@ -140,14 +140,14 @@ function SignUpType({ style, onCloseModal }) {
   };
 
   const handleNicknameCheck = async () => {
-    if (!nickName) {
+    if (!nickname) {
       alert("닉네임을 먼저 입력해주세요.");
       return;
     }
     try {
       const response = await axios.post(
         "http://localhost:8080/member/duplication",
-        { nickName },
+        { nickname },
         {
           headers: {
             "Content-Type": "application/json",
@@ -158,7 +158,7 @@ function SignUpType({ style, onCloseModal }) {
         alert("이미 사용 중인 닉네임입니다.");
       } else {
         alert("사용 가능한 닉네임입니다.");
-        setNickNameChecked(true);
+        setNicknameChecked(true);
       }
     } catch (error) {
       console.error("Error checking nickname:", error);
@@ -180,7 +180,7 @@ function SignUpType({ style, onCloseModal }) {
         alert("이메일 중복 확인을 먼저 해주세요.");
         return;
       }
-      if (!nickNameChecked) {
+      if (!nicknameChecked) {
         alert("닉네임 중복 확인을 먼저 해주세요.");
         return;
       }
@@ -190,15 +190,14 @@ function SignUpType({ style, onCloseModal }) {
           {
             email,
             password,
-            confirmPassword,
             name,
-            nickName,
-            question: selectQuestion,
-            addInput,
+            nickname,
+            questionId: selectQuestion,
+            answer,
           },
           {
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json; charset=utf-8'",
             },
           }
         );
@@ -257,10 +256,10 @@ function SignUpType({ style, onCloseModal }) {
         <ButtonType
           placeholder="닉네임"
           onChange={handleNickNameChange}
-          value={nickName}
+          value={nickname}
           onClick={handleNicknameCheck}
         />
-        <p style={{ color: "red" }}>{nickNameError}</p>
+        <p style={{ color: "red" }}>{nicknameError}</p>
       </div>
       <div className={form.findPassword}>
         <div className={form.inputMargin} onClick={OptionsClick}>
@@ -292,9 +291,9 @@ function SignUpType({ style, onCloseModal }) {
             type="text"
             placeholder={`여기에 ${selectQuestion}에 대한 값을 적어주세요`}
             onChange={handleAddInputChange}
-            value={addInput}
+            value={answer}
           />
-          <p style={{ color: "red" }}>{addInputError}</p>
+          <p style={{ color: "red" }}>{answerError}</p>
         </div>
       )}
       <Primary

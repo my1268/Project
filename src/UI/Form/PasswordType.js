@@ -11,13 +11,13 @@ function PasswordType({ style, setShowNewPassword }) {
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [addInput, setAddInput] = useState("");
+  const [answer, setAnswer] = useState("");
 
   const OptionsClick = () => {
     setShowOptions(!showOptions);
   };
 
-  const questions = ["질문 1", "질문 2", "질문 3"];
+  const questions = [1, 2, 3];
 
   const OptionSelect = (question) => {
     setSelectQuestion(question);
@@ -30,7 +30,7 @@ function PasswordType({ style, setShowNewPassword }) {
       email,
       name,
       question: selectQuestion,
-      addInput,
+      answer,
     };
     try {
       const response = await axios.post("/api/check-identity", data, {
@@ -39,27 +39,16 @@ function PasswordType({ style, setShowNewPassword }) {
           "Content-Type": "application/json",
         },
       });
-      if (response.ok) {
-        const newPassword = "1111";
-        const putResponse = await axios.put("/member/password_reset", {
-          email,
-          newPassword,
-        });
-        if (putResponse.ok) {
-          alert(
-            "비밀번호를 1111로 초기화 했으니 다음 창에서 새 비밀번호를 입력해주세요"
-          );
-          setShowNewPassword(true);
-        } else {
-          alert("비밀번호 초기화 실패");
-        }
+      if (response.data) {
+        setShowNewPassword(true);
       } else {
-        alert("다시 확인해주세요");
+        alert("비밀번호 초기화 실패");
       }
     } catch (error) {
       console.error("Error checking identity:", error);
     }
   };
+
   return (
     <div style={style} className={form.loginType}>
       <input
@@ -105,8 +94,8 @@ function PasswordType({ style, setShowNewPassword }) {
             className={form.findPasswordValue}
             type="text"
             placeholder={`여기에 ${selectQuestion}에 대한 값을 적어주세요`}
-            value={addInput}
-            onChange={(e) => setAddInput(e.target.value)}
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
           />
         </div>
       )}

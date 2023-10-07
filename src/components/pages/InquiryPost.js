@@ -8,6 +8,7 @@ import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
+/* eslint-disable */
 
 function MyInquiry() {
   const [openModal, setOpenModal] = useState(false);

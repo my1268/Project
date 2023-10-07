@@ -197,7 +197,7 @@ function SignUpType({ style, onCloseModal }) {
           },
           {
             headers: {
-              "Content-Type": "application/json; charset=utf-8'",
+              "Content-Type": "application/json; charset=utf-8",
             },
           }
         );

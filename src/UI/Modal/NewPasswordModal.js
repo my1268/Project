@@ -36,15 +36,15 @@ function NewPasswordModal({ onClick, onCloseModal }) {
     } else {
       try {
         const response = await axios.post(
-          "/api/update-password", // 예시 URL
-          { newPassword, confirmPassword },
+          "http://localhost:8080/member/newPassword",
+          { email: localStorage.getItem("email"), newPassword },
           {
             headers: {
               "Content-Type": "application/json",
             },
           }
         );
-        if (response.data.success) {
+        if (response.data) {
           alert("비밀번호 수정이 완료되었습니다.");
           onCloseModal();
         } else {

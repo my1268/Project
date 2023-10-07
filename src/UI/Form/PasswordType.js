@@ -29,17 +29,21 @@ function PasswordType({ style, setShowNewPassword }) {
     const data = {
       email,
       name,
-      question: selectQuestion,
+      questionId: selectQuestion,
       answer,
     };
     try {
-      const response = await axios.post("/api/check-identity", data, {
-        //예시 URL
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:8080/member/checkAnswer",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.data) {
+        localStorage.setItem("email", email);
         setShowNewPassword(true);
       } else {
         alert("비밀번호 초기화 실패");

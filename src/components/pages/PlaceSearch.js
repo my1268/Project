@@ -100,8 +100,9 @@ function PlaceSearch() {
     e.preventDefault();
     try {
       const response = await axios.get(
-        `http://localhost:3001/items?q=${searchKeyword}`
+        `http://localhost:8080/api/tourapi/keywordSearch?keyword=${searchKeyword}&pageNo=1`
       );
+      console.log(response);
       setSearchResults(response.data);
     } catch (error) {
       console.error("Error fetching search results:", error);

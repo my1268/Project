@@ -50,8 +50,9 @@ function MyMenu() {
       return;
     }
     try {
+      // verify();
       const response = await axios.post(
-        "/api/check-nickname", // 예시 URL
+        "/api/check-nickname",
         { nickName },
         {
           headers: {
@@ -59,7 +60,8 @@ function MyMenu() {
           },
         }
       );
-      if (response.data.exists) {
+
+      if (response.data) {
         alert("이미 사용 중인 닉네임입니다.");
       } else {
         alert("사용 가능한 닉네임입니다.");

@@ -7,7 +7,7 @@ import { GrClose } from "react-icons/gr";
 import SignUpModal from "./SignUpModal";
 import PasswordModal from "./PasswordModal";
 import { useNavigate } from "react-router-dom";
-//import axios from "axios";
+import axios from "axios";
 
 function LoginModal({ onClick, onLoginSuccess }) {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
@@ -16,24 +16,26 @@ function LoginModal({ onClick, onLoginSuccess }) {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    //  try {
-    //   const response = await axios.post("/login/normal", {
-    //    email: email,
-    //    password: password,
-    //      });
-    //     if (response.data.token) {
-    //   localStorage.setItem("token", response.data.token);
-    onLoginSuccess();
-    //    } else {
-    //    alert("이메일 또는 비밀번호를 다시 확인해주세요.");
-    //    setEmail("");
-    //    setPassword("");
-    //       }
-    //    } catch (error) {
-    //      console.error("로그인 실패:", error);
-    //   }
+    try {
+      const response = await axios
+        .post("http://localhost:8080/login/normal", {
+          email: email,
+          password: password,
+        })
+        .then((response) => {
+          console.log(response.data);
+          localStorage.setItem("token", response.data);
+          onLoginSuccess();
+        })
+        .catch((error) => {
+          alert("이메일 또는 비밀번호를 다시 확인해주세요.");
+          setEmail("");
+          setPassword("");
+        });
+    } catch (error) {
+      console.error("로그인 실패:", error);
+    }
   };
-
   const navigate = useNavigate("");
   const handleCloseModal = () => {
     onClick();

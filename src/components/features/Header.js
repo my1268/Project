@@ -9,9 +9,8 @@ import LoginModal from "../../UI/Modal/LoginModal";
 import Overlay from "../../UI/Modal/Overlay";
 import SignUpModal from "../../UI/Modal/SignUpModal";
 import { Link, useNavigate } from "react-router-dom";
-// import { getToken } from "../Tokens/getToken";
+import { getToken } from "../Tokens/getToken";
 import { removeToken } from "../Tokens/removeToken";
-// import KakaoLogoutApi from "../../UI/KaKao/KakaoLogoutApi";
 
 function Header() {
   const [isOpenLogin, setIsOpenLogin] = useState(false);
@@ -33,9 +32,8 @@ function Header() {
   };
 
   const handlePlannerButtonClick = () => {
-    //  const token = getToken();
-    // if (token) {
-    if (isLoggedIn) {
+    const token = getToken();
+    if (token) {
       navigate("/makingplanner");
     } else {
       alert("로그인 후 이용해주세요");
@@ -77,7 +75,6 @@ function Header() {
             <Ghost text="궁금한 점" onClick={handleInquiryPostButtonClick} />
           </div>
           <div className={header.member}>
-            {/*{token ?} */}
             {isLoggedIn ? (
               <>
                 <Link to="/mymenu" className={header.myMenu}>
@@ -138,7 +135,4 @@ function Header() {
     </div>
   );
 }
-
 export default Header;
-
-// <KakaoLogoutApi />;

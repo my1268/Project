@@ -1,22 +1,16 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import categories from "./Categories.module.css";
-//import { getToken } from "../Tokens/getToken";
 
 function Categories() {
   const location = useLocation();
-  //const token = getToken();
 
   return (
     <ul className={categories.categories}>
       <li>
         <Link
           to="/mymenu"
-          className={
-            location.pathname === "/mymenu" /*&& token*/
-              ? categories.isOpen
-              : null
-          }
+          className={location.pathname === "/mymenu" ? categories.isOpen : null}
         >
           내 정보
         </Link>
@@ -25,9 +19,7 @@ function Categories() {
         <Link
           to="/mypasswordupdate"
           className={
-            location.pathname === "/mypasswordupdate" /*&& token*/
-              ? categories.isOpen
-              : null
+            location.pathname === "/mypasswordupdate" ? categories.isOpen : null
           }
         >
           비밀번호 수정
@@ -37,9 +29,7 @@ function Categories() {
         <Link
           to="/myplanner"
           className={
-            location.pathname === "/myplanner" /*&& token*/
-              ? categories.isOpen
-              : null
+            location.pathname === "/myplanner" ? categories.isOpen : null
           }
         >
           내 플래너
@@ -48,11 +38,7 @@ function Categories() {
       <li>
         <Link
           to="/mypost"
-          className={
-            location.pathname === "/mypost" /*&& token*/
-              ? categories.isOpen
-              : null
-          }
+          className={location.pathname === "/mypost" ? categories.isOpen : null}
         >
           내 게시글
         </Link>
@@ -61,9 +47,7 @@ function Categories() {
         <Link
           to="/myinquiry"
           className={
-            location.pathname === "/myinquiry" /*&& token*/
-              ? categories.isOpen
-              : null
+            location.pathname === "/myinquiry" ? categories.isOpen : null
           }
         >
           내 문의

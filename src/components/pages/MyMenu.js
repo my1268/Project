@@ -6,9 +6,10 @@ import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
 import ButtonType from "../../UI/Form/ButtonType";
 import axios from "axios";
+import { getToken } from "../Tokens/getToken";
 
 function MyMenu() {
-  const [nickName, setNickName] = useState("");
+  const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -16,16 +17,25 @@ function MyMenu() {
   const [nickNameError, setNickNameError] = useState("");
   const [nickNameChecked, setNickNameChecked] = useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const token = getToken();
 
   useEffect(() => {
     async function getNickName() {
       try {
-        const response = await axios.get("/member/info");
-        if (response.data.success) {
-          setNickName(response.data.nickname);
-        } else {
-          console.error("Failed get nickname:", response.data.errorMessage);
-        }
+        await axios
+          .get("http://localhost:8080/member/info", {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            setNickname(response.data.nickname);
+          })
+          .catch((error) => {
+            console.error("Failed get nickname");
+          });
       } catch (error) {
         console.error("Error get nickname:", error);
       } finally {
@@ -37,7 +47,7 @@ function MyMenu() {
 
   const validateNickName = () => {
     const NickNameRegex = /^.{2,12}$/;
-    if (!nickName.match(NickNameRegex)) {
+    if (!nickname.match(NickNameRegex)) {
       setNickNameError("닉네임을 수정하려면 2~12자 사이여야 합니다.");
       return false;
     }
@@ -45,23 +55,23 @@ function MyMenu() {
   };
 
   const handleNicknameCheck = async () => {
-    if (!nickName) {
+    if (!nickname) {
       alert("닉네임을 먼저 입력해주세요.");
       return;
     }
     try {
-      // verify();
       const response = await axios.post(
-        "/api/check-nickname",
-        { nickName },
+        "http://localhost:8080/member/duplication",
+        { nickname },
         {
           headers: {
+            Authorization: token,
             "Content-Type": "application/json",
           },
         }
       );
 
-      if (response.data) {
+      if (!response.data) {
         alert("이미 사용 중인 닉네임입니다.");
       } else {
         alert("사용 가능한 닉네임입니다.");
@@ -86,8 +96,19 @@ function MyMenu() {
       return;
     }
     try {
-      const response = await axios.put("/member/update", { nickName });
-      if (response.data.success) {
+      const response = await axios.put(
+        "http://localhost:8080/member/update",
+        {
+          nickname,
+        },
+        {
+          headers: {
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data) {
         console.log("Successed nickname update.");
         alert("닉네임이 성공적으로 변경되었습니다.");
       } else {
@@ -128,13 +149,17 @@ function MyMenu() {
       return;
     }
     try {
-      const response = await axios.delete("/member/withdraw", {
-        data: {
-          password: password,
-          confirmPassword: confirmPassword,
-        },
-      });
-      if (response.data.success) {
+      const response = await axios.post(
+        "http://localhost:8080/member/withdraw",
+        { password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+      if (response.data) {
         alert("회원 탈퇴가 완료되었습니다.");
       } else {
         console.error("Failed to delete member:", response.data.errorMessage);
@@ -156,8 +181,8 @@ function MyMenu() {
                 <dd>
                   <ButtonType
                     placeholder="닉네임"
-                    value={loading ? "로딩 중..." : nickName}
-                    onChange={(e) => setNickName(e.target.value)}
+                    value={loading ? "로딩 중..." : nickname}
+                    onChange={(e) => setNickname(e.target.value)}
                     onClick={handleNicknameCheck}
                   />
                 </dd>

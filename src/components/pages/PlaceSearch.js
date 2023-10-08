@@ -9,7 +9,6 @@ import Primary from "../../UI/Button/Primary";
 import axios from "axios";
 import { getToken } from "../Tokens/getToken";
 /* eslint-disable */
-
 function PlaceSearch() {
   const navigate = useNavigate();
   const [dayPlus, setDayPlus] = useState(1);
@@ -264,7 +263,9 @@ function PlaceSearch() {
       return;
     }
     try {
-      const requestData = calendars.map((calendar) => {
+      const schedule = calendars.map((calendar) => {
+        const localItem = JSON.parse(localStorage.getItem("requestData"));
+        console.log("localItem:", localItem);
         const waypointsData = calendar.waypoints
           ? calendar.waypoints.map((waypoint) => ({
               waypoint: waypoint.waypoint,
@@ -276,14 +277,16 @@ function PlaceSearch() {
           start: calendar.start,
           startTime: calendar.startTime,
           waypoints: waypointsData,
+          localItem: localItem,
         };
       });
+
       const response = await axios.post(
-        "http://localhost:3000/save-calendars", //예시 URL
-        requestData,
+        "http://localhost:8080/planner/add",
+        schedule,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: token,
           },
         }
       );

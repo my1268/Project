@@ -7,17 +7,21 @@ import Primary from "../../UI/Button/Primary";
 import ButtonType from "../../UI/Form/ButtonType";
 import axios from "axios";
 import { getToken } from "../Tokens/getToken";
-
+import { removeToken } from "../Tokens/removeToken";
+import { useNavigate } from "react-router-dom";
+/* eslint-disable */
 function MyMenu() {
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [loading, setLoading] = useState(true);
-  const [nickNameError, setNickNameError] = useState("");
-  const [nickNameChecked, setNickNameChecked] = useState(false);
+  const [nicknameError, setNicknameError] = useState("");
+  const [nicknameChecked, setNicknameChecked] = useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
   const token = getToken();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getNickName() {
@@ -46,9 +50,9 @@ function MyMenu() {
   }, []);
 
   const validateNickName = () => {
-    const NickNameRegex = /^.{2,12}$/;
-    if (!nickname.match(NickNameRegex)) {
-      setNickNameError("닉네임을 수정하려면 2~12자 사이여야 합니다.");
+    const nicknameRegex = /^.{2,12}$/;
+    if (!nickname.match(nicknameRegex)) {
+      setNicknameError("닉네임을 수정하려면 2~12자 사이여야 합니다.");
       return false;
     }
     return true;
@@ -75,8 +79,8 @@ function MyMenu() {
         alert("이미 사용 중인 닉네임입니다.");
       } else {
         alert("사용 가능한 닉네임입니다.");
-        setNickNameChecked(true);
-        setNickNameError("");
+        setNicknameChecked(true);
+        setNicknameError("");
       }
     } catch (error) {
       console.error("Error checking nickname:", error);
@@ -87,7 +91,7 @@ function MyMenu() {
     if (!validateNickName()) {
       return;
     }
-    if (!nickNameChecked) {
+    if (!nicknameChecked) {
       alert("닉네임 중복 확인을 먼저 해주세요.");
       return;
     }
@@ -160,7 +164,9 @@ function MyMenu() {
         }
       );
       if (response.data) {
+        removeToken();
         alert("회원 탈퇴가 완료되었습니다.");
+        navigate("/");
       } else {
         console.error("Failed to delete member:", response.data.errorMessage);
       }
@@ -189,7 +195,7 @@ function MyMenu() {
               </div>
             </dl>
             <Primary onClick={putUpdateNickname} text="닉네임 수정" />
-            <p style={{ color: "red" }}>{nickNameError}</p>
+            <p style={{ color: "red" }}>{nicknameError}</p>
           </form>
           <form
             style={{ position: "relative", top: "90px" }}

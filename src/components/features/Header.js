@@ -11,7 +11,7 @@ import SignUpModal from "../../UI/Modal/SignUpModal";
 import { Link, useNavigate } from "react-router-dom";
 import { getToken } from "../Tokens/getToken";
 import { removeToken } from "../Tokens/removeToken";
-
+/* eslint-disable */
 function Header() {
   const [isOpenLogin, setIsOpenLogin] = useState(false);
   const [isOpenSignUp, setIsOpenSignUp] = useState(false);
@@ -19,7 +19,7 @@ function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate();
-
+  const token = getToken();
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
     setIsOpenLogin(false);
@@ -75,7 +75,7 @@ function Header() {
             <Ghost text="궁금한 점" onClick={handleInquiryPostButtonClick} />
           </div>
           <div className={header.member}>
-            {isLoggedIn ? (
+            {token ? (
               <>
                 <Link to="/mymenu" className={header.myMenu}>
                   <BsFillPersonFill />

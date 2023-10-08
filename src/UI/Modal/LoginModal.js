@@ -8,7 +8,7 @@ import SignUpModal from "./SignUpModal";
 import PasswordModal from "./PasswordModal";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+/* eslint-disable */
 function LoginModal({ onClick, onLoginSuccess }) {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);

@@ -94,8 +94,8 @@ function SignUpType({ style, onCloseModal }) {
   };
 
   const validateNickName = () => {
-    const NickNameRegex = /^.{2,12}$/;
-    if (!nickname.match(NickNameRegex)) {
+    const nicknameRegex = /^.{2,12}$/;
+    if (!nickname.match(nicknameRegex)) {
       setNicknameError("올바른 닉네임을 입력해주세요.");
       return false;
     }

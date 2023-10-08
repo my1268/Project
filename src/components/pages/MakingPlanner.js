@@ -5,39 +5,42 @@ import Memo from "../../UI/Form/Memo";
 import PageCover from "../features/PageCover";
 import making from "./MakingPlanner.module.css";
 import { useNavigate } from "react-router-dom";
-//import axios from "axios";
-//import { getToken } from "../Tokens/getToken";
+import Date from "../../UI/Form/Date";
 
-function MakingPlanner() {
+const MakingPlanner = () => {
   const [title, setTitle] = useState("");
   const [memo, setMemo] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [lastDate, setLastDate] = useState("");
 
   const navigate = useNavigate("");
 
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    localStorage.setItem("startDate", date);
+  };
+
+  const handleLastDateChange = (date) => {
+    setLastDate(date);
+    localStorage.setItem("lastDate", date);
+  };
+
   const placeSearchButton = async () => {
-    // const token = getToken();
     if (title.trim().length === 0) {
-      alert("제목을 한 글자 이상 입력해주세요!");
+      alert("제목을 입력해주세요!");
     } else {
-      //    try {
-      //      const requestData = {
-      //        title: title,
-      //        memo: memo,
-      //      };
-      //      const response = await axios.post(
-      //        "http://localhost:3000/create-planner", // 예시 URL
-      //        requestData,
-      //       {
-      //         headers: {
-      //          Authorization: `Bearer ${token}`,
-      //       },
-      //    }
-      //   );
-      //  console.log("Planner created:", response.data);
-      navigate("/placesearch");
-      //  } catch (error) {
-      //    console.error("Error creating planner:", error);
-      //  }
+      try {
+        const requestData = {
+          title,
+          memo,
+          startDate,
+          lastDate,
+        };
+        localStorage.setItem("requestData", JSON.stringify(requestData));
+        navigate("/placesearch");
+      } catch (error) {
+        console.error("Error creating planner:", error);
+      }
     }
   };
 
@@ -68,7 +71,20 @@ function MakingPlanner() {
                   />
                 </dd>
               </div>
+              <div className={making.item}>
+                <dt>Start Date</dt>
+                <dd>
+                  <Date value={startDate} onChange={handleStartDateChange} />
+                </dd>
+              </div>
+              <div className={making.item}>
+                <dt>Last Date</dt>
+                <dd>
+                  <Date value={lastDate} onChange={handleLastDateChange} />
+                </dd>
+              </div>
             </dl>
+
             <Primary
               text="플래너 만들기"
               onClick={placeSearchButton}
@@ -79,6 +95,6 @@ function MakingPlanner() {
       </div>
     </>
   );
-}
+};
 
 export default MakingPlanner;

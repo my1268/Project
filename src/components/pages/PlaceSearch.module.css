@@ -6,13 +6,13 @@
 .input {
   margin-top: 18px;
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
   font-family: Arial, sans-serif;
 }
 
 .inputContainer {
-  border: 1px solid #ccc;
-  padding: 38px;
+  border: 7px solid #ccc;
+  padding: 18px;
   border-radius: 30px;
   background-color: #f9f9f9;
 }
@@ -41,6 +41,7 @@
 
 .datePicker {
   padding: 10px;
+  width: 100px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }

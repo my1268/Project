@@ -23,7 +23,6 @@ function PlaceSearch() {
   const [waypointClickCounts, setWaypointClickCounts] = useState(
     Array(dayPlus).fill(0)
   );
-  //const [polyline, setPolyline] = useState(null);
   const [totalDistance, setTotalDistance] = useState(0);
   const [showResetMarker, setShowResetMarker] = useState(false);
 
@@ -152,11 +151,17 @@ function PlaceSearch() {
   const handleSaveItem = (item) => {
     const selectedCalendar = calendars[selectedDayIndex];
     if (selectedCalendar) {
+      console.log("contentId:", item.contentId);
+      console.log("contentType:", item.contentTypeId);
+      console.log("address:", item.addr1);
+      console.log("place:", item.title);
+      console.log("mapX:", item.mapx);
+      console.log("mapY:", item.mapy);
+      console.log("thumbnailLocation:", item.image);
+
       if (!selectedCalendar.start) {
         handleInputChange(selectedDayIndex, "start", item.title);
         handleInputChange(selectedDayIndex, "startImage", item.image);
-        console.log(`Start Item: ${item.title}`);
-        console.log(`Start Item Image: ${item.image}`);
       } else {
         const waypoints = selectedCalendar.waypoints || [];
         const emptyWaypointIndex = waypoints.findIndex(
@@ -173,14 +178,11 @@ function PlaceSearch() {
             selectedDayIndex,
             emptyWaypointIndex,
             "waypointImage",
-            item.image // 추가
+            item.image
           );
-          console.log(`Waypoint Item: ${item.title}`);
-          console.log(`Waypoint Item Image: ${item.image}`);
         }
       }
       if (item.mapx && item.mapy && map) {
-        console.log(`위도: ${item.mapy}, 경도: ${item.mapx}`);
         const currentMarkerNumber = markerNumber;
         setMarkerNumber(currentMarkerNumber + 1);
         if (!map.markers) {
@@ -194,18 +196,6 @@ function PlaceSearch() {
           map: map,
         });
         map.markers.push(marker);
-        //  const polylineCoordinates = map.markers.map((m) => m.getPosition());
-        //  if (polyline) {
-        //    polyline.setMap(null);
-        //  }
-        //  setPolyline(
-        //    new window.Tmapv2.Polyline({
-        //      path: polylineCoordinates,
-        //      strokeColor: "black",
-        //      strokeWeight: 4,
-        //      map: map,
-        //    })
-        //  );
         const bounds = new window.Tmapv2.LatLngBounds();
         map.markers.forEach((m) => bounds.extend(m.getPosition()));
         map.fitBounds(bounds);
@@ -227,10 +217,6 @@ function PlaceSearch() {
     if (map && map.markers.length > 0) {
       map.markers.forEach((marker) => marker.setMap(null));
       map.markers = [];
-      //    if (polyline) {
-      //     polyline.setMap(null);
-      //     setPolyline(null);
-      //   }
       setTotalDistance(0);
       setMarkerNumber(1);
       setShowResetMarker(false);
@@ -265,7 +251,6 @@ function PlaceSearch() {
     try {
       const schedule = calendars.map((calendar) => {
         const localItem = JSON.parse(localStorage.getItem("requestData"));
-        console.log("localItem:", localItem);
         const waypointsData = calendar.waypoints
           ? calendar.waypoints.map((waypoint) => ({
               waypoint: waypoint.waypoint,
@@ -273,14 +258,20 @@ function PlaceSearch() {
             }))
           : [];
         return {
-          id: calendar.id,
-          start: calendar.start,
-          startTime: calendar.startTime,
-          waypoints: waypointsData,
           localItem: localItem,
+          contentId: calendar.contentId,
+          contentType: calendar.contentType,
+          address: calendar.address,
+          place: calendar.start,
+          mapX: calendar.mapX,
+          mapY: calendar.mapY,
+          arrivetTime: calendar.arrivetTime,
+          startTime: calendar.startTime,
+          thumbnailLocation: calendar.thumbnailLocation,
+          waypoints: waypointsData,
         };
       });
-
+      console.log(schedule);
       const response = await axios.post(
         "http://localhost:8080/planner/add",
         schedule,
@@ -290,6 +281,7 @@ function PlaceSearch() {
           },
         }
       );
+      console.log(schedule);
       console.log("Calendars saved:", response.data);
       navigate("/myplanner");
     } catch (error) {
@@ -353,7 +345,18 @@ function PlaceSearch() {
                     showTimeSelect
                     timeFormat="HH:mm"
                     timeIntervals={30}
-                    dateFormat="yyyy/MM/dd HH:mm"
+                    dateFormat="MM/dd HH:mm"
+                    className={placesearch.datePicker}
+                  />
+                  <DatePicker
+                    selected={calendar.arriveTime}
+                    onChange={(date) =>
+                      handleInputChange(index, "arriveTime", date)
+                    }
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={30}
+                    dateFormat="MM/dd HH:mm"
                     className={placesearch.datePicker}
                   />
                 </div>
@@ -388,7 +391,23 @@ function PlaceSearch() {
                         showTimeSelect
                         timeFormat="HH:mm"
                         timeIntervals={30}
-                        dateFormat="yyyy/MM/dd HH:mm"
+                        dateFormat="MM/dd HH:mm"
+                        className={placesearch.datePicker}
+                      />
+                      <DatePicker
+                        selected={waypoint.arriveTime}
+                        onChange={(date) =>
+                          handleWaypointInputChange(
+                            index,
+                            waypointIndex,
+                            "arriveTime",
+                            date
+                          )
+                        }
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={30}
+                        dateFormat="MM/dd HH:mm"
                         className={placesearch.datePicker}
                       />
                     </div>

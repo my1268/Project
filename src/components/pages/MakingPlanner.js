@@ -9,15 +9,15 @@ import Date from "../../UI/Form/Date";
 
 const MakingPlanner = () => {
   const [title, setTitle] = useState("");
-  const [memo, setMemo] = useState("");
-  const [startDate, setStartDate] = useState("");
+  const [comment, setComment] = useState("");
+  const [firstDate, setFirstDate] = useState("");
   const [lastDate, setLastDate] = useState("");
 
   const navigate = useNavigate("");
 
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-    localStorage.setItem("startDate", date);
+  const handleFirstDateChange = (date) => {
+    setFirstDate(date);
+    localStorage.setItem("firstDate", date);
   };
 
   const handleLastDateChange = (date) => {
@@ -32,8 +32,8 @@ const MakingPlanner = () => {
       try {
         const requestData = {
           title,
-          memo,
-          startDate,
+          comment,
+          firstDate,
           lastDate,
         };
         localStorage.setItem("requestData", JSON.stringify(requestData));
@@ -66,15 +66,15 @@ const MakingPlanner = () => {
                 <dd>
                   <Memo
                     placeholder="메모를 입력하세요"
-                    value={memo}
-                    onChange={(e) => setMemo(e.target.value)}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
                   />
                 </dd>
               </div>
               <div className={making.item}>
-                <dt>Start Date</dt>
+                <dt>First Date</dt>
                 <dd>
-                  <Date value={startDate} onChange={handleStartDateChange} />
+                  <Date value={firstDate} onChange={handleFirstDateChange} />
                 </dd>
               </div>
               <div className={making.item}>

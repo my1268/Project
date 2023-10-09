@@ -34,7 +34,6 @@ function MyMenu() {
             },
           })
           .then((response) => {
-            console.log(response.data);
             setNickname(response.data.nickname);
           })
           .catch((error) => {

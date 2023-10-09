@@ -9,24 +9,18 @@ import Board from "../features/Board";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
-/* eslint-disable */
+import { getToken } from "../Tokens/getToken";
 
 function MyPlanner() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-  //const [list, setList] = useState([]);
-  const [title, setTitle] = useState("");
-  const [currentMemoText, setCurrentMemoText] = useState("");
-
-  const [list, setList] = useState([
-    { id: 1, title: "플래너 1", date: "23.03.01 - 23.03.04", page: "/" },
-    { id: 2, title: "플래너 2", date: "23.02.01 - 23.02.04", page: "/" },
-  ]);
+  const [list, setList] = useState([]);
+  const token = getToken();
 
   const handleDelete = async (itemToDelete) => {
     try {
-      await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
+      await axios.delete(`/api/planner/${itemToDelete.id}`);
       const updatedList = list.filter((item) => item.id !== itemToDelete.id);
       const updatedFilteredList = filteredItems.filter(
         (item) => item.id !== itemToDelete.id
@@ -53,24 +47,29 @@ function MyPlanner() {
   useEffect(() => {
     async function getPlanner() {
       try {
-        const response = await axios.get("/api/title/memo"); // 예시 UR
-        if (response.data.success) {
-          const plannerData = response.data;
-          const id = Date.now();
-          const newListItem = {
-            id: id,
+        const response = await axios.get(
+          "http://localhost:8080/planner/view/my_planner?page=1&size=10",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        const updateList = response.data.dtoList.map((plannerData) => {
+          const dateArray = plannerData.date;
+          const plannerDataDate = `${dateArray[0]}-${dateArray[1]}-0${dateArray[2]}`;
+          return {
             title: plannerData.title,
-            memo: plannerData.memo,
+            date: plannerDataDate,
           };
-          setList([...list, newListItem]);
-          setTitle(plannerData.title);
-        } else {
-          console.error("Failed get title:", response.data.errorMessage);
-        }
+        });
+        setList([...list, ...updateList]);
       } catch (error) {
         console.error("Failed get data:", error);
       }
     }
+
     getPlanner();
   }, []);
 
@@ -94,12 +93,12 @@ function MyPlanner() {
                 filteredItems.length > 0
                   ? filteredItems.map((item) => ({
                       title: item.title,
+                      date: item.date,
                     }))
-                  : list.map((item) => ({ title: item.title }))
+                  : list.map((item) => ({ title: item.title, date: item.date }))
               }
               title="플래너 목록"
-              onClick={(item) => {
-                setCurrentMemoText(item.memo);
+              onClick={() => {
                 setOpenModal(true);
               }}
               onDelete={handleDelete}
@@ -117,9 +116,7 @@ function MyPlanner() {
       {openModal && (
         <>
           <PlannerModal
-            title={title}
             subTitle="타임 테이블"
-            currentMemoText={currentMemoText}
             showUpdateDeleteButton={true}
             showTimeTable={true}
             showMemo={true}

@@ -10,7 +10,6 @@ import making from "../../components/pages/MakingPlanner.module.css";
 import TimeTable from "../TimeTable/TimeTable";
 
 function ReviewWriteModal({ onClick, onCloseModal, style, placeSearchData }) {
-  const [nickName, setNickName] = useState("");
   const [title, setTitle] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -24,21 +23,6 @@ function ReviewWriteModal({ onClick, onCloseModal, style, placeSearchData }) {
     setImagePreviews(imagePreviewsArray);
   };
 
-  useEffect(() => {
-    const getNickName = async () => {
-      try {
-        if (token) {
-          const response = await axios.get("/member/info");
-          const getNickName = response.data;
-          setNickName(getNickName.nickName);
-        }
-      } catch (error) {
-        console.error("닉네임 정보를 가져오는 중 오류 발생:", error);
-      }
-    };
-    getNickName();
-  }, [token]);
-
   const handleReviewSubmit = async () => {
     try {
       const formData = new FormData();
@@ -50,14 +34,22 @@ function ReviewWriteModal({ onClick, onCloseModal, style, placeSearchData }) {
       const year = String(currentDate.getFullYear());
       const month = String(currentDate.getMonth() + 1).padStart(2, "0");
       const day = String(currentDate.getDate()).padStart(2, "0");
-      formData.append("nickName", nickName);
       formData.append("title", title);
       formData.append("reviewText", reviewText);
       imagePreviews.forEach((file, index) => {
         formData.append(`image${index}`, file);
       });
       formData.append("date", `${year}-${month}-${day}`);
-      const response = await axios.post("/api/upload-review", formData); //예시 URL
+      const response = await axios.post(
+        "http://localhost:8080/review/register",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
       if (response.status === 200) {
         console.log("서버 응답 데이터:", response.data);
         alert("리뷰가 성공적으로 업로드되었습니다.");
@@ -77,21 +69,12 @@ function ReviewWriteModal({ onClick, onCloseModal, style, placeSearchData }) {
       <div style={style}>
         <input
           className={`${form.base} ${form.inputMargin}`}
-          style={{ marginTop: "30px" }}
-          value={nickName}
-          placeholder="내 닉네임"
-          readOnly
-          onChange={(e) => setNickName(e.target.value)}
-        />
-        <input
-          className={`${form.base} ${form.inputMargin}`}
           value={title}
           placeholder="리뷰 제목"
           onChange={(e) => setTitle(e.target.value)}
         />
-        <input
-          className={`${form.base} ${form.inputMargin}`}
-          placeholder="리뷰 메모"
+        <textarea
+          className={`${form.base} ${form.inputMargin} ${form.reviewTextArea}`}
           value={reviewText}
           onChange={(e) => setReviewText(e.target.value)}
         />

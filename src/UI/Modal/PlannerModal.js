@@ -8,6 +8,7 @@ import Base from "../Form/Base";
 import Primary from "../Button/Primary";
 import { BiEraser } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
+import { AiTwotoneDelete } from "react-icons/ai";
 import axios from "axios";
 import { getToken } from "../../components/Tokens/getToken";
 import ReviewWriteModal from "./ReviewWriteModal";
@@ -30,6 +31,7 @@ function PlannerModal({
   reviewTitle,
   inquiryText,
   reviewWrite,
+  openModal,
 }) {
   const [placeList, setPlaceList] = useState([]);
   const [photoList, setPhotoList] = useState([]);
@@ -37,17 +39,16 @@ function PlannerModal({
   const [currentComment, setCurrentComment] = useState("");
   const [updatedMemoText, setUpdatedMemoText] = useState(currentMemoText);
   const [updatedReviewText, setUpdatedReviewText] = useState(currentReviewText);
-  const [isMemoUpdate, setIsMemoUpdate] = useState(false);
-  const [isReviewUpdate, setIsReviewUpdate] = useState(false);
   const [placeSearchData, setPlaceSearchData] = useState([]);
   const [showPlannerModal, setShowPlannerModal] = useState(false);
   const [showReviewWriteModal, setShowReviewWriteModal] = useState(false);
   const navigate = useNavigate();
+  const token = getToken();
 
   const handleEditClick = () => {
     const confirmMessage = window.confirm("수정 페이지로 이동하시겠습니까?");
     if (confirmMessage) {
-      const editUrl = `/placesearch/${placeSearchData.id}`;
+      const editUrl = `http://localhost:8080/planner/edit/${placeSearchData.id}`;
       navigate(editUrl);
     }
   };
@@ -64,12 +65,11 @@ function PlannerModal({
     async function getPlanner() {
       try {
         const response = await axios.get(
-          "http://localhost:3000/save-calendars" // 예시 URL
+          `http://localhost:8080/planner/view/my_planner?page=1&size=10=${openModal.id}` // 예시 URL
         );
-        if (response.data.success) {
+        if (response.data) {
           const placeSearchData = response.data;
           const placeSearchItem = {
-            id: placeSearchData.id,
             start: placeSearchData.start,
             startTime: placeSearchData.startTime,
             waypoints: placeSearchData.waypoints.map((waypointItem) => ({
@@ -99,6 +99,32 @@ function PlannerModal({
     }
     getPlanner();
   }, []);
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("삭제하시겠습니까?");
+    if (!confirmDelete) {
+      return;
+    }
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/planner/delete?plannerId=1`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+      if (response.data) {
+        alert("삭제 되었습니다.");
+        navigate("/mymenu");
+        console.log("Success delete");
+      } else {
+        console.error("Failed to delete planner:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Failed to delete planner:", error);
+    }
+  };
 
   useEffect(() => {
     const getReview = async () => {
@@ -116,36 +142,6 @@ function PlannerModal({
     };
     getReview();
   }, []);
-
-  const handleUpdatedMemo = async (updatedMemoText) => {
-    try {
-      const response = await axios.put("/api/memo", { updatedMemoText }); // 예시 URL
-      if (response.data.success) {
-        console.log("메모 수정 성공");
-        alert("메모 수정 성공!");
-      } else {
-        console.error("메모 수정 실패:", response.data.errorMessage);
-        alert("메모 수정 실패!");
-      }
-    } catch (error) {
-      console.error("메모 수정 실패:", error);
-    }
-  };
-
-  const handleUpdatedReview = async (updatedReviewText) => {
-    try {
-      const response = await axios.put("/api/review", { updatedReviewText }); // 예시 URL
-      if (response.data.success) {
-        console.log("리뷰 수정 성공");
-        alert("리뷰 수정 성공!");
-      } else {
-        console.error("리뷰 수정 실패:", response.data.errorMessage);
-        alert("리뷰 수정 실패!");
-      }
-    } catch (error) {
-      console.error("리뷰 수정 실패:", error);
-    }
-  };
 
   const handleSaveComment = async (comment) => {
     if (comment.trim() === "") {
@@ -217,8 +213,25 @@ function PlannerModal({
               className="lg-only"
               onClick={handleEditClick}
             />
-            <button type="button" className={`sm-only ${modal.edit}`}>
+            <Ghost
+              text="삭제"
+              style={{ color: "#F86D7D" }}
+              className="lg-only"
+              onClick={() => handleDelete()}
+            />
+            <button
+              type="button"
+              className={`sm-only ${modal.edit}`}
+              onClick={handleEditClick}
+            >
               <MdEdit />
+            </button>
+            <button
+              type="button"
+              className={`sm-only ${modal.delete}`}
+              onClick={() => handleDelete()}
+            >
+              <AiTwotoneDelete />
             </button>
           </div>
         )}
@@ -247,27 +260,9 @@ function PlannerModal({
           <textarea
             className={modal.memoTextArea}
             value={updatedMemoText}
-            readOnly={showMemoReadOnly || !isMemoUpdate}
+            readOnly={showMemoReadOnly}
             onChange={(e) => setUpdatedMemoText(e.target.value)}
           />
-          <div className={modal.saveButton}>
-            {!showMemoReadOnly && !isMemoUpdate ? (
-              <Ghost
-                style={{ color: "#3DA5F5" }}
-                text="메모 수정"
-                onClick={() => setIsMemoUpdate(true)}
-              />
-            ) : isMemoUpdate ? (
-              <Primary
-                isShortPrimary="true"
-                text="저장"
-                onClick={() => {
-                  handleUpdatedMemo();
-                  setIsMemoUpdate(false);
-                }}
-              />
-            ) : null}
-          </div>
         </div>
       )}
       {showSection && (
@@ -276,28 +271,10 @@ function PlannerModal({
           <textarea
             className={modal.reviewTextArea}
             placeholder="리뷰"
-            readOnly={showReviewReadOnly || !isReviewUpdate}
+            readOnly={showReviewReadOnly}
             value={updatedReviewText}
             onChange={(e) => setUpdatedReviewText(e.target.value)}
           />
-          <div className={modal.saveButton}>
-            {!showReviewReadOnly && !isReviewUpdate ? (
-              <Ghost
-                style={{ color: "#3DA5F5" }}
-                text="리뷰 수정"
-                onClick={() => setIsReviewUpdate(true)}
-              />
-            ) : isReviewUpdate ? (
-              <Primary
-                isShortPrimary="true"
-                text="저장"
-                onClick={() => {
-                  handleUpdatedReview();
-                  setIsReviewUpdate(false);
-                }}
-              />
-            ) : null}
-          </div>
           <div className={modal.section}>
             <h3>사진</h3>
             <CardList photoList={photoList} />

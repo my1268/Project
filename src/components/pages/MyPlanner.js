@@ -18,20 +18,6 @@ function MyPlanner() {
   const [list, setList] = useState([]);
   const token = getToken();
 
-  const handleDelete = async (itemToDelete) => {
-    try {
-      await axios.delete(`/api/planner/${itemToDelete.id}`);
-      const updatedList = list.filter((item) => item.id !== itemToDelete.id);
-      const updatedFilteredList = filteredItems.filter(
-        (item) => item.id !== itemToDelete.id
-      );
-      setList(updatedList);
-      setFilteredItems(updatedFilteredList);
-    } catch (error) {
-      console.error("Failed to delete item:", error);
-    }
-  };
-
   const handleSearch = (e) => {
     e.preventDefault();
     updateFilteredItems();
@@ -58,7 +44,7 @@ function MyPlanner() {
         );
         const updateList = response.data.dtoList.map((plannerData) => {
           const dateArray = plannerData.date;
-          const plannerDataDate = `${dateArray[0]}-${dateArray[1]}-0${dateArray[2]}`;
+          const plannerDataDate = `${dateArray[0]}-${dateArray[1]}-0${dateArray[2]} ${dateArray[3]}:0${dateArray[4]}:${dateArray[5]}`;
           return {
             title: plannerData.title,
             date: plannerDataDate,
@@ -101,8 +87,6 @@ function MyPlanner() {
               onClick={() => {
                 setOpenModal(true);
               }}
-              onDelete={handleDelete}
-              deleteButton={true}
             />
           ) : (
             <p>
@@ -116,10 +100,12 @@ function MyPlanner() {
       {openModal && (
         <>
           <PlannerModal
+            openModal={false}
             subTitle="타임 테이블"
             showUpdateDeleteButton={true}
             showTimeTable={true}
             showMemo={true}
+            showMemoReadOnly={true}
             showPlace={true}
             onClick={() => setOpenModal(false)}
             reviewWrite={true}

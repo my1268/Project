@@ -8,50 +8,36 @@ import CardList from "../../UI/Card/CardList";
 import PlannerModal from "../../UI/Modal/PlannerModal";
 import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
-/* eslint-disable */
+import { getToken } from "../Tokens/getToken";
+
 function PlannerPost() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
   const [title, setTitle] = useState("");
   const [currentMemoText, setCurrentMemoText] = useState("");
-
-  const [placeList, setPlaceList] = useState([
-    {
-      inquiry: 0,
-      title: "플래너 제목1",
-      nickName: "작성자",
-      date: "날짜",
-      image: demoImage,
-    },
-    {
-      inquiry: 0,
-      title: "플래너 제목2",
-      nickName: "작성자",
-      date: "날짜",
-      image: demoImage,
-    },
-    {
-      inquiry: 0,
-      title: "플래너 제목3",
-      nickName: "작성자",
-      date: "날짜",
-      image: demoImage,
-    },
-  ]);
+  const token = getToken();
+  const [placeList, setPlaceList] = useState([]);
 
   useEffect(() => {
     async function getPlanner() {
       try {
-        const response = await axios.get("/api/title/memo"); // 예시 UR
-        if (response.data.success) {
-          const plannerData = response.data;
-          const id = Date.now();
+        const response = await axios.get(
+          "http://localhost:8080/planner/view/all_planner",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        if (response.data) {
+          const plannerData = response.data.dtoList;
           const newListItem = {
-            id: id,
             title: plannerData.title,
             memo: plannerData.memo,
           };
+          console.log(response);
           setPlaceList([...placeList, newListItem]);
           setTitle(plannerData.title);
         } else {

@@ -41,6 +41,7 @@ function PlaceSearch() {
   };
 
   const handleInputChange = (index, property, value) => {
+    console.log(index, property, value);
     const updatedCalendars = [...calendars];
     updatedCalendars[index][property] = value;
     setCalendars(updatedCalendars);
@@ -148,7 +149,31 @@ function PlaceSearch() {
     }
   }, [showMap]);
 
+  const requestData = JSON.parse(localStorage.getItem("requestData"));
+  const data = {
+    title: requestData.title,
+    firstDate: requestData.firstDate,
+    lastDate: requestData.lastDate,
+    comment: requestData.comment,
+    schedules: [],
+  };
+
   const handleSaveItem = (item) => {
+    const newData = {
+      contentId: item.contentId,
+      contentType: item.contentType,
+      address: item.addr1,
+      place: item.title,
+      mapX: item.mapX,
+      mapY: item.mapY,
+      date: "2023-07-21",
+      // "arriveTime" : "",
+      // "viaTime" : "",
+      // "startTime" : "2023-07-21T10:00:00",
+      thumbnailLocation: item.image,
+    };
+    data.schedules.push(newData);
+    console.log(data);
     const selectedCalendar = calendars[selectedDayIndex];
     if (selectedCalendar) {
       console.log("contentId:", item.contentId);
@@ -162,6 +187,12 @@ function PlaceSearch() {
       if (!selectedCalendar.start) {
         handleInputChange(selectedDayIndex, "start", item.title);
         handleInputChange(selectedDayIndex, "startImage", item.image);
+        handleInputChange(selectedDayIndex, "contentId", item.contentId);
+        handleInputChange(selectedDayIndex, "contentType", item.contentTypeId);
+        handleInputChange(selectedDayIndex, "address", item.addr1);
+        handleInputChange(selectedDayIndex, "mapX", item.mapx);
+        handleInputChange(selectedDayIndex, "mapY", item.mapy);
+        handleInputChange(selectedDayIndex, "thumbnailLocation", item.image);
       } else {
         const waypoints = selectedCalendar.waypoints || [];
         const emptyWaypointIndex = waypoints.findIndex(
@@ -178,6 +209,48 @@ function PlaceSearch() {
             selectedDayIndex,
             emptyWaypointIndex,
             "waypointImage",
+            item.image
+          );
+          handleWaypointInputChange(
+            selectedDayIndex,
+            emptyWaypointIndex,
+            "contentId",
+            item.contentId
+          );
+          handleWaypointInputChange(
+            selectedDayIndex,
+            emptyWaypointIndex,
+            "contentType",
+            item.contentTypeId
+          );
+          handleWaypointInputChange(
+            selectedDayIndex,
+            emptyWaypointIndex,
+            "address",
+            item.addr1
+          );
+          handleWaypointInputChange(
+            selectedDayIndex,
+            emptyWaypointIndex,
+            "place",
+            item.title
+          );
+          handleWaypointInputChange(
+            selectedDayIndex,
+            emptyWaypointIndex,
+            "mapX",
+            item.mapx
+          );
+          handleWaypointInputChange(
+            selectedDayIndex,
+            emptyWaypointIndex,
+            "mapY",
+            item.mapy
+          );
+          handleWaypointInputChange(
+            selectedDayIndex,
+            emptyWaypointIndex,
+            "thumbnailLocation",
             item.image
           );
         }
@@ -228,13 +301,17 @@ function PlaceSearch() {
   const saveButtonClick = async () => {
     let emptyData = false;
     for (const calendar of calendars) {
-      if (!calendar.start || !calendar.startTime) {
+      if (!calendar.start || !calendar.startTime || !calendar.arriveTime) {
         emptyData = true;
         break;
       }
       if (calendar.waypoints) {
         for (const waypoint of calendar.waypoints) {
-          if (!waypoint.waypoint || !waypoint.waypointTime) {
+          if (
+            !waypoint.waypoint ||
+            !waypoint.waypointTime ||
+            !waypoint.arriveTime
+          ) {
             emptyData = true;
             break;
           }
@@ -255,19 +332,17 @@ function PlaceSearch() {
           ? calendar.waypoints.map((waypoint) => ({
               waypoint: waypoint.waypoint,
               waypointTime: waypoint.waypointTime,
+              waypointArriveTime: waypoint.arriveTime,
             }))
           : [];
         return {
           localItem: localItem,
-          contentId: calendar.contentId,
-          contentType: calendar.contentType,
-          address: calendar.address,
-          place: calendar.start,
-          mapX: calendar.mapX,
-          mapY: calendar.mapY,
-          arrivetTime: calendar.arrivetTime,
+          start: calendar.start,
           startTime: calendar.startTime,
-          thumbnailLocation: calendar.thumbnailLocation,
+          arriveTime: calendar.arriveTime,
+          contentId: calendar.contentId,
+          contentTypeId: calendar.contentTypeId,
+          mapX: calendar.mapX,
           waypoints: waypointsData,
         };
       });
@@ -277,6 +352,7 @@ function PlaceSearch() {
         schedule,
         {
           headers: {
+            "Content-Type": "application/json",
             Authorization: token,
           },
         }

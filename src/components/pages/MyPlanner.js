@@ -35,6 +35,10 @@ function MyPlanner() {
     e.preventDefault();
   };
 
+  const addDateZeroPlus = (num) => {
+    return num < 10 ? `0${num}` : `${num}`;
+  };
+
   useEffect(() => {
     async function getPlanner() {
       try {
@@ -50,7 +54,13 @@ function MyPlanner() {
         console.log(response.data);
         const updateList = response.data.dtoList.map((plannerData) => {
           const dateArray = plannerData.date;
-          const plannerDataDate = `${dateArray[0]}-${dateArray[1]}-0${dateArray[2]} ${dateArray[3]}:0${dateArray[4]}:${dateArray[5]}`;
+          const year = dateArray[0];
+          const month = addDateZeroPlus(dateArray[1]);
+          const day = addDateZeroPlus(dateArray[2]);
+          const hour = addDateZeroPlus(dateArray[3]);
+          const minute = addDateZeroPlus(dateArray[4]);
+          const second = addDateZeroPlus(dateArray[5]);
+          const plannerDataDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
           return {
             id: plannerData.id,
             title: plannerData.title,

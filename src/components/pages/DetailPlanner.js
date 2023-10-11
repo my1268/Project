@@ -21,6 +21,15 @@ function DetailPlanner() {
     navigate(-1);
   };
 
+  const handleReviewButtonClick = () => {
+    const confirmReview = window.confirm(
+      `${title}플래너 리뷰를 작성하러 가시겠습니까?`
+    );
+    if (confirmReview) {
+      navigate("/makingreview");
+    }
+  };
+
   useEffect(() => {
     async function getPlanner() {
       try {
@@ -42,6 +51,7 @@ function DetailPlanner() {
         setTitle(response.data.title);
         setComment(response.data.comment);
         setSavePlaceData(response.data.schedule);
+        localStorage.setItem("placeData", JSON.stringify(response.data));
       } catch (error) {
         console.error("Failed get data:", error);
       }
@@ -85,7 +95,11 @@ function DetailPlanner() {
             onClick={handlePreviousButtonClick}
           />
           <p>{title}</p>
-          <Ghost className={detailPlanner.ghostText} text="리뷰 작성" />
+          <Ghost
+            className={detailPlanner.ghostText}
+            text="리뷰 작성"
+            onClick={handleReviewButtonClick}
+          />
         </div>
       </header>
       <div

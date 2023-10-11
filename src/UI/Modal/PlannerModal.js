@@ -11,7 +11,6 @@ import { MdEdit } from "react-icons/md";
 import { AiTwotoneDelete } from "react-icons/ai";
 import axios from "axios";
 import { getToken } from "../../components/Tokens/getToken";
-import ReviewWriteModal from "./ReviewWriteModal";
 import { useNavigate } from "react-router-dom";
 
 function PlannerModal({
@@ -200,7 +199,7 @@ function PlannerModal({
     };
   };
 
-  return !showPlannerModal && !showReviewWriteModal ? (
+  return (
     <aside className={`${modal.base} ${modal.posting} ${modal.overFlow}`}>
       <header className={modal.header}>
         {title && <h2>{title}</h2>}
@@ -333,11 +332,6 @@ function PlannerModal({
         </div>
       )}
     </aside>
-  ) : (
-    <ReviewWriteModal
-      onClick={() => setShowReviewWriteModal(false)}
-      placeSearchData={placeSearchData}
-    />
   );
 }
 

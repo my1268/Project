@@ -17,9 +17,9 @@ import ReviewPost from "./components/pages/ReviewPost";
 import PlaceSearch from "./components/pages/PlaceSearch";
 import MyInquiryWrite from "./components/pages/MyInquiryWrite";
 import PlannerPost from "./components/pages/PlannerPost";
-import ReviewWriteModal from "./UI/Modal/ReviewWriteModal";
 import InquiryPost from "./components/pages/InquiryPost";
 import DetailPlanner from "./components/pages/DetailPlanner";
+import MakingReview from "./components/pages/MakingReview";
 
 function App() {
   return (
@@ -35,10 +35,10 @@ function App() {
         <Route path="/myinquiry" element={<MyInquiry />} />
         <Route path="/myinquirywrite" element={<MyInquiryWrite />} />
         <Route path="/makingplanner" element={<MakingPlanner />} />
+        <Route path="/makingreview" element={<MakingReview />} />
         <Route path="/plannerpost" element={<PlannerPost />} />
         <Route path="/reviewpost" element={<ReviewPost />} />
         <Route path="/inquirypost" element={<InquiryPost />} />
-        <Route path="/reviewwritemodal" element={<ReviewWriteModal />} />
         <Route path="/placesearch" element={<PlaceSearch />} />
       </Routes>
     </Router>

@@ -360,6 +360,7 @@ function PlaceSearch() {
       console.log(schedule);
       console.log("Calendars saved:", response.data);
       navigate("/myplanner");
+      localStorage.removeItem("requestData");
     } catch (error) {
       console.error("Error saving calendars:", error);
     }

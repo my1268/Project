@@ -88,7 +88,9 @@ function MyPlanner() {
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
-            <a href={url}>검색</a>
+            <a href={url} className={myPlanner.search}>
+              검색
+            </a>
           </form>
           {list.length > 0 ? (
             <Board

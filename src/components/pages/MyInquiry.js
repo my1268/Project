@@ -19,12 +19,7 @@ function MyInquiry() {
   const [filteredItems, setFilteredItems] = useState([]);
 
   const [currentInquiryText, setCurrentInquiryText] = useState("");
-  //const [list, setList] = useState([]);
-
-  const [list, setList] = useState([
-    { id: 1, title: "문의 1", date: "23.03.01 - 23.03.04", page: "/" },
-    { id: 2, title: "문의 2", date: "23.02.01 - 23.02.04", page: "/" },
-  ]);
+  const [list, setList] = useState([]);
 
   const navigate = useNavigate("");
   const InquiryWriteButton = () => {

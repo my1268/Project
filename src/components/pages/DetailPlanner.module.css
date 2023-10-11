@@ -20,6 +20,7 @@
   border-radius: 4px;
   font-size: 14px;
   margin-bottom: 16px;
+  font-size: 20px;
 }
 
 .marginTop {
@@ -27,11 +28,11 @@
 }
 
 .marginTopButton {
-  margin-top: 220px;
+  margin-top: 110px;
   display: flex;
   justify-content: center;
 }
 
 .marginBottom {
-  margin-bottom: 140px;
+  margin-bottom: 50px;
 }

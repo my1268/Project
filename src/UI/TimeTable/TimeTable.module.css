@@ -9,12 +9,6 @@
   height: 100%;
 }
 
-.date {
-  display: flex;
-  width: calc(100% - 96px);
-  overflow-x: scroll;
-}
-
 .header,
 .contents li {
   display: flex;
@@ -38,10 +32,6 @@
 @media screen and (min-width: 900px) {
   .time {
     width: 130px;
-  }
-
-  .date {
-    width: calc(100% - 130px);
   }
 
   .header,

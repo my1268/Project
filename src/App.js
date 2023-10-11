@@ -19,6 +19,7 @@ import MyInquiryWrite from "./components/pages/MyInquiryWrite";
 import PlannerPost from "./components/pages/PlannerPost";
 import ReviewWriteModal from "./UI/Modal/ReviewWriteModal";
 import InquiryPost from "./components/pages/InquiryPost";
+import DetailPlanner from "./components/pages/DetailPlanner";
 
 function App() {
   return (
@@ -28,7 +29,8 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/mymenu" element={<MyMenu />} />
         <Route path="/mypasswordupdate" element={<MyPasswordUpdate />} />
-        <Route path="/myplanner" element={<MyPlanner />} />
+        <Route path="/planner/plannerList" element={<MyPlanner />} />
+        <Route path="/planner/plannerList/:id" element={<DetailPlanner />} />
         <Route path="/mypost" element={<MyPost />} />
         <Route path="/myinquiry" element={<MyInquiry />} />
         <Route path="/myinquirywrite" element={<MyInquiryWrite />} />

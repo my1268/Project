@@ -14,7 +14,6 @@ function PlannerPost() {
   const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-  const [title, setTitle] = useState("");
   const [currentMemoText, setCurrentMemoText] = useState("");
   const token = getToken();
   const [placeList, setPlaceList] = useState([]);
@@ -32,14 +31,17 @@ function PlannerPost() {
           }
         );
         if (response.data) {
-          const plannerData = response.data.dtoList;
-          const newListItem = {
-            title: plannerData.title,
-            memo: plannerData.memo,
-          };
-          console.log(response);
-          setPlaceList([...placeList, newListItem]);
-          setTitle(plannerData.title);
+          console.log(response.data);
+          const updateList = response.data.dtoList.map((plannerData) => {
+            const dateArray = plannerData.date;
+            const plannerDataDate = `${dateArray[0]}-${dateArray[1]}-0${dateArray[2]} ${dateArray[3]}:0${dateArray[4]}:${dateArray[5]}`;
+            return {
+              id: plannerData.id,
+              title: plannerData.title,
+              date: plannerDataDate,
+            };
+          });
+          setPlaceList([...placeList, ...updateList]);
         } else {
           console.error("Failed get title:", response.data.errorMessage);
         }
@@ -111,7 +113,6 @@ function PlannerPost() {
       {openModal && (
         <>
           <PlannerModal
-            title={title}
             subTitle="타임 테이블"
             currentMemoText={currentMemoText}
             showTimeTable={true}

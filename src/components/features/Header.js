@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import header from "./Header.module.css";
 import { AiOutlineMenu } from "react-icons/ai";
 import Ghost from "../../UI/Button/Ghost";
@@ -17,6 +17,11 @@ function Header() {
   const [isOpenSignUp, setIsOpenSignUp] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = getToken();
+    setIsLoggedIn(Boolean(token));
+  }, []);
 
   const navigate = useNavigate();
   const token = getToken();

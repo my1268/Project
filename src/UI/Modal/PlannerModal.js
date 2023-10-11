@@ -65,7 +65,7 @@ function PlannerModal({
     async function getPlanner() {
       try {
         const response = await axios.get(
-          `http://localhost:8080/planner/view/my_planner?page=1&size=10=${openModal.id}` // 예시 URL
+          `http://localhost:8080/planner/get/{id}` // 예시 URL
         );
         if (response.data) {
           const placeSearchData = response.data;
@@ -106,7 +106,7 @@ function PlannerModal({
     }
     try {
       const response = await axios.delete(
-        `http://localhost:8080/planner/delete?plannerId=1`,
+        //  `http://localhost:8080/planner/delete?plannerId=${plannerId}`,
         {
           headers: {
             "Content-Type": "application/json",

@@ -1,30 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Ghost from "../../UI/Button/Ghost";
-import { GrClose } from "react-icons/gr";
 import CardList from "../../UI/Card/CardList";
 import TimeTable from "../../UI/TimeTable/TimeTable";
-import Base from "../../UI/Form/Base";
-import Primary from "../../UI/Button/Primary";
-import { BiEraser } from "react-icons/bi";
-import { MdEdit } from "react-icons/md";
-import { AiTwotoneDelete } from "react-icons/ai";
 import axios from "axios";
 import { getToken } from "../../components/Tokens/getToken";
 import { useNavigate } from "react-router-dom";
+import detailPlanner from "./DetailPlanner.module.css";
 
-function DetailPlanner({
-  onClick,
-  subTitle,
-  showMemoReadOnly,
-  currentMemoText,
-}) {
+function DetailPlanner({ onClick, subTitle }) {
   const [placeList, setPlaceList] = useState([]);
-  const [updatedMemoText, setUpdatedMemoText] = useState(currentMemoText);
+  const [comment, setComment] = useState();
   const [placeSearchData, setPlaceSearchData] = useState([]);
   const navigate = useNavigate();
   const token = getToken();
 
-  const handleEditClick = () => {
+  const handlePreviousClick = () => {
+    navigate(-1);
+  };
+
+  const handleEditButtonClick = () => {
     const confirmMessage = window.confirm("수정 페이지로 이동하시겠습니까?");
     if (confirmMessage) {
       const editUrl = `http://localhost:8080/planner/edit/${placeSearchData.id}`;
@@ -71,7 +65,7 @@ function DetailPlanner({
   //   getPlanner();
   // }, []);
 
-  const handleDelete = async () => {
+  const handleDeleteButtonClick = async () => {
     const confirmDelete = window.confirm("삭제하시겠습니까?");
     if (!confirmDelete) {
       return;
@@ -100,46 +94,47 @@ function DetailPlanner({
   return (
     <aside>
       <header>
-        <h2>title</h2>
-        <div>
+        <div className={detailPlanner.header}>
           <Ghost
-            text="수정"
-            style={{ color: "#3DA5F5" }}
-            className="lg-only"
-            onClick={handleEditClick}
+            className={detailPlanner.ghostText}
+            text="뒤로"
+            onClick={handlePreviousClick}
           />
-          <Ghost
-            text="삭제"
-            style={{ color: "#F86D7D" }}
-            className="lg-only"
-            onClick={() => handleDelete()}
-          />
-          <button type="button" onClick={handleEditClick}>
-            <MdEdit />
-          </button>
-          <button type="button" onClick={() => handleDelete()}>
-            <AiTwotoneDelete />
-          </button>
+          <p>제목</p>
+          <Ghost className={detailPlanner.ghostText} text="리뷰 작성" />
         </div>
-        <button type="button" className={`sm-only `} onClick={onClick}>
-          <GrClose />
-        </button>
       </header>
-      <div>
-        <h3>{subTitle}</h3>
+      <div
+        className={`${detailPlanner.marginBottom} ${detailPlanner.marginTop}`}
+      >
+        <h3>타임테이블</h3>
         <TimeTable placeSearchData={placeSearchData} />
       </div>
       <div>
         <h3>메모</h3>
         <textarea
-          value={updatedMemoText}
-          readOnly={showMemoReadOnly}
-          onChange={(e) => setUpdatedMemoText(e.target.value)}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          className={`${detailPlanner.marginBottom} ${detailPlanner.memoTextArea}`}
         />
       </div>
       <div>
         <h3>장소 정보</h3>
         <CardList placeList={placeList} />
+      </div>
+      <div className={detailPlanner.marginTopButton}>
+        <Ghost
+          text="수정"
+          style={{ color: "#3DA5F5" }}
+          className={detailPlanner.ghostText}
+          onClick={handleEditButtonClick}
+        />
+        <Ghost
+          text="삭제"
+          style={{ color: "#F86D7D" }}
+          className={detailPlanner.ghostText}
+          onClick={() => handleDeleteButtonClick()}
+        />
       </div>
     </aside>
   );

@@ -47,7 +47,9 @@ function App() {
 
 function HeaderHide() {
   const location = useLocation();
-  const hideHeader = location.pathname === "/placesearch";
+  const hideHeader =
+    location.pathname === "/placesearch" ||
+    location.pathname.includes("/planner/plannerList/");
   return hideHeader ? null : <Header />;
 }
 

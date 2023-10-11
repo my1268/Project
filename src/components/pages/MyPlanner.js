@@ -7,16 +7,16 @@ import myPlanner from "./MyPlanner.module.css";
 import Board from "../features/Board";
 import axios from "axios";
 import { getToken } from "../Tokens/getToken";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function MyPlanner() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [list, setList] = useState([]);
-  const { id } = useParams();
-  const navigate = useNavigate();
   const token = getToken();
+  const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+
   let pageParam = "1";
   if (queryParams.get("page") != null) {
     pageParam = queryParams.get("page");
@@ -64,7 +64,7 @@ function MyPlanner() {
     }
 
     getPlanner();
-  }, [id]);
+  }, []);
 
   return (
     <>

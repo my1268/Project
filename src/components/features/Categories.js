@@ -27,9 +27,11 @@ function Categories() {
       </li>
       <li>
         <Link
-          to="/myplanner"
+          to="/planner/plannerList"
           className={
-            location.pathname === "/myplanner" ? categories.isOpen : null
+            location.pathname === "/planner/plannerList"
+              ? categories.isOpen
+              : null
           }
         >
           내 플래너

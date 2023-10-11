@@ -2,39 +2,44 @@ import React, { useEffect, useState } from "react";
 import Categories from "../features/Categories";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
-import Primary from "../../UI/Button/Primary";
 import Pagination from "../../UI/Pagination/Pagination";
 import myPlanner from "./MyPlanner.module.css";
 import Board from "../features/Board";
-import PlannerModal from "../../UI/Modal/PlannerModal";
-import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
 import { getToken } from "../Tokens/getToken";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 function MyPlanner() {
-  const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
   const [list, setList] = useState([]);
+  const { id } = useParams();
+  const navigate = useNavigate();
   const token = getToken();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  let pageParam = "1";
+  if (queryParams.get("page") != null) {
+    pageParam = queryParams.get("page");
+  }
+  let keywordParam = "";
+  if (queryParams.get("keyword") != null) {
+    keywordParam = queryParams.get("keyword");
+  }
+  let sizeParam = "";
+  if (queryParams.get("size") != null) {
+    sizeParam = queryParams.get("size");
+  }
+  let url = `/planner/plannerList?page=${pageParam}&size=${sizeParam}&type=T&keyword=${searchKeyword}`;
 
   const handleSearch = (e) => {
     e.preventDefault();
-    updateFilteredItems();
-  };
-
-  const updateFilteredItems = () => {
-    const filteredList = list.filter((item) =>
-      item.title.includes(searchKeyword)
-    );
-    setFilteredItems(filteredList);
   };
 
   useEffect(() => {
     async function getPlanner() {
       try {
         const response = await axios.get(
-          "http://localhost:8080/planner/view/my_planner?page=1&size=10",
+          `http://localhost:8080/planner/view/all_planner?page=1&size=${sizeParam}&type=T&keyword=${keywordParam}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -42,10 +47,12 @@ function MyPlanner() {
             },
           }
         );
+        console.log(response.data);
         const updateList = response.data.dtoList.map((plannerData) => {
           const dateArray = plannerData.date;
           const plannerDataDate = `${dateArray[0]}-${dateArray[1]}-0${dateArray[2]} ${dateArray[3]}:0${dateArray[4]}:${dateArray[5]}`;
           return {
+            id: plannerData.id,
             title: plannerData.title,
             date: plannerDataDate,
           };
@@ -57,7 +64,7 @@ function MyPlanner() {
     }
 
     getPlanner();
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -71,21 +78,18 @@ function MyPlanner() {
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
-            <Primary isShortPrimary="true" text="검색" onClick={handleSearch} />
+            <a href={url}>검색</a>
           </form>
-          {filteredItems.length > 0 || list.length > 0 ? (
+          {list.length > 0 ? (
             <Board
-              list={
-                filteredItems.length > 0
-                  ? filteredItems.map((item) => ({
-                      title: item.title,
-                      date: item.date,
-                    }))
-                  : list.map((item) => ({ title: item.title, date: item.date }))
-              }
+              list={list.map((item) => ({
+                title: item.title,
+                date: item.date,
+                id: item.id,
+              }))}
               title="플래너 목록"
-              onClick={() => {
-                setOpenModal(true);
+              onClick={(id) => {
+                navigate(`/planner/plannerList/${id}`);
               }}
             />
           ) : (
@@ -97,22 +101,6 @@ function MyPlanner() {
           <Pagination />
         </div>
       </div>
-      {openModal && (
-        <>
-          <PlannerModal
-            openModal={false}
-            subTitle="타임 테이블"
-            showUpdateDeleteButton={true}
-            showTimeTable={true}
-            showMemo={true}
-            showMemoReadOnly={true}
-            showPlace={true}
-            onClick={() => setOpenModal(false)}
-            reviewWrite={true}
-          />
-          <Overlay onClick={() => setOpenModal(false)} />
-        </>
-      )}
     </>
   );
 }

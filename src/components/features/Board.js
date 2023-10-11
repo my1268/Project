@@ -12,7 +12,11 @@ function Board({ list, onClick, title }) {
       {list.map((item) => {
         return (
           <li className={board.tableBody} key={item.title}>
-            <button type="button" className={board.title} onClick={onClick}>
+            <button
+              type="button"
+              className={board.title}
+              onClick={() => onClick(item.id)}
+            >
               {item.title}
             </button>
             <span className={`lg-only ${board.date}`}>{item.date}</span>

@@ -6,12 +6,9 @@ import Primary from "../../UI/Button/Primary";
 import Pagination from "../../UI/Pagination/Pagination";
 import myPlanner from "./MyPlanner.module.css";
 import Board from "../features/Board";
-import PlannerModal from "../../UI/Modal/PlannerModal";
-import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
-/* eslint-disable */
+
 function MyPost() {
-  const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
   const [list, setList] = useState([]);
@@ -19,30 +16,8 @@ function MyPost() {
   const [currentReviewText, setCurrentReviewText] = useState("");
   const [reviewimage, setReviewImage] = useState("");
 
-  const handleDelete = async (itemToDelete) => {
-    try {
-      await axios.delete(`/api/planner/${itemToDelete.id}`); // 예시 URL
-      const updatedList = list.filter((item) => item.id !== itemToDelete.id);
-      const updatedFilteredList = filteredItems.filter(
-        (item) => item.id !== itemToDelete.id
-      );
-      setList(updatedList);
-      setFilteredItems(updatedFilteredList);
-    } catch (error) {
-      console.error("Failed to delete item:", error);
-    }
-  };
-
   const handleSearch = (e) => {
     e.preventDefault();
-    updateFilteredItems();
-  };
-
-  const updateFilteredItems = () => {
-    const filteredList = list.filter((item) =>
-      item.title.includes(searchKeyword)
-    );
-    setFilteredItems(filteredList);
   };
 
   useEffect(() => {
@@ -101,10 +76,7 @@ function MyPost() {
               onClick={(item) => {
                 setCurrentReviewText(item.reviewText);
                 setReviewImage(item.image);
-                setOpenModal(true);
               }}
-              onDelete={handleDelete}
-              deleteButton={true}
             />
           ) : (
             <p>현재 게시글이 없습니다. 리뷰를 작성해보세요!</p>
@@ -112,22 +84,6 @@ function MyPost() {
           <Pagination />
         </div>
       </div>
-      {openModal && (
-        <>
-          <PlannerModal
-            reviewtitle={reviewTitle}
-            subTitle="플래너 요약"
-            currentReviewText={currentReviewText}
-            showUpdateDeleteButton={true}
-            reviewimage={reviewimage}
-            showTimeTable={true}
-            showSection={true}
-            onClick={() => setOpenModal(false)}
-            showUpdateButton={false}
-          />
-          <Overlay onClick={() => setOpenModal(false)} />
-        </>
-      )}
     </>
   );
 }

@@ -10,7 +10,7 @@ import axios from "axios";
 
 const MakingReview = () => {
   const [title, setTitle] = useState("");
-  const [reviewText, setReviewText] = useState("");
+  const [content, setContent] = useState("");
   const [imagePreviews, setImagePreviews] = useState([]);
   const navigate = useNavigate();
   const token = getToken();
@@ -31,13 +31,13 @@ const MakingReview = () => {
         return;
       }
       formData.append("title", title);
-      formData.append("reviewText", reviewText);
+      formData.append("content", content);
       formData.append("placeData", JSON.stringify(placeData));
       imagePreviews.forEach((file, index) => {
         formData.append(`image${index}`, file);
       });
-      for (const [title, reviewText] of formData.entries()) {
-        console.log(title, reviewText);
+      for (const [title, content] of formData.entries()) {
+        console.log(title, content);
       }
       const response = await axios.post(
         "http://localhost:8080/review/register",
@@ -84,8 +84,8 @@ const MakingReview = () => {
                 <dd>
                   <Memo
                     placeholder="메모를 입력하세요"
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
                   />
                 </dd>
               </div>

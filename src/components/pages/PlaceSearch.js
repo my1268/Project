@@ -8,7 +8,7 @@ import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
 import axios from "axios";
 import { getToken } from "../Tokens/getToken";
-/* eslint-disable */
+
 function PlaceSearch() {
   const navigate = useNavigate();
   const [dayPlus, setDayPlus] = useState(1);
@@ -41,7 +41,6 @@ function PlaceSearch() {
   };
 
   const handleInputChange = (index, property, value) => {
-    console.log(index, property, value);
     const updatedCalendars = [...calendars];
     updatedCalendars[index][property] = value;
     setCalendars(updatedCalendars);
@@ -101,7 +100,6 @@ function PlaceSearch() {
       const response = await axios.get(
         `http://localhost:8080/api/tourapi/keywordSearch?keyword=${searchKeyword}&pageNo=1`
       );
-      console.log(response);
       setSearchResults(response.data);
     } catch (error) {
       console.error("Error fetching search results:", error);
@@ -149,46 +147,18 @@ function PlaceSearch() {
     }
   }, [showMap]);
 
-  const requestData = JSON.parse(localStorage.getItem("requestData"));
-  const data = {
-    title: requestData.title,
-    firstDate: requestData.firstDate,
-    lastDate: requestData.lastDate,
-    comment: requestData.comment,
-    schedules: [],
-  };
-
   const handleSaveItem = (item) => {
-    const newData = {
-      contentId: item.contentId,
-      contentType: item.contentType,
-      address: item.addr1,
-      place: item.title,
-      mapX: item.mapX,
-      mapY: item.mapY,
-      date: "2023-07-21",
-      // "arriveTime" : "",
-      // "viaTime" : "",
-      // "startTime" : "2023-07-21T10:00:00",
-      thumbnailLocation: item.image,
-    };
-    data.schedules.push(newData);
-    console.log(data);
     const selectedCalendar = calendars[selectedDayIndex];
     if (selectedCalendar) {
-      console.log("contentId:", item.contentId);
-      console.log("contentType:", item.contentTypeId);
-      console.log("address:", item.addr1);
-      console.log("place:", item.title);
-      console.log("mapX:", item.mapx);
-      console.log("mapY:", item.mapy);
-      console.log("thumbnailLocation:", item.image);
-
       if (!selectedCalendar.start) {
         handleInputChange(selectedDayIndex, "start", item.title);
         handleInputChange(selectedDayIndex, "startImage", item.image);
         handleInputChange(selectedDayIndex, "contentId", item.contentId);
-        handleInputChange(selectedDayIndex, "contentType", item.contentTypeId);
+        handleInputChange(
+          selectedDayIndex,
+          "contentTypeId",
+          item.contentTypeId
+        );
         handleInputChange(selectedDayIndex, "address", item.addr1);
         handleInputChange(selectedDayIndex, "mapX", item.mapx);
         handleInputChange(selectedDayIndex, "mapY", item.mapy);
@@ -220,7 +190,7 @@ function PlaceSearch() {
           handleWaypointInputChange(
             selectedDayIndex,
             emptyWaypointIndex,
-            "contentType",
+            "contentTypeId",
             item.contentTypeId
           );
           handleWaypointInputChange(
@@ -326,30 +296,46 @@ function PlaceSearch() {
       return;
     }
     try {
-      const schedule = calendars.map((calendar) => {
+      const calendarData = calendars.map((calendar) => {
         const localItem = JSON.parse(localStorage.getItem("requestData"));
         const waypointsData = calendar.waypoints
           ? calendar.waypoints.map((waypoint) => ({
-              waypoint: waypoint.waypoint,
-              waypointTime: waypoint.waypointTime,
-              waypointArriveTime: waypoint.arriveTime,
+              place: waypoint.waypoint,
+              startTime: waypoint.waypointTime,
+              arriveTime: waypoint.arriveTime,
+              contentId: waypoint.contentId,
+              contentType: waypoint.contentTypeId,
+              mapX: waypoint.mapX,
+              mapY: waypoint.mapY,
+              address: waypoint.address,
+              thumbnailLocation: waypoint.thumbnailLocation,
             }))
           : [];
         return {
-          localItem: localItem,
-          start: calendar.start,
-          startTime: calendar.startTime,
-          arriveTime: calendar.arriveTime,
-          contentId: calendar.contentId,
-          contentTypeId: calendar.contentTypeId,
-          mapX: calendar.mapX,
-          waypoints: waypointsData,
+          title: localItem.title,
+          comment: localItem.comment,
+          firstDate: localItem.firstDate,
+          lastDate: localItem.lastDate,
+          schedule: [
+            {
+              place: calendar.start,
+              startTime: calendar.startTime,
+              arriveTime: calendar.arriveTime,
+              contentId: calendar.contentId,
+              contentType: calendar.contentTypeId,
+              mapX: calendar.mapX,
+              mapY: calendar.mapY,
+              address: calendar.address,
+              thumbnailLocation: calendar.thumbnailLocation,
+              waypoints: waypointsData,
+            },
+          ],
         };
       });
-      console.log(schedule);
+      console.log(calendarData);
       const response = await axios.post(
         "http://localhost:8080/planner/add",
-        schedule,
+        calendarData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -357,7 +343,6 @@ function PlaceSearch() {
           },
         }
       );
-      console.log(schedule);
       console.log("Calendars saved:", response.data);
       navigate("/myplanner");
       localStorage.removeItem("requestData");
@@ -393,7 +378,7 @@ function PlaceSearch() {
           )}
           <Ghost
             className={placesearch.saveButton}
-            text="저장하기"
+            text={localStorage.getItem("placeData") ? "수정하기" : "저장하기"}
             onClick={saveButtonClick}
           />
         </div>

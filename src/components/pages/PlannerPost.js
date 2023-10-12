@@ -5,18 +5,16 @@ import Primary from "../../UI/Button/Primary";
 import reviewPost from "./ReviewPost.module.css";
 import demoImage from "../../assets/images/놀이공원.png";
 import CardList from "../../UI/Card/CardList";
-import PlannerModal from "../../UI/Modal/PlannerModal";
-import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
 import { getToken } from "../Tokens/getToken";
+import { useNavigate } from "react-router-dom";
 
 function PlannerPost() {
-  const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-  const [currentMemoText, setCurrentMemoText] = useState("");
   const token = getToken();
   const [placeList, setPlaceList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getPlanner() {
@@ -98,10 +96,7 @@ function PlannerPost() {
                     image: demoImage,
                   }))
             }
-            onClick={() => {
-              setCurrentMemoText();
-              setOpenModal(true);
-            }}
+            onClick={() => navigate("/detailplanner")}
           />
         ) : (
           <p>
@@ -110,20 +105,6 @@ function PlannerPost() {
           </p>
         )}
       </div>
-      {openModal && (
-        <>
-          <PlannerModal
-            subTitle="타임 테이블"
-            currentMemoText={currentMemoText}
-            showTimeTable={true}
-            showMemo={true}
-            showPlace={true}
-            onClick={() => setOpenModal(false)}
-            showMemoReadOnly={true}
-          />
-          <Overlay onClick={() => setOpenModal(false)} />
-        </>
-      )}
     </>
   );
 }

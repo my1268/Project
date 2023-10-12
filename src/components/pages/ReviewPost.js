@@ -5,59 +5,48 @@ import Primary from "../../UI/Button/Primary";
 import reviewPost from "./ReviewPost.module.css";
 import demoImage from "../../assets/images/놀이공원.png";
 import CardList from "../../UI/Card/CardList";
-import PlannerModal from "../../UI/Modal/PlannerModal";
-import Overlay from "../../UI/Modal/Overlay";
 import axios from "axios";
-/* eslint-disable */
+import { getToken } from "../Tokens/getToken";
+import { useNavigate } from "react-router-dom";
+
 function ReviewPost() {
-  const [openModal, setOpenModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-  const [reviewTitle, setReviewTitle] = useState("");
-  const [placeList, setPlaceList] = useState([
-    {
-      inquiry: 0,
-      title: "리뷰 제목1",
-      nickName: "작성자",
-      date: "날짜",
-      image: demoImage,
-    },
-    {
-      inquiry: 0,
-      title: "리뷰 제목2",
-      nickName: "작성자",
-      date: "날짜",
-      image: demoImage,
-    },
-    {
-      inquiry: 0,
-      title: "리뷰 제목3",
-      nickName: "작성자",
-      date: "날짜",
-      image: demoImage,
-    },
-  ]);
+  const token = getToken();
+  const [placeList, setPlaceList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const getReview = async () => {
+    async function getReview() {
       try {
-        const response = await axios.get("/api/upload-review");
-        const reviewData = response.data;
-        const id = Date.now();
-        const newListItem = {
-          inquiry: 0,
-          id: id,
-          nickName: reviewData.nickName,
-          title: reviewData.title,
-          date: reviewData.date,
-          image: demoImage,
-        };
-        setPlaceList([...placeList, newListItem]);
-        setReviewTitle(reviewData.title);
+        const response = await axios.get(
+          "http://localhost:8080/review/getList",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        if (response.data) {
+          console.log(response.data);
+          const updateList = response.data.dtoList.map((plannerData) => {
+            const dateArray = plannerData.date;
+            const plannerDataDate = `${dateArray[0]}-${dateArray[1]}-0${dateArray[2]} ${dateArray[3]}:0${dateArray[4]}:${dateArray[5]}`;
+            return {
+              id: plannerData.id,
+              title: plannerData.title,
+              date: plannerDataDate,
+            };
+          });
+          setPlaceList([...placeList, ...updateList]);
+        } else {
+          console.error("Failed get title:", response.data.errorMessage);
+        }
       } catch (error) {
-        console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
+        console.error("Failed get data:", error);
       }
-    };
+    }
     getReview();
   }, []);
 
@@ -96,8 +85,18 @@ function ReviewPost() {
         {filteredItems.length > 0 || placeList.length > 0 ? (
           <CardList
             inquiryCounting={true}
-            placeList={filteredItems.length > 0 ? filteredItems : placeList}
-            onClick={() => setOpenModal(true)}
+            placeList={
+              filteredItems.length > 0
+                ? filteredItems.map((item) => ({
+                    title: item.title,
+                    image: demoImage,
+                  }))
+                : placeList.map((item) => ({
+                    title: item.title,
+                    image: demoImage,
+                  }))
+            }
+            onClick={() => navigate("/detailreview")}
           />
         ) : (
           <p>
@@ -106,19 +105,6 @@ function ReviewPost() {
           </p>
         )}
       </div>
-      {openModal && (
-        <>
-          <PlannerModal
-            reviewTitle={reviewTitle}
-            subTitle="플래너 요약"
-            showTimeTable={true}
-            showSection={true}
-            onClick={() => setOpenModal(false)}
-            showReviewReadOnly={true}
-          />
-          <Overlay onClick={() => setOpenModal(false)} />
-        </>
-      )}
     </>
   );
 }

@@ -72,7 +72,6 @@ function MyPlanner() {
         console.error("Failed get data:", error);
       }
     }
-
     getPlanner();
   }, []);
 

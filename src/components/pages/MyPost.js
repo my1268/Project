@@ -2,45 +2,73 @@ import React, { useEffect, useState } from "react";
 import Categories from "../features/Categories";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
-import Primary from "../../UI/Button/Primary";
 import Pagination from "../../UI/Pagination/Pagination";
 import myPlanner from "./MyPlanner.module.css";
 import Board from "../features/Board";
 import axios from "axios";
+import { getToken } from "../Tokens/getToken";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function MyPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
   const [list, setList] = useState([]);
-  const [reviewTitle, setReviewTitle] = useState("");
-  const [currentReviewText, setCurrentReviewText] = useState("");
-  const [reviewimage, setReviewImage] = useState("");
+  const token = getToken();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  let pageParam = "1";
+  if (queryParams.get("page") != null) {
+    pageParam = queryParams.get("page");
+  }
+  let keywordParam = "";
+  if (queryParams.get("keyword") != null) {
+    keywordParam = queryParams.get("keyword");
+  }
+  let sizeParam = "";
+  if (queryParams.get("size") != null) {
+    sizeParam = queryParams.get("size");
+  }
+  let url = `/planner/reviewList?page=${pageParam}&size=${sizeParam}&type=T&keyword=${searchKeyword}`;
 
   const handleSearch = (e) => {
     e.preventDefault();
   };
 
+  const addDateZeroPlus = (num) => {
+    return num < 10 ? `0${num}` : `${num}`;
+  };
+
   useEffect(() => {
     async function getReview() {
       try {
-        const response = await axios.get("/api/upload-review"); // 예시 URL
-        if (response.data.success) {
-          const reviewData = response.data;
-          const id = Date.now();
-          const newListItem = {
-            id: id,
-            nickName: reviewData.nickName,
-            title: reviewData.title,
-            reviewText: reviewData.reviewText,
-            selectPlanner: reviewData.selectPlanner,
-            image: reviewData.image,
-            date: reviewData.date,
+        const response = await axios.get(
+          `http://localhost:8080/planner/review/all_planner?page=1&size=${sizeParam}&type=T&keyword=${keywordParam}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        console.log(response.data);
+        const updateList = response.data.dtoList.map((plannerData) => {
+          const dateArray = plannerData.date;
+          const year = dateArray[0];
+          const month = addDateZeroPlus(dateArray[1]);
+          const day = addDateZeroPlus(dateArray[2]);
+          const hour = addDateZeroPlus(dateArray[3]);
+          const minute = addDateZeroPlus(dateArray[4]);
+          const second = addDateZeroPlus(dateArray[5]);
+          const plannerDataDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+          return {
+            id: plannerData.id,
+            title: plannerData.title,
+            date: plannerDataDate,
           };
-          setList([...list, newListItem]);
-          setReviewTitle(reviewData.title);
-        } else {
-          console.error("Failed get title:", response.data.errorMessage);
-        }
+        });
+        setList([...list, updateList]);
+        console.error("Failed get title:", response.data.errorMessage);
       } catch (error) {
         console.error("Failed get data:", error);
       }
@@ -60,22 +88,23 @@ function MyPost() {
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
-            <Primary isShortPrimary="true" text="검색" onClick={handleSearch} />
+            <a
+              href={url}
+              className={myPlanner.search}
+              style={{ color: "white", fontWeight: "700" }}
+            >
+              검색
+            </a>
           </form>
-          {filteredItems.length > 0 || list.length > 0 ? (
+          {list.length > 0 ? (
             <Board
-              list={
-                filteredItems.length > 0
-                  ? filteredItems.map((item) => ({
-                      title: item.title,
-                      date: item.date,
-                    }))
-                  : list.map((item) => ({ title: item.title, date: item.date }))
-              }
+              list={list.map((item) => ({
+                title: item.title,
+                date: item.date,
+              }))}
               title="게시글 목록"
-              onClick={(item) => {
-                setCurrentReviewText(item.reviewText);
-                setReviewImage(item.image);
+              onClick={(id) => {
+                navigate(`/planner/reviewList/${id}`);
               }}
             />
           ) : (

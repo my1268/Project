@@ -19,12 +19,18 @@ function DetailPlanner() {
 
   const handlePreviousButtonClick = () => {
     navigate(-1);
+    localStorage.removeItem("placeData");
+  };
+
+  const handleEditButtonClick = () => {
+    const confirmReview = window.confirm(`${title}플래너를 수정하고 싶나요?`);
+    if (confirmReview) {
+      navigate("/makingplanner");
+    }
   };
 
   const handleReviewButtonClick = () => {
-    const confirmReview = window.confirm(
-      `${title}플래너 리뷰를 작성하러 가시겠습니까?`
-    );
+    const confirmReview = window.confirm(`${title}플래너를 리뷰하고싶나요?`);
     if (confirmReview) {
       navigate("/makingreview");
     }
@@ -124,7 +130,7 @@ function DetailPlanner() {
           text="수정"
           style={{ color: "#3DA5F5" }}
           className={detailPlanner.ghostText}
-          // onClick={handleEditButtonClick}
+          onClick={handleEditButtonClick}
         />
         <Ghost
           text="삭제"

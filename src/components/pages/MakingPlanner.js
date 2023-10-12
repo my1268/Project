@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
 import Memo from "../../UI/Form/Memo";
@@ -6,6 +6,7 @@ import PageCover from "../features/PageCover";
 import making from "./MakingPlanner.module.css";
 import { useNavigate } from "react-router-dom";
 import Date from "../../UI/Form/Date";
+import Ghost from "../../UI/Button/Ghost";
 
 const MakingPlanner = () => {
   const [title, setTitle] = useState("");
@@ -15,14 +16,36 @@ const MakingPlanner = () => {
 
   const navigate = useNavigate("");
 
+  const formatDate = (dateArray) => {
+    const year = dateArray[0];
+    const month = dateArray[1].toString().padStart(2, "0");
+    const day = dateArray[2].toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const handleFirstDateChange = (date) => {
     setFirstDate(date);
-    localStorage.setItem("firstDate", date);
   };
 
   const handleLastDateChange = (date) => {
     setLastDate(date);
-    localStorage.setItem("lastDate", date);
+  };
+
+  useEffect(() => {
+    const localData = localStorage.getItem("placeData");
+    console.log(localData);
+    if (localData) {
+      const parseData = JSON.parse(localData);
+      setTitle(parseData.title || "");
+      setComment(parseData.comment || "");
+      setFirstDate(parseData.firstDate ? formatDate(parseData.firstDate) : "");
+      setLastDate(parseData.lastDate ? formatDate(parseData.lastDate) : "");
+    }
+  }, []);
+
+  const requestDataPreviousButtonClick = () => {
+    navigate(-1);
+    localStorage.removeItem("requestData");
   };
 
   const placeSearchButton = async () => {
@@ -46,9 +69,16 @@ const MakingPlanner = () => {
 
   return (
     <>
-      <PageCover title="플래너 만들기" />
+      <PageCover
+        title={
+          localStorage.getItem("placeData")
+            ? "플래너 수정하기"
+            : "플래너 만들기"
+        }
+      />
       <div className="not-layout">
         <div className="container">
+          <Ghost text="이전으로" onClick={requestDataPreviousButtonClick} />
           <form className={making.form}>
             <dl className={making.list}>
               <div className={making.item}>
@@ -84,9 +114,12 @@ const MakingPlanner = () => {
                 </dd>
               </div>
             </dl>
-
             <Primary
-              text="플래너 만들기"
+              text={
+                localStorage.getItem("placeData")
+                  ? "플래너 수정 하러가기"
+                  : "플래너 만들기"
+              }
               onClick={placeSearchButton}
               style={{ marginBottom: "8px" }}
             />

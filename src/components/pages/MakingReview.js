@@ -7,6 +7,7 @@ import making from "./MakingPlanner.module.css";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../../components/Tokens/getToken";
 import axios from "axios";
+import Ghost from "../../UI/Button/Ghost";
 
 const MakingReview = () => {
   const [title, setTitle] = useState("");
@@ -14,6 +15,10 @@ const MakingReview = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const navigate = useNavigate();
   const token = getToken();
+
+  const previousButtonClick = () => {
+    navigate(-1);
+  };
 
   const FileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -67,6 +72,7 @@ const MakingReview = () => {
       <PageCover title="리뷰 만들기" />
       <div className="not-layout">
         <div className="container">
+          <Ghost text="이전으로" onClick={previousButtonClick} />
           <form className={making.form}>
             <dl className={making.list}>
               <div className={making.item}>

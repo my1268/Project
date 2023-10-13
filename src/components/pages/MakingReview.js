@@ -20,33 +20,47 @@ const MakingReview = () => {
     navigate(-1);
   };
 
-  const FileChange = (e) => {
+  const FilePlus = (e) => {
     const files = Array.from(e.target.files);
     const imagePreviewsArray = [...imagePreviews];
-    files.forEach((file) => imagePreviewsArray.push(URL.createObjectURL(file)));
-    setImagePreviews(imagePreviewsArray);
+
+    files.forEach(async (file) => {
+      const previewURL = URL.createObjectURL(file);
+      imagePreviewsArray.push(previewURL);
+      setImagePreviews(imagePreviewsArray);
+
+      const formData = new FormData();
+      formData.append("file", file);
+      console.log("FormData에 추가된 파일:", formData.get("file"));
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/file/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: token,
+            },
+          }
+        );
+        if (response.data) {
+          console.log("파일 업로드 성공:", response.data);
+        } else {
+          console.error("파일 업로드 실패:", response.data);
+        }
+      } catch (error) {
+        console.error("파일 업로드 중 오류 발생:", error);
+      }
+    });
   };
 
-  const handleReviewSubmit = async () => {
-    const placeData = JSON.parse(localStorage.getItem("placeData"));
+  const handleRemoveImage = async (index) => {
     try {
-      const formData = new FormData();
-      if (!title) {
-        alert("리뷰 제목은 필수 입력 항목입니다.");
-        return;
-      }
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("placeData", JSON.stringify(placeData));
-      imagePreviews.forEach((file, index) => {
-        formData.append(`image${index}`, file);
-      });
-      for (const [title, content] of formData.entries()) {
-        console.log(title, content);
-      }
       const response = await axios.post(
-        "http://localhost:8080/review/register",
-        formData,
+        "http://localhost:8080/file/remove",
+        {
+          imageUrl: imagePreviews[index],
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -54,7 +68,47 @@ const MakingReview = () => {
           },
         }
       );
-      if (response.status === 200) {
+      if (response.data) {
+        console.log("파일 삭제 성공");
+      } else {
+        console.error("파일 삭제 실패");
+      }
+    } catch (error) {
+      console.error("파일 삭제 중 오류 발생:", error);
+    }
+  };
+
+  const handleReviewSubmit = async () => {
+    try {
+      const placeData = JSON.parse(localStorage.getItem("placeData"));
+      let data = {
+        title: title,
+        content: content,
+        email: placeData.email,
+        plannerId: placeData.plannerId,
+        thumbnailUrl: placeData.thumbnailUrl,
+        reviewImageDTOList: [
+          {
+            id: 0,
+            fileName: "string",
+            uuid: "string",
+            folderPath: "string",
+            thumbnailUrl: "string",
+            imageUrl: "string",
+          },
+        ],
+      };
+      const response = await axios.post(
+        "http://localhost:8080/review/register",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+      if (response.data) {
         console.log("서버 응답 데이터:", response.data);
         alert("리뷰가 성공적으로 업로드되었습니다.");
         navigate("/reviewpost");
@@ -98,7 +152,7 @@ const MakingReview = () => {
               <div className={making.item} style={{ marginBottom: "30px" }}>
                 <dt>사진 추가</dt>
                 <dd>
-                  <input type="file" multiple onChange={FileChange} />
+                  <input type="file" multiple onChange={FilePlus} />
                 </dd>
               </div>
               {imagePreviews.length > 0 && (
@@ -106,22 +160,29 @@ const MakingReview = () => {
                   <dt>선택 사진</dt>
                   <dd>
                     {imagePreviews.map((previewUrl, index) => (
-                      <img
-                        key={index}
-                        src={previewUrl}
-                        alt={`Preview ${index}`}
-                        style={{
-                          width: "190px",
-                          height: "121px",
-                          margin: "2px",
-                        }}
-                      />
+                      <div key={index}>
+                        <img
+                          key={index}
+                          src={previewUrl}
+                          alt={`Preview ${index}`}
+                          style={{
+                            width: "230px",
+                            height: "130px",
+                            margin: "2px",
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                        >
+                          x
+                        </button>
+                      </div>
                     ))}
                   </dd>
                 </div>
               )}
             </dl>
-
             <Primary
               text="리뷰 올리기"
               onClick={handleReviewSubmit}

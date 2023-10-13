@@ -39,10 +39,29 @@ function PlaceSearch() {
       0,
     ]);
   };
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
 
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+  // calendars
   const handleInputChange = (index, property, value) => {
+    console.log(index, property, value);
+
+    let formattedValue = value;
+
+    if (property === "startTime" || property === "arriveTime") {
+      // 날짜 포맷팅 함수 호출
+      formattedValue = formatDate(value);
+    }
+
     const updatedCalendars = [...calendars];
-    updatedCalendars[index][property] = value;
+    updatedCalendars[index][property] = formattedValue;
     setCalendars(updatedCalendars);
   };
 
@@ -66,6 +85,7 @@ function PlaceSearch() {
     setSelectedDayIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
+  // waypoint 추가
   const handleAddWaypoint = (index) => {
     if (waypointClickCounts[index] >= 8) {
       return;
@@ -296,46 +316,50 @@ function PlaceSearch() {
       return;
     }
     try {
-      const calendarData = calendars.map((calendar) => {
-        const localItem = JSON.parse(localStorage.getItem("requestData"));
-        const waypointsData = calendar.waypoints
-          ? calendar.waypoints.map((waypoint) => ({
+      const localItem = JSON.parse(localStorage.getItem("requestData"));
+      let data = {
+        title: localItem.title,
+        comment: localItem.comment,
+        firstDate: localItem.firstDate,
+        lastDate: localItem.lastDate,
+        schedule: [],
+      };
+      let schedule = [];
+      calendars.forEach((calendar, index) => {
+        const calendarData = {
+          place: calendar.start,
+          startTime: calendar.startTime,
+          arriveTime: calendar.arriveTime,
+          contentId: calendar.contentId,
+          contentType: calendar.contentTypeId,
+          // date: index + 1,
+          address: calendar.address,
+          thumbnailLocation: calendar.thumbnailLocation,
+        };
+        schedule.push(calendarData);
+
+        if (calendar.waypoints) {
+          calendar.waypoints.forEach((waypoint) => {
+            const waypointData = {
               place: waypoint.waypoint,
               startTime: waypoint.waypointTime,
               arriveTime: waypoint.arriveTime,
               contentId: waypoint.contentId,
               contentType: waypoint.contentTypeId,
-              mapX: waypoint.mapX,
-              mapY: waypoint.mapY,
+              // date: index + 1,
               address: waypoint.address,
               thumbnailLocation: waypoint.thumbnailLocation,
-            }))
-          : [];
-        return {
-          title: localItem.title,
-          comment: localItem.comment,
-          firstDate: localItem.firstDate,
-          lastDate: localItem.lastDate,
-          schedule: [
-            {
-              place: calendar.start,
-              startTime: calendar.startTime,
-              arriveTime: calendar.arriveTime,
-              contentId: calendar.contentId,
-              contentType: calendar.contentTypeId,
-              mapX: calendar.mapX,
-              mapY: calendar.mapY,
-              address: calendar.address,
-              thumbnailLocation: calendar.thumbnailLocation,
-              waypoints: waypointsData,
-            },
-          ],
-        };
+            };
+            schedule.push(waypointData);
+          });
+        }
       });
-      console.log(calendarData);
+
+      data.schedule = schedule;
+      console.log(data);
       const response = await axios.post(
         "http://localhost:8080/planner/add",
-        calendarData,
+        data,
         {
           headers: {
             "Content-Type": "application/json",
@@ -343,8 +367,9 @@ function PlaceSearch() {
           },
         }
       );
+
       console.log("Calendars saved:", response.data);
-      navigate("/myplanner");
+      navigate("/planner/plannerList");
       localStorage.removeItem("requestData");
     } catch (error) {
       console.error("Error saving calendars:", error);

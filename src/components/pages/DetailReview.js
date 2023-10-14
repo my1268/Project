@@ -6,11 +6,17 @@ import { getToken } from "../../components/Tokens/getToken";
 import { useNavigate } from "react-router-dom";
 import detailReview from "./DetailReview.module.css";
 import { useParams } from "react-router-dom";
+import Base from "../../UI/Form/Base";
+import Primary from "../../UI/Button/Primary";
+import { BiEraser } from "react-icons/bi";
 
 function DetailReview() {
+  const [nickname, setNickname] = useState("");
   const [placeList, setPlaceList] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState();
+  const [comments, setComments] = useState([]);
+  const [currentComment, setCurrentComment] = useState("");
   const token = getToken();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -26,6 +32,29 @@ function DetailReview() {
       navigate("/makingreview");
     }
   };
+
+  useEffect(() => {
+    async function getNickName() {
+      try {
+        await axios
+          .get("http://localhost:8080/member/info", {
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            setNickname(response.data.nickname);
+          })
+          .catch((error) => {
+            console.error("Failed get nickname");
+          });
+      } catch (error) {
+        console.error("Error get nickname:", error);
+      }
+    }
+    getNickName();
+  }, []);
 
   useEffect(() => {
     async function getPlanner() {
@@ -78,6 +107,56 @@ function DetailReview() {
       console.error("Failed to delete planner:", error);
     }
   };
+
+  const handleSaveComment = async (comment) => {
+    const local = localStorage.getItem("reviewData");
+    console.log(local);
+    if (comment.trim() === "") {
+      return;
+    }
+    if (!token) {
+      alert("로그인 후에 댓글을 저장할 수 있습니다.");
+      setCurrentComment("");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/reply/write",
+        {
+          reviewId: local.id,
+          email: local.email,
+          content: currentComment,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+      console.log(response);
+      if (response.data) {
+        setComments([...comments, { text: comment, time: new Date() }]);
+        setCurrentComment("");
+      } else {
+        console.error("댓글 저장 실패:", response.data.errorMessage);
+      }
+    } catch (error) {
+      console.error("댓글 저장 실패:", error);
+    }
+  };
+
+  const handleDeleteComment = (index, commentText) => {
+    return () => {
+      const deleteComment = window.confirm(
+        `"${commentText}" 댓글을 삭제하시겠습니까?`
+      );
+      if (deleteComment) {
+        const updatedComments = comments.filter((_, i) => i !== index);
+        setComments(updatedComments);
+      }
+    };
+  };
   return (
     <aside>
       <header>
@@ -99,6 +178,49 @@ function DetailReview() {
       <div className={`${detailReview.marginBottom} ${detailReview.marginTop}`}>
         <h3>리뷰 메모</h3>
         <textarea value={content} className={detailReview.memoTextArea} />
+      </div>
+      <div className={detailReview.section}>
+        <h3>댓글</h3>
+        <div
+          className={`${detailReview.saveButton} ${detailReview.marginBottom}`}
+        >
+          <Base
+            placeholder="댓글을 입력하세요"
+            value={currentComment}
+            maxLength={60}
+            onChange={(e) => setCurrentComment(e.target.value)}
+          />
+          <Primary
+            isShortPrimary="true"
+            text="저장"
+            onClick={() => {
+              handleSaveComment(currentComment);
+            }}
+          />
+        </div>
+      </div>
+      <div>
+        {comments
+          .slice()
+          .reverse()
+          .map((comment, index) => (
+            <div
+              key={index}
+              className={`${detailReview.commentContainer} ${detailReview}`}
+            >
+              <p>
+                {nickname} : {comment.text} ---
+                {comment.time.toLocaleString()}
+              </p>
+              <BiEraser
+                className={detailReview.deleteButton}
+                onClick={handleDeleteComment(
+                  comments.length - 1 - index,
+                  comment.text
+                )}
+              />
+            </div>
+          ))}
       </div>
       <div>
         <h3>리뷰 사진</h3>

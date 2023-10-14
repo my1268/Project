@@ -24,15 +24,33 @@
 }
 
 .marginTop {
-  margin-top: 200px;
+  margin-top: 140px;
 }
 
 .marginTopButton {
-  margin-top: 180px;
+  margin-top: 120px;
   display: flex;
   justify-content: center;
 }
 
 .marginBottom {
-  margin-bottom: 150px;
+  margin-bottom: 80px;
+}
+
+.saveButton {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.deleteButton {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.commentContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
 }

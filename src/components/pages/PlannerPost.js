@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 
 function PlannerPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
   const token = getToken();
   const [placeList, setPlaceList] = useState([]);
   const navigate = useNavigate();
@@ -52,14 +51,6 @@ function PlannerPost() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    updateFilteredItems();
-  };
-
-  const updateFilteredItems = () => {
-    const filteredList = placeList.filter((item) =>
-      item.title.includes(searchKeyword)
-    );
-    setFilteredItems(filteredList);
   };
 
   return (
@@ -82,20 +73,13 @@ function PlannerPost() {
             </div>
           </div>
         </form>
-        {filteredItems.length > 0 || placeList.length > 0 ? (
+        {placeList.length > 0 ? (
           <CardList
             inquiryCounting={true}
-            placeList={
-              filteredItems.length > 0
-                ? filteredItems.map((item) => ({
-                    title: item.title,
-                    image: demoImage,
-                  }))
-                : placeList.map((item) => ({
-                    title: item.title,
-                    image: demoImage,
-                  }))
-            }
+            placeList={placeList.map((item) => ({
+              title: item.title,
+              image: demoImage,
+            }))}
             onClick={() => navigate("/detailplanner")}
           />
         ) : (

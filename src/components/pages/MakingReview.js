@@ -53,8 +53,6 @@ const MakingReview = () => {
             fileName: file.name,
             uuid: response.data[0].uuid,
             folderPath: response.data[0].folderPath,
-            thumbnailUrl: response.data[0].thumbnailUrl,
-            imageUrl: response.data[0].imageUrl,
           });
         } else {
           console.error("파일 업로드 실패:", response.data);
@@ -67,7 +65,6 @@ const MakingReview = () => {
   };
 
   const handleRemoveImage = async (index) => {
-    // console.log(JSON.stringify(removeImagesUrl[index]));
     console.log(removeImagesUrl[index]);
     try {
       const response = await axios.post(
@@ -78,7 +75,6 @@ const MakingReview = () => {
         let updatedImagePreviews = [...imagePreviews];
         updatedImagePreviews.splice(index, 1);
         setImagePreviews(updatedImagePreviews); // 해당 이미지 미리보기 제거
-
         let updatedRemoveImagesUrl = [...removeImagesUrl];
         updatedRemoveImagesUrl.splice(index, 1);
         setRemoveImagesUrl(updatedRemoveImagesUrl); // 해당 이미지 URL 제거
@@ -93,12 +89,12 @@ const MakingReview = () => {
   const handleReviewSubmit = async () => {
     try {
       const placeData = JSON.parse(localStorage.getItem("placeData"));
+      console.log(JSON.stringify(placeData));
       let data = {
         title: title,
         content: content,
-        email: placeData.email,
         plannerId: placeData.plannerId,
-        thumbnailUrl: placeData.thumbnailUrl,
+        thumbnailUrl: selectFiles[0].thumbnailUrl,
         reviewImageDTOList: selectFiles,
       };
       console.log(data);
@@ -115,9 +111,9 @@ const MakingReview = () => {
       if (response.data) {
         console.log("서버 응답 데이터:", response.data);
         alert("리뷰가 성공적으로 업로드되었습니다.");
-        navigate("/reviewpost");
+        navigate("/mypost");
       } else {
-        console.error("서버 응답 상태 코드가 200이 아닙니다.");
+        console.error("리뷰 업로드가 되지않았습니다.");
       }
       localStorage.removeItem("placeData");
     } catch (error) {
@@ -127,7 +123,11 @@ const MakingReview = () => {
 
   return (
     <>
-      <PageCover title="리뷰 만들기" />
+      <PageCover
+        title={
+          localStorage.getItem("placeData") ? "리뷰 만들기" : "리뷰 수정하기"
+        }
+      />
       <div className="not-layout">
         <div className="container">
           <Ghost text="이전으로" onClick={previousButtonClick} />
@@ -189,7 +189,11 @@ const MakingReview = () => {
               )}
             </dl>
             <Primary
-              text="리뷰 올리기"
+              text={
+                localStorage.getItem("placeData")
+                  ? "리뷰 만들기"
+                  : "리뷰 수정하기"
+              }
               onClick={handleReviewSubmit}
               style={{ marginBottom: "8px" }}
             />

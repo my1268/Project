@@ -43,7 +43,7 @@ function MyPlanner() {
     async function getPlanner() {
       try {
         const response = await axios.get(
-          `http://localhost:8080/planner/view/all_planner?page=1&size=${sizeParam}&type=T&keyword=${keywordParam}`,
+          `http://localhost:8080/planner/view/my_planner?page=1&size=${sizeParam}&type=T&keyword=${keywordParam}`,
           {
             headers: {
               "Content-Type": "application/json",

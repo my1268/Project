@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 
 function ReviewPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
   const token = getToken();
   const [placeList, setPlaceList] = useState([]);
   const navigate = useNavigate();
@@ -19,15 +18,12 @@ function ReviewPost() {
   useEffect(() => {
     async function getReview() {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/review/getList",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token,
-            },
-          }
-        );
+        const response = await axios.get("http://localhost:8080/review/List", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        });
         if (response.data) {
           console.log(response.data);
           const updateList = response.data.dtoList.map((plannerData) => {
@@ -52,14 +48,6 @@ function ReviewPost() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    updateFilteredItems();
-  };
-
-  const updateFilteredItems = () => {
-    const filteredList = placeList.filter((item) =>
-      item.title.includes(searchKeyword)
-    );
-    setFilteredItems(filteredList);
   };
 
   return (
@@ -82,20 +70,13 @@ function ReviewPost() {
             </div>
           </div>
         </form>
-        {filteredItems.length > 0 || placeList.length > 0 ? (
+        {placeList.length > 0 ? (
           <CardList
             inquiryCounting={true}
-            placeList={
-              filteredItems.length > 0
-                ? filteredItems.map((item) => ({
-                    title: item.title,
-                    image: demoImage,
-                  }))
-                : placeList.map((item) => ({
-                    title: item.title,
-                    image: demoImage,
-                  }))
-            }
+            placeList={placeList.map((item) => ({
+              title: item.title,
+              image: demoImage,
+            }))}
             onClick={() => navigate("/detailreview")}
           />
         ) : (

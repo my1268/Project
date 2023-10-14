@@ -29,7 +29,7 @@ function MyPost() {
   if (queryParams.get("size") != null) {
     sizeParam = queryParams.get("size");
   }
-  let url = `/planner/reviewList?page=${pageParam}&size=${sizeParam}&type=T&keyword=${searchKeyword}`;
+  let url = `/mypost?page=${pageParam}&size=${sizeParam}&type=T&keyword=${searchKeyword}`;
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ function MyPost() {
     async function getReview() {
       try {
         const response = await axios.get(
-          `http://localhost:8080/planner/review/all_planner?page=1&size=${sizeParam}&type=T&keyword=${keywordParam}`,
+          `http://localhost:8080/review/mylist?page=1&size=${sizeParam}&type=T&keyword=${keywordParam}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -67,8 +67,7 @@ function MyPost() {
             date: plannerDataDate,
           };
         });
-        setList([...list, updateList]);
-        console.error("Failed get title:", response.data.errorMessage);
+        setList([...list, ...updateList]);
       } catch (error) {
         console.error("Failed get data:", error);
       }
@@ -101,10 +100,11 @@ function MyPost() {
               list={list.map((item) => ({
                 title: item.title,
                 date: item.date,
+                id: item.id,
               }))}
               title="게시글 목록"
               onClick={(id) => {
-                navigate(`/planner/reviewList/${id}`);
+                navigate(`/mypost/${id}`);
               }}
             />
           ) : (

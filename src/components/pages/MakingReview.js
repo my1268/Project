@@ -13,9 +13,10 @@ const MakingReview = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [removeImagesUrl, setRemoveImagesUrl] = useState([]);
   const navigate = useNavigate();
   const token = getToken();
-
+  const [selectFiles, setSelectFiles] = useState([]);
   const previousButtonClick = () => {
     navigate(-1);
   };
@@ -23,28 +24,38 @@ const MakingReview = () => {
   const FilePlus = (e) => {
     const files = Array.from(e.target.files);
     const imagePreviewsArray = [...imagePreviews];
-
+    const newFiles = [...selectFiles];
     files.forEach(async (file) => {
       const previewURL = URL.createObjectURL(file);
       imagePreviewsArray.push(previewURL);
       setImagePreviews(imagePreviewsArray);
-
+      selectFiles.push(file);
       const formData = new FormData();
-      formData.append("file", file);
-      console.log("FormData에 추가된 파일:", formData.get("file"));
+      formData.append("uploadFiles", file);
+      console.log("FormData에 추가된 파일:", formData.get("uploadFiles"));
       try {
         const response = await axios.post(
           "http://localhost:8080/file/upload",
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              "Content-Type": false,
               Authorization: token,
             },
           }
         );
         if (response.data) {
           console.log("파일 업로드 성공:", response.data);
+          let removeImagesUrlArray = [...removeImagesUrl];
+          removeImagesUrlArray.push(response.data[0].imageUrl);
+          setRemoveImagesUrl(removeImagesUrlArray);
+          newFiles.push({
+            fileName: file.name,
+            uuid: response.data[0].uuid,
+            folderPath: response.data[0].folderPath,
+            thumbnailUrl: response.data[0].thumbnailUrl,
+            imageUrl: response.data[0].imageUrl,
+          });
         } else {
           console.error("파일 업로드 실패:", response.data);
         }
@@ -52,24 +63,25 @@ const MakingReview = () => {
         console.error("파일 업로드 중 오류 발생:", error);
       }
     });
+    setSelectFiles(newFiles);
   };
 
   const handleRemoveImage = async (index) => {
+    // console.log(JSON.stringify(removeImagesUrl[index]));
+    console.log(removeImagesUrl[index]);
     try {
       const response = await axios.post(
-        "http://localhost:8080/file/remove",
-        {
-          imageUrl: imagePreviews[index],
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        }
+        "http://localhost:8080/file/remove?fileName=" + removeImagesUrl[index]
       );
       if (response.data) {
         console.log("파일 삭제 성공");
+        let updatedImagePreviews = [...imagePreviews];
+        updatedImagePreviews.splice(index, 1);
+        setImagePreviews(updatedImagePreviews); // 해당 이미지 미리보기 제거
+
+        let updatedRemoveImagesUrl = [...removeImagesUrl];
+        updatedRemoveImagesUrl.splice(index, 1);
+        setRemoveImagesUrl(updatedRemoveImagesUrl); // 해당 이미지 URL 제거
       } else {
         console.error("파일 삭제 실패");
       }
@@ -87,17 +99,9 @@ const MakingReview = () => {
         email: placeData.email,
         plannerId: placeData.plannerId,
         thumbnailUrl: placeData.thumbnailUrl,
-        reviewImageDTOList: [
-          {
-            id: 0,
-            fileName: "string",
-            uuid: "string",
-            folderPath: "string",
-            thumbnailUrl: "string",
-            imageUrl: "string",
-          },
-        ],
+        reviewImageDTOList: selectFiles,
       };
+      console.log(data);
       const response = await axios.post(
         "http://localhost:8080/review/register",
         data,
@@ -174,6 +178,7 @@ const MakingReview = () => {
                         <button
                           type="button"
                           onClick={() => handleRemoveImage(index)}
+                          data-name=""
                         >
                           x
                         </button>

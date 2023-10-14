@@ -20,6 +20,7 @@ import PlannerPost from "./components/pages/PlannerPost";
 import InquiryPost from "./components/pages/InquiryPost";
 import DetailPlanner from "./components/pages/DetailPlanner";
 import MakingReview from "./components/pages/MakingReview";
+import DetailReview from "./components/pages/DetailReview";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/planner/plannerList" element={<MyPlanner />} />
         <Route path="/planner/plannerList/:id" element={<DetailPlanner />} />
         <Route path="/mypost" element={<MyPost />} />
+        <Route path="/mypost/:id" element={<DetailReview />} />
         <Route path="/myinquiry" element={<MyInquiry />} />
         <Route path="/myinquirywrite" element={<MyInquiryWrite />} />
         <Route path="/makingplanner" element={<MakingPlanner />} />
@@ -51,7 +53,8 @@ function HeaderHide() {
     location.pathname === "/placesearch" ||
     location.pathname === "/makingplanner" ||
     location.pathname === "/makingreview" ||
-    location.pathname.includes("/planner/plannerList/");
+    location.pathname.includes("/planner/plannerList/") ||
+    location.pathname.includes("/mypost/");
   return hideHeader ? null : <Header />;
 }
 

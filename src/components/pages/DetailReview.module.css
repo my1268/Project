@@ -44,6 +44,11 @@
   gap: 8px;
 }
 
+.commentPosition {
+  position: relative;
+  bottom: 75px;
+}
+
 .deleteButton {
   font-size: 20px;
   cursor: pointer;

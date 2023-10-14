@@ -109,7 +109,7 @@ function DetailReview() {
   };
 
   const handleSaveComment = async (comment) => {
-    const local = localStorage.getItem("reviewData");
+    const local = JSON.parse(localStorage.getItem("reviewData"));
     console.log(local);
     if (comment.trim() === "") {
       return;
@@ -119,30 +119,33 @@ function DetailReview() {
       setCurrentComment("");
       return;
     }
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/reply/write",
-        {
-          reviewId: local.id,
-          email: local.email,
-          content: currentComment,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
+    const confirmSave = window.confirm("댓글을 저장하시겠습니까?");
+    if (confirmSave) {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/reply/write",
+          {
+            reviewId: local.id,
+            email: local.email,
+            content: currentComment,
           },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        console.log(response);
+        if (response.data) {
+          setComments([...comments, { text: comment, time: new Date() }]);
+          setCurrentComment("");
+        } else {
+          console.error("댓글 저장 실패:", response.data.errorMessage);
         }
-      );
-      console.log(response);
-      if (response.data) {
-        setComments([...comments, { text: comment, time: new Date() }]);
-        setCurrentComment("");
-      } else {
-        console.error("댓글 저장 실패:", response.data.errorMessage);
+      } catch (error) {
+        console.error("댓글 저장 실패:", error);
       }
-    } catch (error) {
-      console.error("댓글 저장 실패:", error);
     }
   };
 
@@ -206,7 +209,7 @@ function DetailReview() {
           .map((comment, index) => (
             <div
               key={index}
-              className={`${detailReview.commentContainer} ${detailReview}`}
+              className={`${detailReview.commentContainer} ${detailReview.commentPosition} `}
             >
               <p>
                 {nickname} : {comment.text} ---

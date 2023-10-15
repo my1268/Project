@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
 import Memo from "../../UI/Form/Memo";
@@ -21,6 +21,16 @@ const MakingReview = () => {
     navigate(-1);
   };
 
+  useEffect(() => {
+    const localData = localStorage.getItem("reviewData");
+    console.log(localData);
+    if (localData) {
+      const parseData = JSON.parse(localData);
+      setTitle(parseData.title || "");
+      setContent(parseData.content || "");
+    }
+  }, []);
+  //사진 post
   const FilePlus = (e) => {
     const files = Array.from(e.target.files);
     const imagePreviewsArray = [...imagePreviews];
@@ -64,6 +74,7 @@ const MakingReview = () => {
     setSelectFiles(newFiles);
   };
 
+  //사진delete
   const handleRemoveImage = async (index) => {
     console.log(removeImagesUrl[index]);
     try {
@@ -71,13 +82,12 @@ const MakingReview = () => {
         "http://localhost:8080/file/remove?fileName=" + removeImagesUrl[index]
       );
       if (response.data) {
-        console.log("파일 삭제 성공");
         let updatedImagePreviews = [...imagePreviews];
         updatedImagePreviews.splice(index, 1);
         setImagePreviews(updatedImagePreviews); // 해당 이미지 미리보기 제거
         let updatedRemoveImagesUrl = [...removeImagesUrl];
         updatedRemoveImagesUrl.splice(index, 1);
-        setRemoveImagesUrl(updatedRemoveImagesUrl); // 해당 이미지 URL 제거
+        setRemoveImagesUrl(updatedRemoveImagesUrl); //해당 이미지 url 제거
       } else {
         console.error("파일 삭제 실패");
       }
@@ -86,6 +96,7 @@ const MakingReview = () => {
     }
   };
 
+  //리뷰 올리기
   const handleReviewSubmit = async () => {
     try {
       const placeData = JSON.parse(localStorage.getItem("placeData"));
@@ -118,6 +129,42 @@ const MakingReview = () => {
       localStorage.removeItem("placeData");
     } catch (error) {
       console.error("리뷰 업로드 중 오류 발생:", error);
+    }
+  };
+
+  //리뷰 수정하기
+  const handleEditReviewSubmit = async () => {
+    try {
+      const reviewData = JSON.parse(localStorage.getItem("reviewData"));
+      console.log(JSON.stringify(reviewData));
+      let data = {
+        title: title,
+        content: content,
+        plannerId: reviewData.plannerId,
+        thumbnailUrl: selectFiles[0].thumbnailUrl,
+        reviewImageDTOList: selectFiles,
+      };
+      console.log(data);
+      const response = await axios.put(
+        "http://localhost:8080/review/update",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+      if (response.data) {
+        console.log("서버 응답 데이터:", response.data);
+        alert("리뷰가 성공적으로 수정되었습니다.");
+        navigate("/mypost");
+      } else {
+        console.error("리뷰 수정이 되지않았습니다.");
+      }
+      localStorage.removeItem("placeData");
+    } catch (error) {
+      console.error("리뷰 수정 중 오류 발생:", error);
     }
   };
 
@@ -188,15 +235,22 @@ const MakingReview = () => {
                 </div>
               )}
             </dl>
-            <Primary
-              text={
-                localStorage.getItem("placeData")
-                  ? "리뷰 만들기"
-                  : "리뷰 수정하기"
-              }
-              onClick={handleReviewSubmit}
-              style={{ marginBottom: "8px" }}
-            />
+            <>
+              {localStorage.getItem("placeData") && (
+                <Primary
+                  text="리뷰 만들기"
+                  onClick={handleReviewSubmit}
+                  style={{ marginBottom: "8px" }}
+                />
+              )}
+              {localStorage.getItem("reviewData") && (
+                <Primary
+                  text="리뷰 수정하기"
+                  onClick={handleEditReviewSubmit}
+                  style={{ marginBottom: "8px" }}
+                />
+              )}
+            </>
           </form>
         </div>
       </div>

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Ghost from "../../UI/Button/Ghost";
-import CardList from "../../UI/Card/CardList";
 import TimeTable from "../../UI/TimeTable/TimeTable";
 import axios from "axios";
 import { getToken } from "../../components/Tokens/getToken";
 import { useNavigate } from "react-router-dom";
 import detailPlanner from "./DetailPlanner.module.css";
 import { useParams } from "react-router-dom";
+import Card from "../../UI/Card/Card";
 
 function DetailPlanner() {
   const [placeList, setPlaceList] = useState([]);
@@ -123,7 +123,7 @@ function DetailPlanner() {
       </div>
       <div>
         <h3>장소 정보</h3>
-        <CardList placeList={placeList} />
+        <Card placeList={placeList} uiWrite={false} />
       </div>
       <div className={detailPlanner.marginTopButton}>
         <Ghost

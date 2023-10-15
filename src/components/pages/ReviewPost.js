@@ -4,9 +4,9 @@ import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
 import reviewPost from "./ReviewPost.module.css";
 import demoImage from "../../assets/images/놀이공원.png";
-import CardList from "../../UI/Card/CardList";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Card from "../../UI/Card/Card";
 
 function ReviewPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -76,7 +76,7 @@ function ReviewPost() {
           </div>
         </form>
         {placeList.length > 0 ? (
-          <CardList
+          <Card
             placeList={placeList.map((item) => ({
               id: item.id,
               title: item.title,
@@ -85,6 +85,7 @@ function ReviewPost() {
               date: item.date,
             }))}
             onClick={(id) => navigate(`/mypost/${id}`)}
+            uiWrite={true}
           />
         ) : (
           <p>

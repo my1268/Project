@@ -119,33 +119,30 @@ function DetailReview() {
       setCurrentComment("");
       return;
     }
-    const confirmSave = window.confirm("댓글을 저장하시겠습니까?");
-    if (confirmSave) {
-      try {
-        const response = await axios.post(
-          "http://localhost:8080/reply/write",
-          {
-            reviewId: local.id,
-            email: local.email,
-            content: currentComment,
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/reply/write",
+        {
+          reviewId: local.id,
+          email: local.email,
+          content: currentComment,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token,
-            },
-          }
-        );
-        console.log(response);
-        if (response.data) {
-          setComments([...comments, { text: comment, time: new Date() }]);
-          setCurrentComment("");
-        } else {
-          console.error("댓글 저장 실패:", response.data.errorMessage);
         }
-      } catch (error) {
-        console.error("댓글 저장 실패:", error);
+      );
+      console.log(response);
+      if (response.data) {
+        setComments([...comments, { text: comment, time: new Date() }]);
+        setCurrentComment("");
+      } else {
+        console.error("댓글 저장 실패:", response.data.errorMessage);
       }
+    } catch (error) {
+      console.error("댓글 저장 실패:", error);
     }
   };
 

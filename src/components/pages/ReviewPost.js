@@ -6,32 +6,37 @@ import reviewPost from "./ReviewPost.module.css";
 import demoImage from "../../assets/images/놀이공원.png";
 import CardList from "../../UI/Card/CardList";
 import axios from "axios";
-import { getToken } from "../Tokens/getToken";
 import { useNavigate } from "react-router-dom";
 
 function ReviewPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
-  const token = getToken();
   const [placeList, setPlaceList] = useState([]);
   const navigate = useNavigate();
+
+  const addDateZeroPlus = (num) => {
+    return num < 10 ? `0${num}` : `${num}`;
+  };
 
   useEffect(() => {
     async function getReview() {
       try {
-        const response = await axios.get("http://localhost:8080/review/List", {
+        const response = await axios.get("http://localhost:8080/review/list", {
           headers: {
             "Content-Type": "application/json",
-            Authorization: token,
           },
         });
         if (response.data) {
           console.log(response.data);
           const updateList = response.data.dtoList.map((plannerData) => {
             const dateArray = plannerData.date;
-            const plannerDataDate = `${dateArray[0]}-${dateArray[1]}-0${dateArray[2]} ${dateArray[3]}:0${dateArray[4]}:${dateArray[5]}`;
+            const year = dateArray[0];
+            const month = addDateZeroPlus(dateArray[1]);
+            const day = addDateZeroPlus(dateArray[2]);
+            const plannerDataDate = `${year}-${month}-${day} `;
             return {
               id: plannerData.id,
               title: plannerData.title,
+              nickname: plannerData.nickname,
               date: plannerDataDate,
             };
           });
@@ -72,12 +77,14 @@ function ReviewPost() {
         </form>
         {placeList.length > 0 ? (
           <CardList
-            inquiryCounting={true}
             placeList={placeList.map((item) => ({
+              id: item.id,
               title: item.title,
+              nickname: item.nickname,
               image: demoImage,
+              date: item.date,
             }))}
-            onClick={() => navigate("/detailreview")}
+            onClick={(id) => navigate(`/mypost/${id}`)}
           />
         ) : (
           <p>

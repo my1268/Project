@@ -4,10 +4,13 @@ import Base from "../../UI/Form/Base";
 import reviewPost from "./ReviewPost.module.css";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import page from "../../UI/Pagination/Pagination.module.css";
 
 function ReviewPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [placeList, setPlaceList] = useState([]);
+  const [pageList, setPageList] = useState([]);
   const addDateZeroPlus = (num) => {
     return num < 10 ? `0${num}` : `${num}`;
   };
@@ -40,6 +43,10 @@ function ReviewPost() {
           }
         );
         if (response.data) {
+          const pageDtoList = response.data.pageList.map((page) => {
+            return page;
+          });
+          setPageList(pageDtoList);
           console.log(response.data);
           const updateList = response.data.dtoList.map((plannerData) => {
             const dateArray = plannerData.date;
@@ -118,6 +125,23 @@ function ReviewPost() {
             작성해보세요!
           </p>
         )}
+        <div className={page.buttons}>
+          <button className={page.chevron} type="button">
+            <FiChevronLeft />
+          </button>
+          <div className={page.pages}>
+            {pageList.map((page) => (
+              <a
+                href={`http://localhost:3000/reviewpost?page=${page}&size=${sizeParam}&type=T&keyword=${keywordParam}`}
+              >
+                {page}
+              </a>
+            ))}
+          </div>
+          <button className={page.chevron} type="button">
+            <FiChevronRight />
+          </button>
+        </div>
       </div>
     </>
   );

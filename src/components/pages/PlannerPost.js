@@ -2,16 +2,15 @@ import React, { useEffect, useState } from "react";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
 import reviewPost from "./ReviewPost.module.css";
-import demoImage from "../../assets/images/놀이공원.png";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
-import Card from "../../UI/Card/Card";
+import { useLocation } from "react-router-dom";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import page from "../../UI/Pagination/Pagination.module.css";
 
 function PlannerPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [placeList, setPlaceList] = useState([]);
-  const navigate = useNavigate();
-
+  const [pageList, setPageList] = useState([]);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
@@ -45,6 +44,10 @@ function PlannerPost() {
           }
         );
         if (response.data) {
+          const pageDtoList = response.data.pageList.map((page) => {
+            return page;
+          });
+          setPageList(pageDtoList);
           console.log(response.data);
           const updateList = response.data.dtoList.map((plannerData) => {
             const dateArray = plannerData.date;
@@ -123,6 +126,23 @@ function PlannerPost() {
             작성해보세요!
           </p>
         )}
+        <div className={page.buttons}>
+          <button className={page.chevron} type="button">
+            <FiChevronLeft />
+          </button>
+          <div className={page.pages}>
+            {pageList.map((page) => (
+              <a
+                href={`http://localhost:3000/plannerpost?page=${page}&size=${sizeParam}&type=T&keyword=${keywordParam}`}
+              >
+                {page}
+              </a>
+            ))}
+          </div>
+          <button className={page.chevron} type="button">
+            <FiChevronRight />
+          </button>
+        </div>
       </div>
     </>
   );

@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import Categories from "../features/Categories";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
-import Pagination from "../../UI/Pagination/Pagination";
 import myPlanner from "./MyPlanner.module.css";
 import Board from "../features/Board";
 import axios from "axios";
 import { getToken } from "../Tokens/getToken";
 import { useLocation, useNavigate } from "react-router-dom";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import page from "../../UI/Pagination/Pagination.module.css";
 
 function MyPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [pageList, setPageList] = useState([]);
   const [list, setList] = useState([]);
   const token = getToken();
   const navigate = useNavigate();
@@ -51,6 +53,10 @@ function MyPost() {
             },
           }
         );
+        const pageDtoList = response.data.pageList.map((page) => {
+          return page;
+        });
+        setPageList(pageDtoList);
         console.log(response.data);
         const updateList = response.data.dtoList.map((plannerData) => {
           const dateArray = plannerData.date;
@@ -110,7 +116,23 @@ function MyPost() {
           ) : (
             <p>현재 게시글이 없습니다. 리뷰를 작성해보세요!</p>
           )}
-          <Pagination />
+          <div className={page.buttons}>
+            <button className={page.chevron} type="button">
+              <FiChevronLeft />
+            </button>
+            <div className={page.pages}>
+              {pageList.map((page) => (
+                <a
+                  href={`http://localhost:3000/mypost?page=${page}&size=${sizeParam}&type=T&keyword=${keywordParam}`}
+                >
+                  {page}
+                </a>
+              ))}
+            </div>
+            <button className={page.chevron} type="button">
+              <FiChevronRight />
+            </button>
+          </div>
         </div>
       </div>
     </>

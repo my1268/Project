@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
-import Primary from "../../UI/Button/Primary";
 import reviewPost from "./ReviewPost.module.css";
 import demoImage from "../../assets/images/놀이공원.png";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../../UI/Card/Card";
 
 function ReviewPost() {
@@ -15,15 +14,34 @@ function ReviewPost() {
   const addDateZeroPlus = (num) => {
     return num < 10 ? `0${num}` : `${num}`;
   };
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  let pageParam = "1";
+  if (queryParams.get("page") != null) {
+    pageParam = queryParams.get("page");
+  }
+  let keywordParam = "";
+  if (queryParams.get("keyword") != null) {
+    keywordParam = queryParams.get("keyword");
+  }
+  let sizeParam = "";
+  if (queryParams.get("size") != null) {
+    sizeParam = queryParams.get("size");
+  }
+  let url = `/reviewpost?page=${pageParam}&size=${sizeParam}&type=T&keyword=${searchKeyword}`;
 
   useEffect(() => {
     async function getReview() {
       try {
-        const response = await axios.get("http://localhost:8080/review/list", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.get(
+          `http://localhost:8080/review/list?page=${pageParam}&size=${sizeParam}&type=T&keyword=${keywordParam}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.data) {
           const updateList = response.data.dtoList.map((plannerData) => {
             const dateArray = plannerData.date;
@@ -68,11 +86,13 @@ function ReviewPost() {
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
               />
-              <Primary
-                isShortPrimary="true"
-                text="검색"
-                onClick={handleSearch}
-              />
+              <a
+                className={reviewPost.search}
+                href={url}
+                style={{ color: "white", fontWeight: "700" }}
+              >
+                검색
+              </a>
             </div>
           </div>
         </form>

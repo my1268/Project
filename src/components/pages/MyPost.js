@@ -43,7 +43,7 @@ function MyPost() {
     async function getReview() {
       try {
         const response = await axios.get(
-          `http://localhost:8080/review/mylist?page=1&size=${sizeParam}&type=T&keyword=${keywordParam}`,
+          `http://localhost:8080/review/mylist?page=${pageParam}&size=${sizeParam}&type=T&keyword=${keywordParam}`,
           {
             headers: {
               "Content-Type": "application/json",

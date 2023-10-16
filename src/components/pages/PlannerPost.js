@@ -1,17 +1,33 @@
 import React, { useEffect, useState } from "react";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
-import Primary from "../../UI/Button/Primary";
 import reviewPost from "./ReviewPost.module.css";
 import demoImage from "../../assets/images/놀이공원.png";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../../UI/Card/Card";
 
 function PlannerPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [placeList, setPlaceList] = useState([]);
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  let pageParam = "1";
+  if (queryParams.get("page") != null) {
+    pageParam = queryParams.get("page");
+  }
+  let keywordParam = "";
+  if (queryParams.get("keyword") != null) {
+    keywordParam = queryParams.get("keyword");
+  }
+  let sizeParam = "";
+  if (queryParams.get("size") != null) {
+    sizeParam = queryParams.get("size");
+  }
+  let url = `/plannerpost?page=${pageParam}&size=${sizeParam}&type=T&keyword=${searchKeyword}`;
 
   const addDateZeroPlus = (num) => {
     return num < 10 ? `0${num}` : `${num}`;
@@ -21,7 +37,7 @@ function PlannerPost() {
     async function getPlanner() {
       try {
         const response = await axios.get(
-          "http://localhost:8080/planner/view/all_planner",
+          `http://localhost:8080/planner/view/all_planner?page=${pageParam}&size=${sizeParam}&type=T&keyword=${keywordParam}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -70,11 +86,13 @@ function PlannerPost() {
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
               />
-              <Primary
-                isShortPrimary="true"
-                text="검색"
-                onClick={handleSearch}
-              />
+              <a
+                className={reviewPost.search}
+                href={url}
+                style={{ color: "white", fontWeight: "700" }}
+              >
+                검색
+              </a>
             </div>
           </div>
         </form>

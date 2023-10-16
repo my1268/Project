@@ -13,6 +13,7 @@ const MyReviewUpdate = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [removeImages, setRemoveImages] = useState([]);
   const [removeImagesUrl, setRemoveImagesUrl] = useState([]);
   const navigate = useNavigate();
   const token = getToken();
@@ -22,13 +23,24 @@ const MyReviewUpdate = () => {
   };
 
   useEffect(() => {
-    const localData = localStorage.getItem("reviewData");
-    console.log(localData);
-    if (localData) {
-      const parseData = JSON.parse(localData);
-      setTitle(parseData.title || "");
-      setContent(parseData.content || "");
-    }
+    const title = localStorage.getItem("reviewTitle");
+    const content = localStorage.getItem("reviewContent");
+    const reviewImageList = JSON.parse(localStorage.getItem("reviewImageList"));
+    console.log(reviewImageList);
+
+    const imageList = [];
+    reviewImageList.map((image) => {
+      // const data = {
+      //   "id": image.id,
+      //   "fileName": image.imageUrl
+      // }
+
+      imageList.push(image);
+    });
+
+    setImagePreviews(imageList);
+    setTitle(title);
+    setContent(content);
   }, []);
   //사진 post
   const FilePlus = (e) => {
@@ -76,10 +88,19 @@ const MyReviewUpdate = () => {
 
   //사진delete
   const handleRemoveImage = async (index) => {
-    console.log(removeImagesUrl[index]);
+    // console.log(removeImagesUrl[index]);
+    console.log(imagePreviews[index]);
+
+    const data = [...removeImages];
+    data.push(imagePreviews[index]);
+    setRemoveImages(data);
+
+    console.log(selectFiles);
+
     try {
       const response = await axios.post(
-        "http://localhost:8080/file/remove?fileName=" + removeImagesUrl[index]
+        "http://localhost:8080/file/remove?fileName=" +
+          imagePreviews[index].imageUrl
       );
       if (response.data) {
         let updatedImagePreviews = [...imagePreviews];
@@ -99,15 +120,15 @@ const MyReviewUpdate = () => {
   //리뷰 수정하기
   const handleEditReviewSubmit = async () => {
     try {
-      const reviewData = JSON.parse(localStorage.getItem("reviewData"));
-      console.log(JSON.stringify(reviewData));
+      console.log(removeImages);
+
       let data = {
-        id: reviewData.id,
+        id: localStorage.getItem("reviewId"),
         title: title,
         content: content,
-        plannerId: reviewData.plannerId,
-        thumbnailUrl: selectFiles[0].thumbnailUrl,
+        plannerId: localStorage.getItem("plannerId"),
         reviewImageDTOList: selectFiles,
+        removeImageDTOList: removeImages,
       };
       console.log(data);
       const response = await axios.put(
@@ -123,6 +144,13 @@ const MyReviewUpdate = () => {
       if (response.data) {
         console.log("서버 응답 데이터:", response.data);
         alert("리뷰가 성공적으로 수정되었습니다.");
+
+        localStorage.removeItem("plannerId");
+        localStorage.removeItem("reviewId");
+        localStorage.removeItem("reviewTitle");
+        localStorage.removeItem("reviewContent");
+        localStorage.removeItem("reviewImageList");
+
         navigate("/mypost");
       } else {
         console.error("리뷰 수정이 되지않았습니다.");
@@ -175,11 +203,11 @@ const MyReviewUpdate = () => {
                 <div className={making.item}>
                   <dt>선택 사진</dt>
                   <dd>
-                    {imagePreviews.map((previewUrl, index) => (
+                    {imagePreviews.map((data, index) => (
                       <div key={index}>
                         <img
                           key={index}
-                          src={previewUrl}
+                          src={`http://localhost:8080/file/display?fileName=${data.imageUrl}`}
                           alt={`Preview ${index}`}
                           style={{
                             width: "230px",

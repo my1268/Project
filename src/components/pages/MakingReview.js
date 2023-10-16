@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
 import Memo from "../../UI/Form/Memo";

@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 import PageCover from "../features/PageCover";
 import Base from "../../UI/Form/Base";
 import reviewPost from "./ReviewPost.module.css";
-import demoImage from "../../assets/images/놀이공원.png";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
-import Card from "../../UI/Card/Card";
+import { useLocation } from "react-router-dom";
 
 function ReviewPost() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [placeList, setPlaceList] = useState([]);
-  const navigate = useNavigate();
   const addDateZeroPlus = (num) => {
     return num < 10 ? `0${num}` : `${num}`;
   };
@@ -43,6 +40,7 @@ function ReviewPost() {
           }
         );
         if (response.data) {
+          console.log(response.data);
           const updateList = response.data.dtoList.map((plannerData) => {
             const dateArray = plannerData.date;
             const year = dateArray[0];
@@ -50,7 +48,6 @@ function ReviewPost() {
             const day = addDateZeroPlus(dateArray[2]);
             const plannerDataDate = `${year}-${month}-${day} `;
             const thumbnailUrl = plannerData.thumbnailUrl;
-            console.log(thumbnailUrl);
             return {
               id: plannerData.id,
               title: plannerData.title,
@@ -97,32 +94,23 @@ function ReviewPost() {
           </div>
         </form>
         {placeList.length > 0 ? (
-          <div>
+          <div style={{ display: "flex", gap: "20px" }}>
             {placeList.map((item) => (
-              <div key={item.id}>
-                <p>{item.title}</p>
-                <p>{item.nickname}</p>
-                <img
-                  src={item.thumbnailUrl}
-                  alt={item.thumbnailUrl}
-                  style={{ width: "400px", height: "400px" }}
-                />
-                <button onClick={() => navigate(`/mypost/${item.id}`)}>
-                  Post
-                </button>
+              <div key={item.id} style={{ position: "relative" }}>
+                <a href={`/mypost/${item.id}`}>
+                  <img
+                    src={`http://localhost:8080/file/display?fileName=${item.thumbnailUrl}`}
+                    alt={item.thumbnailUrl}
+                    className={reviewPost.image}
+                  />
+                </a>
+                <p style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span>{item.title}</span>
+                  <span>{item.date}</span>
+                </p>
+                <p>작성자: {item.nickname}</p>
               </div>
             ))}
-            {/* <Card
-              placeList={placeList.map((item) => ({
-                id: item.id,
-                title: item.title,
-                nickname: item.nickname,
-                image: demoImage,
-                date: item.date,
-              }))}
-              onClick={(id) => navigate(`/mypost/${id}`)}
-              uiWrite={true}
-            /> */}
           </div>
         ) : (
           <p>

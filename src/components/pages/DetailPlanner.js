@@ -11,7 +11,7 @@ function DetailPlanner() {
   const [savePlaceData, setSavePlaceData] = useState([]);
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState();
-  const [thumbnails, setThumbnails] = useState("");
+  const [thumbnails, setThumbnails] = useState([]);
   const token = getToken();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -46,9 +46,13 @@ function DetailPlanner() {
             },
           }
         );
+
+        const thumbnails = response.data.schedule.map((data) => {
+          return data.thumbnailLocation;
+        });
+        setThumbnails(thumbnails); // 이미지 배열로 업데이트
         setTitle(response.data.title);
         setComment(response.data.comment);
-        setThumbnails(response.data.schedule.thumbnailLocation);
         setSavePlaceData(response.data.schedule);
         localStorage.setItem("placeData", JSON.stringify(response.data));
       } catch (error) {
@@ -116,18 +120,14 @@ function DetailPlanner() {
       </div>
       <div>
         <h3>장소 정보</h3>
-        <img
-          src={thumbnails}
-          alt=""
-          style={{ width: "400px", height: "400px" }}
-        />
-        {/* {thumbnails.map((url, index) => (
+        {thumbnails.map((url, index) => (
           <img
             key={index}
             src={url}
-            alt=""
+            alt="장소 사진"
             style={{ width: "400px", height: "400px" }}
-          /> */}
+          />
+        ))}
       </div>
       <div className={detailPlanner.marginTopButton}>
         <Ghost

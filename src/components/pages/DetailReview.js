@@ -70,7 +70,7 @@ function DetailReview() {
           },
         }
       );
-      console.log(response.data.map((data) => data.createdAt));
+      // console.log(response.data.map((data) => data.createdAt));
       const dataList = response.data.map((data) => {
         const createdAtArray = data.createdAt;
         const createdAt = new Date(
@@ -81,7 +81,7 @@ function DetailReview() {
           createdAtArray[4],
           createdAtArray[5]
         );
-        console.log(createdAt);
+        // console.log(createdAt);
         return {
           id: data.id,
           content: data.content,
@@ -112,7 +112,15 @@ function DetailReview() {
         console.log(response.data);
         setTitle(response.data.title);
         setContent(response.data.content);
-        localStorage.setItem("reviewData", JSON.stringify(response.data));
+        localStorage.setItem("reviewTitle", response.data.title);
+        localStorage.setItem("reviewContent", response.data.content);
+        localStorage.setItem(
+          "reviewImageList",
+          JSON.stringify(response.data.reviewImageDTOList)
+        );
+        localStorage.setItem("reviewId", response.data.id);
+        localStorage.setItem("plannerId", response.data.plannerId);
+
         // 사진 조회
         const imageUrls = response.data.reviewImageDTOList.map((data) => {
           return `http://localhost:8080/file/display?fileName=${data.imageUrl}`;
@@ -154,7 +162,7 @@ function DetailReview() {
   };
   //댓글저장
   const handleSaveComment = async (comment) => {
-    const local = JSON.parse(localStorage.getItem("reviewData"));
+    const id = JSON.parse(localStorage.getItem("reviewId"));
     if (comment.trim() === "") {
       return;
     }
@@ -167,7 +175,7 @@ function DetailReview() {
       const response = await axios.post(
         "http://localhost:8080/reply/write",
         {
-          reviewId: local.id,
+          reviewId: id,
           content: currentComment, //메모
         },
         {
@@ -222,7 +230,7 @@ function DetailReview() {
         const data = {
           id: comments[index].id,
           reviewId: id,
-          content: comments[index].content, // TODO
+          content: editedComment, // TODO
         };
         const response = await axios.put(
           "http://localhost:8080/reply/update",

@@ -52,11 +52,13 @@ function PlannerPost() {
             const month = addDateZeroPlus(dateArray[1]);
             const day = addDateZeroPlus(dateArray[2]);
             const plannerDataDate = `${year}-${month}-${day} `;
+            const thumbnailUrl = plannerData.thumbnailUrl;
             return {
               id: plannerData.id,
               title: plannerData.title,
               nickname: plannerData.nickname,
               date: plannerDataDate,
+              thumbnailUrl: thumbnailUrl,
             };
           });
           setPlaceList([...placeList, ...updateList]);
@@ -97,23 +99,28 @@ function PlannerPost() {
           </div>
         </form>
         {placeList.length > 0 ? (
-          <Card
-            placeList={placeList.map((item) => ({
-              id: item.id,
-              title: item.title,
-              nickname: item.nickname,
-              image: demoImage,
-              date: item.date,
-            }))}
-            onClick={(id) => {
-              navigate(`/planner/plannerList/${id}`);
-            }}
-            uiWrite={true}
-          />
+          <div style={{ display: "flex", gap: "20px" }}>
+            {placeList.map((item) => (
+              <div key={item.id} style={{ position: "relative" }}>
+                <a href={`/planner/plannerList/${item.id}`}>
+                  <img
+                    src={item.thumbnailUrl}
+                    alt={item.thumbnailUrl}
+                    className={reviewPost.image}
+                  />
+                </a>
+                <p style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span>{item.title}</span>
+                  <span>{item.date}</span>
+                </p>
+                <p>작성자: {item.nickname}</p>
+              </div>
+            ))}
+          </div>
         ) : (
           <p>
-            유저 플래너가 없습니다. 상단에 플래너 작성하기 버튼을 눌러 처음으로
-            플래너를 작성해보세요!
+            유저 리뷰 플래너가 없습니다. 내 플래너 버튼을 눌러 처음으로 플래너를
+            작성해보세요!
           </p>
         )}
       </div>

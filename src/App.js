@@ -21,6 +21,7 @@ import InquiryPost from "./components/pages/InquiryPost";
 import DetailPlanner from "./components/pages/DetailPlanner";
 import MakingReview from "./components/pages/MakingReview";
 import DetailReview from "./components/pages/DetailReview";
+import MyReviewUpdate from "./components/pages/MyReviewUpdate";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/planner/plannerList/:id" element={<DetailPlanner />} />
         <Route path="/mypost" element={<MyPost />} />
         <Route path="/mypost/:id" element={<DetailReview />} />
+        <Route path="/mypost/review/:id" element={<MyReviewUpdate />} />
         <Route path="/myinquiry" element={<MyInquiry />} />
         <Route path="/myinquirywrite" element={<MyInquiryWrite />} />
         <Route path="/makingplanner" element={<MakingPlanner />} />

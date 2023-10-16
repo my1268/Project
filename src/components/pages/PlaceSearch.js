@@ -341,7 +341,7 @@ function PlaceSearch() {
           calendar.waypoints.forEach((waypoint) => {
             const waypointData = {
               place: waypoint.waypoint,
-              startTime: formatDate(waypoint.startTime),
+              startTime: formatDate(waypoint.waypointTime),
               arriveTime: formatDate(waypoint.arriveTime),
               contentId: waypoint.contentId,
               contentType: waypoint.contentTypeId,

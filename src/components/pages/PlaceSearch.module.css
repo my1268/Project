@@ -157,19 +157,47 @@
 .mapTypeButton:hover {
   background-color: #0056b3;
 }
-@media screen and (max-width: 1400px) {
+@media screen and (min-width: 700px) and (max-width: 1910px) {
   .position {
     position: relative;
     top: 300px;
   }
   .form {
     position: absolute;
-    top: 110px;
+    top: 70px;
   }
   .tourapi {
     position: absolute;
-    top: 140px;
+    top: 100px;
     bottom: 300px;
+  }
+  .totalDistance {
+    position: relative;
+    left: 80px;
+    bottom: 580px;
+  }
+  .resetMarkers {
+    position: relative;
+    left: 5px;
+    bottom: 560px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .position {
+    position: relative;
+    top: 10px;
+  }
+  .form {
+    position: relative;
+    top: 3px;
+    left: 2px;
+  }
+  .tourapi {
+    position: relative;
+    top: 0.1px;
+    bottom: 300px;
+    left: 10px;
   }
   .totalDistance {
     position: relative;

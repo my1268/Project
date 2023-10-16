@@ -393,7 +393,7 @@ function PlaceSearch() {
               onClick={() => handleToggleInput(index)}
             />
           ))}
-          {dayPlus < 16 && (
+          {dayPlus < 8 && (
             <Ghost
               text="추가"
               style={{ color: "#3da5f5" }}

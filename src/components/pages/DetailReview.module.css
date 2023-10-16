@@ -50,12 +50,54 @@
 }
 
 .deleteButton {
-  font-size: 20px;
+  color: #075ddd;
+  font-size: 25px;
   cursor: pointer;
+}
+
+.deleteButton:hover {
+  color: #0929e2;
 }
 
 .commentContainer {
   display: flex;
   align-items: center;
   margin-bottom: 4px;
+}
+
+.editButton {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 5px 7px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 16px;
+}
+.editButton:hover {
+  background-color: #043623;
+}
+
+.editInput {
+  padding: 8px;
+  border-radius: 4px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+.editButton {
+  background: #4caf50;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
 }

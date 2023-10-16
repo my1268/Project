@@ -6,13 +6,12 @@ import { getToken } from "../../components/Tokens/getToken";
 import { useNavigate } from "react-router-dom";
 import detailPlanner from "./DetailPlanner.module.css";
 import { useParams } from "react-router-dom";
-import Card from "../../UI/Card/Card";
 
 function DetailPlanner() {
-  const [placeList, setPlaceList] = useState([]);
   const [savePlaceData, setSavePlaceData] = useState([]);
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState();
+  const [thumbnails, setThumbnails] = useState("");
   const token = getToken();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -35,7 +34,6 @@ function DetailPlanner() {
       navigate("/makingreview");
     }
   };
-
   useEffect(() => {
     async function getPlanner() {
       try {
@@ -48,14 +46,9 @@ function DetailPlanner() {
             },
           }
         );
-        console.log(response.data);
-        const placeData = {
-          title: response.data.title,
-          comment: response.data.comment,
-        };
-        setPlaceList([placeData]);
         setTitle(response.data.title);
         setComment(response.data.comment);
+        setThumbnails(response.data.schedule.thumbnailLocation);
         setSavePlaceData(response.data.schedule);
         localStorage.setItem("placeData", JSON.stringify(response.data));
       } catch (error) {
@@ -123,7 +116,18 @@ function DetailPlanner() {
       </div>
       <div>
         <h3>장소 정보</h3>
-        <Card placeList={placeList} uiWrite={false} />
+        <img
+          src={thumbnails}
+          alt=""
+          style={{ width: "400px", height: "400px" }}
+        />
+        {/* {thumbnails.map((url, index) => (
+          <img
+            key={index}
+            src={url}
+            alt=""
+            style={{ width: "400px", height: "400px" }}
+          /> */}
       </div>
       <div className={detailPlanner.marginTopButton}>
         <Ghost

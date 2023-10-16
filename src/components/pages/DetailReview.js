@@ -8,17 +8,17 @@ import { useParams } from "react-router-dom";
 import Base from "../../UI/Form/Base";
 import Primary from "../../UI/Button/Primary";
 import { BiEraser } from "react-icons/bi";
-import Card from "../../UI/Card/Card";
 
 function DetailReview() {
   const [nickname, setNickname] = useState("");
-  const [placeList, setPlaceList] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState(); //메모
   const [comments, setComments] = useState([]);
   const [editedComment, setEditedComment] = useState("");
   const [editingComment, setEditingComment] = useState(false);
   const [currentComment, setCurrentComment] = useState(""); //입력 댓글 리셋
+  const [imageURLs, setImageURLs] = useState([]);
+
   const token = getToken();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -31,9 +31,10 @@ function DetailReview() {
   const handleEditButtonClick = () => {
     const confirmReview = window.confirm(`${title}플래너를 수정하고 싶나요?`);
     if (confirmReview) {
-      navigate("/makingreview");
+      navigate(`/mypost/review/${id}`);
     }
   };
+
   //닉네임불러오기
   useEffect(() => {
     async function getNickName() {
@@ -57,6 +58,47 @@ function DetailReview() {
     }
     getNickName();
   }, []);
+
+  // 댓글 불러오기
+  const getReplies = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/reply/list/${id}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      console.log(response.data.map((data) => data.createdAt));
+      const dataList = response.data.map((data) => {
+        const createdAtArray = data.createdAt;
+        const createdAt = new Date(
+          createdAtArray[0],
+          createdAtArray[1] - 1,
+          createdAtArray[2],
+          createdAtArray[3],
+          createdAtArray[4],
+          createdAtArray[5]
+        );
+        console.log(createdAt);
+        return {
+          id: data.id,
+          content: data.content,
+          createdAt: createdAt,
+        };
+      });
+      setComments(dataList);
+      setCurrentComment("");
+    } catch (error) {
+      console.error("댓글 저장 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    getReplies();
+  }, []);
+
   //리뷰데이터 불러오기
   useEffect(() => {
     async function getPlanner() {
@@ -67,14 +109,16 @@ function DetailReview() {
             Authorization: token,
           },
         });
-        const placeData = {
-          title: response.data.title,
-          content: response.data.content,
-        };
-        setPlaceList([placeData]);
+        console.log(response.data);
         setTitle(response.data.title);
         setContent(response.data.content);
         localStorage.setItem("reviewData", JSON.stringify(response.data));
+        // 사진 조회
+        const imageUrls = response.data.reviewImageDTOList.map((data) => {
+          return `http://localhost:8080/file/display?fileName=${data.imageUrl}`;
+        });
+
+        setImageURLs(imageUrls); // 이미지 URL 배열로 업데이트
       } catch (error) {
         console.error("Failed get data:", error);
       }
@@ -124,7 +168,6 @@ function DetailReview() {
         "http://localhost:8080/reply/write",
         {
           reviewId: local.id,
-          email: local.email,
           content: currentComment, //메모
         },
         {
@@ -135,24 +178,8 @@ function DetailReview() {
         }
       );
       if (response.data) {
-        try {
-          const response = await axios.get(
-            `http://localhost:8080/reply/list/${id}`,
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          );
-          if (response.data) {
-            const dataList = response.data.map((data) => data.content);
-            console.log(dataList);
-            setComments([...comments, ...dataList]);
-            setCurrentComment("");
-          }
-        } catch (error) {
-          console.error("댓글 저장 실패:", error);
-        }
+        getReplies();
+        console.log(comments);
       } else {
         console.error("댓글 저장 실패:", response.data.errorMessage);
       }
@@ -161,10 +188,14 @@ function DetailReview() {
     }
   };
   //댓글삭제
-  const handleDeleteComment = async () => {
+  const handleDeleteComment = async (index) => {
     try {
+      const confirmDelete = window.confirm("정말로 댓글을 삭제하시겠습니까?");
+      if (!confirmDelete) {
+        return;
+      }
       const response = await axios.delete(
-        `http://localhost:8080/reply/delete?id=${id}`,
+        `http://localhost:8080/reply/delete?id=${comments[index].id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -172,9 +203,10 @@ function DetailReview() {
           },
         }
       );
+      console.log(response.data);
       if (response.data) {
-        alert("삭제 되었습니다.");
-        console.log("Success delete");
+        alert("댓글이 삭제 되었습니다.");
+        getReplies();
       } else {
         console.error("Failed to delete comment:", response.data.message);
       }
@@ -183,22 +215,35 @@ function DetailReview() {
     }
   };
   //댓글수정
-  const handleEditComment = async () => {
-    try {
-      const response = await axios.put("http://localhost:8080/reply/update", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      });
-      if (response.data) {
-        alert("수정 되었습니다.");
-        console.log("Success update");
-      } else {
-        console.error("Failed to update comment:", response.data.message);
+  const handleEditComment = async (index) => {
+    const confirmEdit = window.confirm("댓글을 수정하시겠습니까?");
+    if (confirmEdit) {
+      try {
+        const data = {
+          id: comments[index].id,
+          reviewId: id,
+          content: comments[index].content, // TODO
+        };
+        const response = await axios.put(
+          "http://localhost:8080/reply/update",
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        if (response.data) {
+          getReplies();
+          alert("댓글이 수정 되었습니다.");
+          console.log("Success update");
+        } else {
+          console.error("Failed to update comment:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Failed to update comment:", error);
       }
-    } catch (error) {
-      console.error("Failed to update comment:", error);
     }
   };
   return (
@@ -246,7 +291,7 @@ function DetailReview() {
       <div>
         {comments
           .slice()
-          .reverse()
+          // .reverse()
           .map((comment, index) => (
             <div
               key={index}
@@ -258,10 +303,12 @@ function DetailReview() {
                     type="text"
                     value={editedComment}
                     onChange={(e) => setEditedComment(e.target.value)}
+                    className={detailReview.editInput}
                   />
                   <button
+                    className={detailReview.editButton}
                     onClick={() => {
-                      handleEditComment(index, editedComment);
+                      handleEditComment(index);
                       setEditingComment(null);
                       setEditedComment("");
                     }}
@@ -272,13 +319,26 @@ function DetailReview() {
               ) : (
                 <>
                   <p>
-                    {nickname} : {comment}
+                    {nickname} : {comment.content} -{" "}
+                    {new Intl.DateTimeFormat("ko-KR", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    }).format(comment.createdAt)}
                   </p>
                   <BiEraser
                     className={detailReview.deleteButton}
-                    onClick={() => handleDeleteComment()}
+                    onClick={() => handleDeleteComment(index)}
                   />
-                  <button onClick={() => setEditingComment(index)}>수정</button>
+                  <button
+                    className={detailReview.editButton}
+                    onClick={() => setEditingComment(index)}
+                  >
+                    수정
+                  </button>
                 </>
               )}
             </div>
@@ -286,7 +346,14 @@ function DetailReview() {
       </div>
       <div>
         <h3>리뷰 사진</h3>
-        <Card placeList={placeList} />
+        {imageURLs.map((url, index) => (
+          <img
+            key={index}
+            src={url}
+            alt="리뷰 사진"
+            style={{ width: "400px", height: "400px" }}
+          />
+        ))}
       </div>
       <div className={detailReview.marginTopButton}>
         <Ghost

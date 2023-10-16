@@ -87,7 +87,9 @@ function PlannerPost() {
               image: demoImage,
               date: item.date,
             }))}
-            onClick={(id) => navigate(`/planner/plannerList/${id}`)}
+            onClick={(id) => {
+              navigate(`/planner/plannerList/${id}`);
+            }}
             uiWrite={true}
           />
         ) : (

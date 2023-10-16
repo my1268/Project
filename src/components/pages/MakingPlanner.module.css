@@ -25,6 +25,24 @@
   width: 100%;
 }
 
+.deleteButton {
+  background: #d609b4;
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 10px;
+  position: relative;
+  bottom: 8px;
+}
+
+.deleteButton:hover {
+  background: #833d77;
+}
+
 @media screen and (min-width: 900px) {
   .item {
     height: auto;

@@ -20,16 +20,6 @@ const MakingReview = () => {
   const previousButtonClick = () => {
     navigate(-1);
   };
-
-  useEffect(() => {
-    const localData = localStorage.getItem("reviewData");
-    console.log(localData);
-    if (localData) {
-      const parseData = JSON.parse(localData);
-      setTitle(parseData.title || "");
-      setContent(parseData.content || "");
-    }
-  }, []);
   //사진 post
   const FilePlus = (e) => {
     const files = Array.from(e.target.files);
@@ -132,48 +122,10 @@ const MakingReview = () => {
     }
   };
 
-  //리뷰 수정하기
-  const handleEditReviewSubmit = async () => {
-    try {
-      const reviewData = JSON.parse(localStorage.getItem("reviewData"));
-      console.log(JSON.stringify(reviewData));
-      let data = {
-        title: title,
-        content: content,
-        plannerId: reviewData.plannerId,
-        thumbnailUrl: selectFiles[0].thumbnailUrl,
-        reviewImageDTOList: selectFiles,
-      };
-      console.log(data);
-      const response = await axios.put(
-        "http://localhost:8080/review/update",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        }
-      );
-      if (response.data) {
-        console.log("서버 응답 데이터:", response.data);
-        alert("리뷰가 성공적으로 수정되었습니다.");
-        navigate("/mypost");
-      } else {
-        console.error("리뷰 수정이 되지않았습니다.");
-      }
-      localStorage.removeItem("placeData");
-    } catch (error) {
-      console.error("리뷰 수정 중 오류 발생:", error);
-    }
-  };
-
   return (
     <>
       <PageCover
-        title={
-          localStorage.getItem("placeData") ? "리뷰 만들기" : "리뷰 수정하기"
-        }
+        title={localStorage.getItem("placeData") ? "리뷰 만들기" : null}
       />
       <div className="not-layout">
         <div className="container">
@@ -236,20 +188,11 @@ const MakingReview = () => {
               )}
             </dl>
             <>
-              {localStorage.getItem("placeData") && (
-                <Primary
-                  text="리뷰 만들기"
-                  onClick={handleReviewSubmit}
-                  style={{ marginBottom: "8px" }}
-                />
-              )}
-              {localStorage.getItem("reviewData") && (
-                <Primary
-                  text="리뷰 수정하기"
-                  onClick={handleEditReviewSubmit}
-                  style={{ marginBottom: "8px" }}
-                />
-              )}
+              <Primary
+                text="리뷰 만들기"
+                onClick={handleReviewSubmit}
+                style={{ marginBottom: "8px" }}
+              />
             </>
           </form>
         </div>
